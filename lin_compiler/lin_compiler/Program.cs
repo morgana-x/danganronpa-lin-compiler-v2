@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dr_lin;
+using System;
 using System.Collections.Generic;
 
 namespace LIN
@@ -36,6 +37,7 @@ namespace LIN
             Game game = Game.Base;
             bool decompile = false;
             string input, output;
+            bool dump = false;
 
             // Parse arguments
             List<string> plainArgs = new List<string>();
@@ -49,6 +51,7 @@ namespace LIN
                     if (a == "-d" || a == "--decompile")      { decompile = true; }
                     if (a == "-dr2" || a == "--danganronpa2") { game = Game.Danganronpa2; }
                     if (a == "-s" || a == "--silent")         { silentMode = true; }
+                    if (a == "-dmp" || a == "--dump") { dump = true; }
                 }
                 else
                 {
@@ -68,6 +71,13 @@ namespace LIN
 
             // Generate opcode name lookup
             Opcode.GenerateOpcodeLookup();
+
+            if (dump)
+            {
+                Console.WriteLine("Dumping selected");
+                Dumper.DumpDirectory(input, output, game);
+                return;
+            }
 
             // Execute desired functionality
             Script s = new Script(input, decompile, game);

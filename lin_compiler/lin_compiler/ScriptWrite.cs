@@ -46,6 +46,43 @@ namespace LIN
             File.Close();
             Program.PrintLine("[write] done.");
         }
+        static public void WriteSourceAppend(Script s, System.IO.StreamWriter File, Game game = Game.Base)
+        {
+            Program.PrintLine("[write] writing decompiled file...");
+
+            foreach (ScriptEntry e in s.ScriptData)
+            {
+                File.Write(Opcode.GetOpName(e.Opcode, game));
+                if (e.Opcode == 0x02)
+                {
+                    string Text = e.Text;
+                    while (Text.EndsWith("\0")) Text = Text.Remove(Text.Length - 1);
+
+                    // Escapes
+                    Text = Text.Replace("\\", "\\\\");
+                    Text = Text.Replace("\"", "\\\"");
+                    Text = Text.Replace("\r", "\\r");
+                    Text = Text.Replace("\n", "\\n");
+
+                    File.Write("(\"" + Text + "\")");
+                }
+                else
+                {
+                    File.Write("(");
+                    if (e.Args.Length > 0)
+                    {
+                        for (int a = 0; a < e.Args.Length; a++)
+                        {
+                            if (a > 0) File.Write(", ");
+                            File.Write(e.Args[a].ToString());
+                        }
+                    }
+                    File.Write(")");
+                }
+                File.WriteLine();
+            }
+            Program.PrintLine("[write] done.");
+        }
 
         static public void WriteCompiled(Script s, string Filename, Game game = Game.Base)
         {
