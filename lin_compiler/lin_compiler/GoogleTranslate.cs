@@ -77,16 +77,29 @@ namespace dr_lin
             }
             newText = await Translate(newText, "en");
             translated = newText.Split(";").ToList();*/
+            int t = 0;
+            int CursorPos = Console.CursorLeft;
             foreach (string tag in good)
             {
+                Console.CursorLeft = CursorPos;
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("(" + t + "/" + good.Count + ")");
+                Console.ForegroundColor = ConsoleColor.Gray;
+
+                int CursorPos2 = Console.CursorLeft;
                 string newText = tag;
                 for (int i = 0; i < depth; i++)
                 {
+                    Console.CursorLeft = CursorPos2;
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("(" + i + "/" + depth + ")");
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     newText = await Translate(newText, languages[rnd.Next(languages.Count - 1)]);
                 }
                 newText = await Translate(newText, "en");
                 //Console.WriteLine(newText);
                 translated.Add(newText);
+                t++;
             }
             o = inp;
             for (int i = 0; i < good.Count; i++)
@@ -176,27 +189,31 @@ namespace dr_lin
                         int recursion = 5;
                         if (e.Text.Length > 140)
                         {
-                            recursion = 1;
+                            recursion = 3;
                         }
                         else if (e.Text.Length > 130)
                         {
-                            recursion = 2;
+                            recursion = 4;
                         }
                         else if (e.Text.Length > 90)
                         {
-                            recursion = 3;
+                            recursion = 5;
                         }
                         else if (e.Text.Length > 70)
                         {
-                            recursion = 4;
+                            recursion = 5;
                         }
-                        else if (e.Text.Length < 5)
+                        else if (e.Text.Length > 50)
                         {
                             recursion = 6;
                         }
+                        else if (e.Text.Length > 35)
+                        {
+                            recursion = 7;
+                        }
                         else
                         {
-                            recursion = 5;
+                            recursion = 10;
                         }
                         var task = GoogleTranslate.TranslateLine(e.Text, recursion);
                         task.Wait();
