@@ -36,8 +36,8 @@ namespace LIN
                 { 0x14, new KeyValuePair<string, int>("TrialCamera", 3) }, //Character, Motion, Position
                 { 0x15, new KeyValuePair<string, int>("LoadMap", 3) }, // Room, State, Padding, Time of Day
                 { 0x19, new KeyValuePair<string, int>("LoadScript", 3) },
-                { 0x1A, new KeyValuePair<string, int>("ExecuteScript", 0) },
-                { 0x1B, new KeyValuePair<string, int>(null, 3) },
+                { 0x1A, new KeyValuePair<string, int>("StopScript", 0) },
+                { 0x1B, new KeyValuePair<string, int>("RunScript", 3) },
                 { 0x1C, new KeyValuePair<string, int>(null, 0) },
                 { 0x1E, new KeyValuePair<string, int>("Sprite", 5) },
                 { 0x1F, new KeyValuePair<string, int>("ScreenFlash", 7) },
@@ -46,11 +46,11 @@ namespace LIN
                 { 0x22, new KeyValuePair<string, int>("ScreenFade", 3) },
                 { 0x23, new KeyValuePair<string, int>("ObjectState", 5) },
                 { 0x25, new KeyValuePair<string, int>("ChangeUi", 2) },
-                { 0x26, new KeyValuePair<string, int>("SetFlag", 3) },
+                { 0x26, new KeyValuePair<string, int>("SetFlag", 3) }, // Argument 1 is the group, argument 2 is the ID, and argument 3 is the state.
                 { 0x27, new KeyValuePair<string, int>("CheckCharacter", 1) },
                 { 0x29, new KeyValuePair<string, int>("CheckObject", 1) },
-                { 0x2A, new KeyValuePair<string, int>("SetLabel", 2) },
-                { 0x2B, new KeyValuePair<string, int>(null, 1) }, // Choice??
+                { 0x2A, new KeyValuePair<string, int>("SetLabel", 2) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
+                { 0x2B, new KeyValuePair<string, int>("SetChoiceText", 1) }, // Choice??
                 { 0x2C, new KeyValuePair<string, int>("EndOfJump", 2) },
                 { 0x2D, new KeyValuePair<string, int>("CameraFlash",1) },// IF CAUSING ISSUE THIS IS THE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 { 0x2E, new KeyValuePair<string, int>("CameraShake", 2) },
@@ -58,12 +58,14 @@ namespace LIN
                 { 0x30, new KeyValuePair<string, int>("ShowBackground", 3) },
                 { 0x32, new KeyValuePair<string, int>(null, 1) }, // Truth bullet / Choice?
                 { 0x33, new KeyValuePair<string, int>(null, 4) },
-                { 0x34, new KeyValuePair<string, int>("GotoLabel", 2) },
+                { 0x34, new KeyValuePair<string, int>("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
+                { 0x35, new KeyValuePair<string, int>("CheckFlagA", -1) }, // each check is 4 args
+                { 0x36, new KeyValuePair<string, int>("CheckFlagB", -1) }, // each check is 4 args
                 { 0x38, new KeyValuePair<string, int>(null, -1) },
                 { 0x39, new KeyValuePair<string, int>(null, 5) },
                 { 0x3A, new KeyValuePair<string, int>("WaitInput", 0) },
                 { 0x3B, new KeyValuePair<string, int>("WaitFrame", 0) },
-                { 0x3C, new KeyValuePair<string, int>(null, 0) },
+                { 0x3C, new KeyValuePair<string, int>("If_FlagCheck", 0) },
                 { 0x4B, new KeyValuePair<string, int>("WaitInputDR2", -1) },
                 { 0x4C, new KeyValuePair<string, int>("WaitFrameDR2", 0) },
                 { 0x4D, new KeyValuePair<string, int>(null, -1) },

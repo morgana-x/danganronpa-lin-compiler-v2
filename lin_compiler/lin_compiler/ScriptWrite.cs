@@ -7,13 +7,83 @@ namespace LIN
 {
     static class ScriptWrite
     {
-        static public void WriteSource(Script s, string Filename, Game game = Game.Base)
+        static public void WriteSource(Script s, System.IO.StreamWriter File, Game game = Game.Base, bool append = false)
         {
             Program.PrintLine("[write] writing decompiled file...");
-            System.IO.StreamWriter File = new System.IO.StreamWriter(Filename, false, Encoding.Unicode);
-
+            int indentLevel = 0;
+            int shouldPlaceBracket = 0;
+            int shouldPlaceBrackedChoice = 0;
             foreach (ScriptEntry e in s.ScriptData)
             {
+
+                if (( (e.Opcode == 0x2B || e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBrackedChoice > 0))
+                {
+                    if (shouldPlaceBrackedChoice > 0)
+                    {
+                        shouldPlaceBrackedChoice -= 1;
+                    }
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    File.Write(new string('\t', indentLevel));
+                    File.Write('}');
+                    File.Write('\n');
+                    if (e.Opcode == 0x29 || e.Opcode == 0x27)
+                    {
+                        indentLevel = 0;
+                    }
+                }
+                if ((e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBracket > 0)// || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
+                {
+
+                    if ((shouldPlaceBracket > 0))
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    File.Write(new string('\t', indentLevel));
+                    File.Write('}');
+                    File.Write('\n');
+                }
+                /*if (e.Opcode == 0x29 || e.Opcode == 0x27) // CheckObject, Check Character
+                {
+
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;//-= 1;
+                    }
+                    indentLevel += 1;
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                        File.WriteLine("}");
+                    }
+                }*/
+                if (s.ScriptData.IndexOf(e) > 1 && (s.ScriptData[s.ScriptData.IndexOf(e) - 2].Opcode == 0x3C)) // If flag check
+                {
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    File.Write(new string('\t', indentLevel));
+                    File.Write('}');
+                    File.Write('\n');
+                }
+
+                if (indentLevel > 0)
+                {
+                    File.Write(new string('\t', indentLevel));
+
+                   //File.Write(new string('\t', ((indentLevel > 0 && (e.Opcode == 0x29 || e.Opcode == 0x27)) ? indentLevel - 1 : indentLevel)));
+                }
                 File.Write(Opcode.GetOpName(e.Opcode, game));
                 if (e.Opcode == 0x02)
                 {
@@ -42,46 +112,55 @@ namespace LIN
                     File.Write(")");
                 }
                 File.WriteLine();
+                if (e.Opcode == 0x29 || e.Opcode == 0x27 || e.Opcode == 0x3C || (e.Opcode == 0x2B)) // Check Object, Check Character, If_Flag
+                {
+                    File.Write(new string('\t', indentLevel));
+                    File.Write('{');
+                    File.Write('\n');
+                    indentLevel += 1;
+                    if (e.Opcode != 0x2B)
+                    {
+                        shouldPlaceBracket += 1;
+                    }
+                    else
+                    {
+                        shouldPlaceBrackedChoice += 1;
+                    }
+                    
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBrackedChoice > 0))
+                {
+                    shouldPlaceBrackedChoice -= 1;
+                    
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    File.WriteLine(new string('\t', indentLevel) + '}');
+
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBracket > 0))
+                {
+                    shouldPlaceBracket -= 1;
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    File.WriteLine(new string('\t', indentLevel) + '}');
+                }
+          
+
             }
-            File.Close();
+            if (!append)
+            {
+                File.Close();
+            }
             Program.PrintLine("[write] done.");
         }
-        static public void WriteSourceAppend(Script s, System.IO.StreamWriter File, Game game = Game.Base)
+        static public void WriteSource(Script s, string Filename, Game game = Game.Base, bool append = false)
         {
-            Program.PrintLine("[write] writing decompiled file...");
-
-            foreach (ScriptEntry e in s.ScriptData)
-            {
-                File.Write(Opcode.GetOpName(e.Opcode, game));
-                if (e.Opcode == 0x02)
-                {
-                    string Text = e.Text;
-                    while (Text.EndsWith("\0")) Text = Text.Remove(Text.Length - 1);
-
-                    // Escapes
-                    Text = Text.Replace("\\", "\\\\");
-                    Text = Text.Replace("\"", "\\\"");
-                    Text = Text.Replace("\r", "\\r");
-                    Text = Text.Replace("\n", "\\n");
-
-                    File.Write("(\"" + Text + "\")");
-                }
-                else
-                {
-                    File.Write("(");
-                    if (e.Args.Length > 0)
-                    {
-                        for (int a = 0; a < e.Args.Length; a++)
-                        {
-                            if (a > 0) File.Write(", ");
-                            File.Write(e.Args[a].ToString());
-                        }
-                    }
-                    File.Write(")");
-                }
-                File.WriteLine();
-            }
-            Program.PrintLine("[write] done.");
+            System.IO.StreamWriter File = new System.IO.StreamWriter(Filename, false, Encoding.Unicode);
+            WriteSource(s, File, game, append);
         }
 
         static public void WriteCompiled(Script s, string Filename, Game game = Game.Base)

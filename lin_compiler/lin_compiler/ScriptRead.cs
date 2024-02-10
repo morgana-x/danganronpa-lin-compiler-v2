@@ -21,7 +21,38 @@ namespace LIN
 
                 // Get opcode
                 sb.Clear();
-                while (char.IsWhiteSpace(c)) c = (char)File.Read(); if (File.Peek() == -1) break;
+                while (char.IsWhiteSpace(c) || c == '{' || c == '}')
+                {
+                    c = (char)File.Read();
+                    if (c == '/')
+                    {
+                        c = (char)File.Read();
+                        if (c == '/')
+                        {
+                            while (c != '\n')
+                            {
+                                c = (char)File.Read();
+                            }
+                        }
+                        else if (c == '*')
+                        {
+                            while (true)
+                            {
+                                c = (char)File.Read();
+                                if (c == '*')
+                                {
+                                    c = (char)File.Read();
+                                    if (c == '/')
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            c = (char)File.Read();
+                        }
+                    }
+                }
+                if (File.Peek() == -1) break;
                 while (c != '(' && File.Peek() != -1)
                 {
                     sb.Append(c);

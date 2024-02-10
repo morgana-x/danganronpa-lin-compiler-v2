@@ -38,7 +38,6 @@ namespace LIN
             bool decompile = false;
             string input, output;
             bool dump = false;
-            bool translate = false;
 
             // Parse arguments
             List<string> plainArgs = new List<string>();
@@ -53,7 +52,6 @@ namespace LIN
                     if (a == "-dr2" || a == "--danganronpa2") { game = Game.Danganronpa2; }
                     if (a == "-s" || a == "--silent")         { silentMode = true; }
                     if (a == "-dmp" || a == "--dump") { dump = true; }
-                    if (a == "-trs" || a == "--translate") { translate = true; }
                 }
                 else
                 {
@@ -78,12 +76,6 @@ namespace LIN
             {
                 Console.WriteLine("Dumping selected");
                 Dumper.DumpDirectory(input, output, game);
-                return;
-            }
-            if (translate)
-            {
-                Console.WriteLine("Translating selected");
-                GoogleTranslate.TranslateDirectory(input, output, game);
                 return;
             }
 

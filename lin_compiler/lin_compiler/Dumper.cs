@@ -27,7 +27,7 @@ namespace dr_lin
                 try
                 {
                     Script s = new Script(filePath, true, game);
-                    ScriptWrite.WriteSourceAppend(s, OutFileWriter, game);
+                    ScriptWrite.WriteSource(s, OutFileWriter, game, true);
                 }
                 catch
                 {
