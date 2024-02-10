@@ -9,6 +9,11 @@ This fork allows source / decompiled files to have:
 + Comments
 + Squiqqly Brackets {}
 When decompiling it will automatically add indentation and {}s for readability
+
+Also adds the --dump argument, 
++ write the decompiled contents of all the lin files in the in folder to the designated text document
+Example: `lin_compiler --dump infolder\ output.txt`
+
 ### LIN script compiler / decompiler.
 
 To compile a script file, simply supply the input file (and optionally an
