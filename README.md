@@ -5,6 +5,8 @@ Tool for compiling and decompiling Danganronpa LIN files
 
 [Script Dumps](https://github.com/morgana-x/Danganronpa-Script-Dumps) that can help you find what script you want to edit.
 
+[Wad Extractor](https://github.com/morgana-x/WadLib) that can help you extract only the script files you need by searching for them. (Rather than extract the whole archive)
+
 ## `lin_compiler`
 ### New Stuff!
 This fork allows source / decompiled files to have:
