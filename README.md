@@ -1,7 +1,9 @@
-<s>Dragontoppa</s> Danganronpa tools
+# Lin Compiler
 ====================================
 
-Tools for translating Danganronpa (PC version).
+Tool for compiling and decompiling Danganronpa LIN files
+
+[Script Dumps](https://github.com/morgana-x/Danganronpa-Script-Dumps) that can help you find what script you want to edit.
 
 ## `lin_compiler`
 ### New Stuff!
