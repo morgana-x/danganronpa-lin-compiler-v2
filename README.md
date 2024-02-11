@@ -10,7 +10,7 @@ Tool for compiling and decompiling Danganronpa LIN files
 ## `lin_compiler`
 ### New Stuff!
 This fork allows source / decompiled files to have:
-+ Comments
++ Comments (Either using // or /**/, same as c language style commenting)
 + Squiqqly Brackets {}
 
 When decompiling it will automatically add indentation and {}s for readability
