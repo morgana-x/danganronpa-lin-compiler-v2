@@ -1,6 +1,7 @@
 ﻿using dr_lin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LIN
 {
@@ -76,6 +77,12 @@ namespace LIN
             {
                 Console.WriteLine("Dumping selected");
                 Dumper.DumpDirectory(input, output, game);
+                return;
+            }
+
+            if (Directory.Exists(input))
+            {
+                BatchProcesser.BatchProcessDirectory(input, decompile, game, output);
                 return;
             }
 
