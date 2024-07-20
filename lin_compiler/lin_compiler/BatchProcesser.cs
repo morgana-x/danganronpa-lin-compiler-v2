@@ -12,12 +12,18 @@ namespace dr_lin
     {
         public static void BatchProcessDirectory (string folder, bool decompile, Game game, string outFolder)
         {
-            if (true || outFolder == null || outFolder == string.Empty)
+            if (outFolder == null || outFolder == string.Empty)
             {
-                outFolder = folder + "_" + (decompile ? "extracted" : "repacked") + "\\";
+                outFolder = folder + "_" + (decompile ? "extracted" : "repacked");
+            }
+            if (!outFolder.EndsWith("\\")) 
+            {
+                outFolder += "\\";
             }
             if (!Directory.Exists (folder)) 
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"There is no folder existent at \"{folder}\"");
                 return;
             }
             string[] files = Directory.GetFiles (folder);
@@ -28,17 +34,26 @@ namespace dr_lin
             }
             foreach (string file in files) 
             {
-      
+                
                 Script script = new Script(file, decompile, game);
                 string outPath = outFolder + Path.GetFileNameWithoutExtension(file) + (decompile ? ".txt" : ".lin");
                 Console.WriteLine(outPath);
-                if (decompile)
+                try
                 {
-                    ScriptWrite.WriteSource(script, outPath, game);
+                    if (decompile)
+                    {
+                        ScriptWrite.WriteSource(script, outPath, game);
+                    }
+                    else
+                    {
+                        ScriptWrite.WriteCompiled(script, outPath, game);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    ScriptWrite.WriteCompiled(script, outPath, game);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error occured while processing {file}. Error:\n{e.ToString()}");
+                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
 
             }

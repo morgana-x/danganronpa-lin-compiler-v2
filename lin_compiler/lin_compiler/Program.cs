@@ -77,12 +77,16 @@ namespace LIN
             {
                 Console.WriteLine("Dumping selected");
                 Dumper.DumpDirectory(input, output, game);
+                Console.WriteLine("Press any key to close/continue.");
+                Console.ReadKey();
                 return;
             }
 
             if (Directory.Exists(input))
             {
-                BatchProcesser.BatchProcessDirectory(input, decompile, game, output);
+                BatchProcesser.BatchProcessDirectory(input, decompile, game, plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
+                Console.WriteLine("Press any key to close/continue.");
+                Console.ReadKey();
                 return;
             }
 
@@ -96,6 +100,8 @@ namespace LIN
             {
                 ScriptWrite.WriteCompiled(s, output, game);
             }
+            Console.WriteLine("Press any key to close/continue.");
+            Console.ReadKey();
         }
     }
 }
