@@ -25,14 +25,8 @@ pass the `-dr2` (or `--danganronpa2`) argument.
 ### New Stuff!
 This fork allows source / decompiled files to have:
 + Comments (Either using // or /**/, same as c language style commenting)
-+ Squiqqly Brackets {}
-
-There are also more Opcode translations
-
-When decompiling it will automatically add indentation and {}s for readability
-
-Also adds the --dump argument, 
-+ write the decompiled contents of all the lin files in the in folder to the designated text document.
-
-Example: `lin_compiler --dump infolder\ output.txt`
++ "Synatax", Decompiled files have psuedo indentations/bracketed blocks of code based on certain opcodes
++ Batch processing, allows folders to be supplied, Example: `lin_compiler infolder outfolder --decompile` /  `lin_compiler infolder outfolder`
++ More Opcode names
++ --dump argument, allows you to dump the decompiled contents of a folder of scripts into a singular file, Example: `lin_compiler --dump infolder\ output.txt`
 
