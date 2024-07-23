@@ -52,7 +52,7 @@ namespace LIN
                 { 0x2A, new KeyValuePair<string, int>("SetLabel", 2) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
                 { 0x2B, new KeyValuePair<string, int>("SetChoiceText", 1) }, // Choice??
                 { 0x2C, new KeyValuePair<string, int>("EndOfJump", 2) },
-                { 0x2D, new KeyValuePair<string, int>("CameraFlash",1) },// IF CAUSING ISSUE THIS IS THE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                { 0x2D, new KeyValuePair<string, int>("CameraFlash",-1) },// IF CAUSING ISSUE THIS IS THE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 { 0x2E, new KeyValuePair<string, int>("CameraShake", 2) },
                 { 0x2F, new KeyValuePair<string, int>(null, 10) },
                 { 0x30, new KeyValuePair<string, int>("ShowBackground", 3) },

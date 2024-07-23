@@ -211,7 +211,10 @@ namespace LIN
                     {
                         if (s.File[i] != 0x00)
                         {
-                            throw new Exception("[read] error: expected 0x70, got 0x" + s.File[i].ToString("X2") + ".");
+                            Console.WriteLine($"[read] error: expected 0x00, got 0x{s.File[i].ToString("X2")}.");
+                            Console.WriteLine("SCRIPT IS NOW BROKEN, please check the last opcode at the end of the file and report the error! (If you're feeling generous :)");
+                            break;
+                            //throw new Exception("[read] error: expected 0x00, got 0x" + s.File[i].ToString("X2") + ".");
                         }
                         i++;
                     }
