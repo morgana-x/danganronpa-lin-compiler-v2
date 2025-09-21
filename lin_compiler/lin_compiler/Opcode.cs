@@ -1,7 +1,6 @@
 ﻿using dr_lin;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace LIN
 {
@@ -54,11 +53,11 @@ namespace LIN
                 if (name != null) return name;
             }
 
-            if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_CHAR_SPEAK || args[1] == (byte)Enums.DR_FLAG.FLAG_CHAR_DEAD)
+           /* if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_CHR_SPEAK || args[1] == (byte)Enums.DR_FLAG.FLAG_CHR_DEAD)
             {
                 var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
                 if (name != null) return name;
-            }
+            }*/
 
             if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_HANDBOOK)
             {
@@ -144,7 +143,7 @@ namespace LIN
                 { 0x04, new Opcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
                 { 0x05, new Opcode("Movie", 2) },
                 { 0x06, new Opcode("Animation", 8) },
-                { 0x08, new Opcode("Voice", 5) },
+                { 0x08, new VoiceOpcode("Voice", 5) },
                 { 0x09, new Opcode("Music", 3) },
                 { 0x0A, new Opcode("Sound", 3) },
                 { 0x0B, new Opcode("SoundB", 2) },

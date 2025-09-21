@@ -187,7 +187,7 @@ namespace dr_lin
             CHAPTER_4,
             CHAPTER_5,
             CHAPTER_6,
-            CHAPTER_GENERIC
+            CHAPTER_99 = 99
         }
 
 
