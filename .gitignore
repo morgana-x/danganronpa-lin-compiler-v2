@@ -6,3 +6,5 @@
 /lin_compiler/.vs/lin_compiler
 /lin_compiler/lin_compiler/bin/Debug
 /lin_compiler/lin_compiler/obj/Debug
+/lin_compiler/lin_compiler/bin/Release
+/lin_compiler/lin_compiler/obj/Release
