@@ -86,7 +86,7 @@ namespace LIN
                     }
                     if (File.Peek() != -1) c = (char)File.Read();
 
-                    if (sb.ToString().Trim() == "#DEFINE")
+                    if (sb.ToString().Trim().ToLower() == "#define")
                     {
                         SkipWhitespace(File, ref c);
 
