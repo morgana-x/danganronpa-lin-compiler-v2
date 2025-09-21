@@ -141,7 +141,6 @@ namespace dr_lin
             HANDBOOK_TRUTHBULLET_ENABLED = 6,
             HANDBOOK_SAVE_ENABLED = 7,
             HANDBOOK_TRUTHBULLET_KNOWN = 19
-
         }
 
         public enum DR_TIME

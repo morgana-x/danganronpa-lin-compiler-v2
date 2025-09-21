@@ -1,7 +1,6 @@
 ﻿using LIN;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace dr_lin
 {
@@ -32,6 +31,7 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_HANDBOOK));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_UI));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_TIME));
+            LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_CHAPTER));
 
 
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_CHAR));
@@ -44,7 +44,6 @@ namespace dr_lin
             if (Definitions[game].ContainsKey(name)) return Definitions[game][name];
             if (Definitions[Game.Base].ContainsKey(name)) return Definitions[Game.Base][name];
             throw (new Exception($"Tried to parse unknown definition {name}!"));
-            return 0;
         }
 
         // For scripts to define reusable values
