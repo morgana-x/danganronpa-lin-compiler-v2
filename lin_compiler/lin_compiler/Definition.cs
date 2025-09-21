@@ -17,9 +17,14 @@ namespace dr_lin
             [Game.Danganronpa2] = new Dictionary<string, byte>(),
         };
 
+        public static Dictionary<string, byte> ScriptDefinedDefinitions = new Dictionary<string, byte>();
         public static void LoadDefinitions()
         {
-            Definitions[Game.Base].Clear();
+            ScriptDefinedDefinitions.Clear(); // Definitions that get set by the script
+
+
+            // Only load this once when nessecary
+            if (Definitions[Game.Base].Count != 0) return;
 
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FADE));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_CAM_DIR));
@@ -40,10 +45,18 @@ namespace dr_lin
 
         public static byte TryGetDefinitionValue(string name, Game game = Game.Base)
         {
+            if (ScriptDefinedDefinitions.ContainsKey(name)) return ScriptDefinedDefinitions[name];
             if (Definitions[game].ContainsKey(name)) return Definitions[game][name];
             throw (new Exception($"Tried to parse unknown definition {name}!"));
             return 0;
         }
+
+        // For scripts to define reusable values
+        public static void ScriptDefineDefinition(string name, byte value)
+        {
+            ScriptDefinedDefinitions[name] = value;
+        }
+
         public static void LoadDefinitonsFromEnum(Game game, Type e)
         {
             var names = Enum.GetNames(e);
