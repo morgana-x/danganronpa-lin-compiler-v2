@@ -114,6 +114,22 @@ namespace LIN
         }
     }
 
+    public class StudentEntryOpcode : Opcode
+    {
+        public StudentEntryOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex== 0)
+            {
+                var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+
+
 
     public class Opcode
     {
@@ -150,8 +166,8 @@ namespace LIN
                 { 0x0C, new Opcode("AddTruthBullets", 2) },
                 { 0x0D, new Opcode("AddPresents", 3) },
                 { 0x0E, new Opcode("UnlockSkill", 2) },
-                { 0x0F, new Opcode("StudentTitleEntry", 3) },
-                { 0x10, new Opcode("StudentReportInfo", 3) },
+                { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
+                { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
                 { 0x11, new Opcode(null, 4) }, // Relationship setting?
                 { 0x14, new Opcode("TrialCamera", 3) }, //Character, Motion, Position
                 { 0x15, new Opcode("LoadMap", 3) }, // Room, State, Padding, Time of Day
