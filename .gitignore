@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/lin_compiler/.vs/lin_compiler
+/lin_compiler/lin_compiler/bin/Debug
+/lin_compiler/lin_compiler/obj/Debug
