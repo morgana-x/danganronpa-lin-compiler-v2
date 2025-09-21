@@ -7,6 +7,22 @@ namespace LIN
 {
     static class ScriptRead
     {
+        static void SkipWhitespace(System.IO.StreamReader File, ref char c)
+        {
+            while (c == ' ' || c == '\t' && File.Peek() != -1)
+                c = (char)File.Read();
+        }
+
+        static string ReadString(System.IO.StreamReader File, StringBuilder sb, ref char c)
+        {
+            while (c != ' ' && c != '\n' && c != '\r' && File.Peek() != -1)
+            {
+                sb.Append(c);
+                c = (char)File.Read();
+            }
+
+            return sb.ToString();
+        }
         static public bool ReadSource(Script s, string Filename, Game game = Game.Base)
         {
             Definition.LoadDefinitions();
@@ -24,8 +40,7 @@ namespace LIN
                     char c = (char)File.Read();
                     ScriptEntry e = new ScriptEntry();
 
-                    // Get opcode
-                    sb.Clear();
+           
                     while (char.IsWhiteSpace(c) || c == '{' || c == '}')
                     {
                         c = (char)File.Read();
@@ -59,12 +74,33 @@ namespace LIN
                         }
                     }
                     if (File.Peek() == -1) break;
+
+                    // Get opcode
+                    sb.Clear();
+
                     while (c != '(' && File.Peek() != -1)
                     {
+                        if (sb.Length > 0 && sb[0] == '#' && c == ' ') break;
                         sb.Append(c);
                         c = (char)File.Read();
                     }
                     if (File.Peek() != -1) c = (char)File.Read();
+
+                    if (sb.ToString().Trim() == "#DEFINE")
+                    {
+                        SkipWhitespace(File, ref c);
+
+                        sb.Clear();
+                        string def_name = ReadString(File, sb, ref c).Trim();
+          
+                        SkipWhitespace(File, ref c);
+
+                        sb.Clear();
+                        byte def_value = byte.Parse(ReadString(File, sb, ref c).Trim());
+
+                        Definition.ScriptDefineDefinition(def_name, def_value);
+                        continue;
+                    }
 
                     e.Opcode = Opcode.GetOpcodeByName(sb.ToString().Trim(), game);
 

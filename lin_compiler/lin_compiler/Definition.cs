@@ -20,8 +20,7 @@ namespace dr_lin
         public static Dictionary<string, byte> ScriptDefinedDefinitions = new Dictionary<string, byte>();
         public static void LoadDefinitions()
         {
-            ScriptDefinedDefinitions.Clear(); // Definitions that get set by the script
-
+            ScriptDefinedDefinitions.Clear(); // Definitions that get set by the script, clear when reading new script
 
             // Only load this once when nessecary
             if (Definitions[Game.Base].Count != 0) return;
@@ -34,10 +33,6 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_UI));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_TIME));
 
-            Definitions[Game.Danganronpa1] = Definitions[Game.Base].ToDictionary(entry => entry.Key,
-                                               entry => entry.Value);
-            Definitions[Game.Danganronpa2] = Definitions[Game.Base].ToDictionary(entry => entry.Key,
-                                               entry => entry.Value);
 
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_CHAR));
             LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_CHAR));
@@ -47,6 +42,7 @@ namespace dr_lin
         {
             if (ScriptDefinedDefinitions.ContainsKey(name)) return ScriptDefinedDefinitions[name];
             if (Definitions[game].ContainsKey(name)) return Definitions[game][name];
+            if (Definitions[Game.Base].ContainsKey(name)) return Definitions[Game.Base][name];
             throw (new Exception($"Tried to parse unknown definition {name}!"));
             return 0;
         }
