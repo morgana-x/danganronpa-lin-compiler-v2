@@ -296,7 +296,7 @@ namespace LIN
                     int TextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (TextID + 1) * 4);
                     int NextTextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (TextID + 2) * 4);
                     if (TextID == s.TextEntries - 1) NextTextPos = s.FileSize - s.TextBlockPos;
-                    s.ScriptData[i].Text = Encoding.Unicode.GetString(s.File, s.TextBlockPos + TextPos, NextTextPos - TextPos);
+                    s.ScriptData[i].Text = Encoding.Unicode.GetString(s.File, s.TextBlockPos + TextPos + 2, NextTextPos - TextPos - 2);
                 }
                 else
                 {
