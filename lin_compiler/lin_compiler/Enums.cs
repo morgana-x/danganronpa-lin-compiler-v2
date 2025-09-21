@@ -98,7 +98,7 @@ namespace dr_lin
         public enum DR_UI
         {
             UI_TEXTBOX = 1,
-            UI_HELP = 2,
+            UI_NAME = 2,
             UI_HUD = 3,
             UI_MINIMAP = 5,
             UI_BLACKBACKGROUND = 6,
