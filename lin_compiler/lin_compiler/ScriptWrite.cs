@@ -106,7 +106,7 @@ namespace LIN
                         for (int a = 0; a < e.Args.Length; a++)
                         {
                             if (a > 0) File.Write(", ");
-                            File.Write(e.Args[a].ToString());
+                            File.Write(Opcode.GetOpcodeByID(e.Opcode, game).DecompileArg(null, 0, e.Args, a,  e.Args[a]));
                         }
                     }
                     File.Write(")");

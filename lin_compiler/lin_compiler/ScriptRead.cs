@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dr_lin;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,7 @@ namespace LIN
     {
         static public bool ReadSource(Script s, string Filename, Game game = Game.Base)
         {
+            Definition.LoadDefinitions();
             // Default script type is textless
             s.Type = ScriptType.Textless;
             //Program.PrintLine("[read] reading source file...");
@@ -126,7 +128,11 @@ namespace LIN
                         {
                             foreach (string a in sb.ToString().Trim().Split(','))
                             {
-                                Args.Add(byte.Parse(a.Trim()));
+                                var trimmed = a.Trim();
+                                byte value = 0;
+                                if (!byte.TryParse(trimmed, out value))
+                                    value = Definition.TryGetDefinitionValue(trimmed, game);
+                                Args.Add(value);
                             }
                         }
                         e.Args = Args.ToArray();

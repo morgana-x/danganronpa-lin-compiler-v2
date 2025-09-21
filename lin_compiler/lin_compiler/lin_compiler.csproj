@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BatchProcesser.cs" />
+    <Compile Include="Definition.cs" />
     <Compile Include="Dumper.cs" />
     <Compile Include="Opcode.cs" />
     <Compile Include="Program.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Script.cs" />
     <Compile Include="ScriptRead.cs" />
     <Compile Include="ScriptWrite.cs" />
+    <Compile Include="Enums.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace LIN
 {
-    enum ScriptType
+    public enum ScriptType
     {
         Textless = 1,
         Text = 2,
     }
 
-    class ScriptEntry
+    public class ScriptEntry
     {
         public byte Opcode;
         public byte[] Args;
         public string Text;
     }
 
-    class Script
+    public class Script
     {
         public byte[] File;
         public ScriptType Type;
