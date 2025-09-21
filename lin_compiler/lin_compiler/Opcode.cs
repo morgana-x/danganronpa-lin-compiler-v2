@@ -15,7 +15,7 @@ namespace LIN
     public class ChangeUIOpcode : Opcode
     {
         public ChangeUIOpcode(string name, int numargs) : base(name, numargs) { }
-        public override string DecompileArg(Script script, int OpcodeIndex, byte[] args, int ArgIndex, byte ArgValue)
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
         {
             if (ArgIndex == 0)
             {
@@ -23,7 +23,7 @@ namespace LIN
                 if (name != null) return name;
             }
 
-            return base.DecompileArg(script, OpcodeIndex, args, ArgIndex, ArgValue);
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
         }
     }
 
@@ -31,14 +31,14 @@ namespace LIN
     {
         public SpeakerOpcode(string name, int numargs) : base(name, numargs) { }
 
-        public override string DecompileArg(Script script, int OpcodeIndex, byte[] args, int ArgIndex, byte ArgValue)
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
         {
             if (ArgIndex == 0)
             {
-                var name = Enum.GetName(typeof(Enums.DR1_CHAR), ArgValue);
+                var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
                 if (name != null) return name;
             }
-            return base.DecompileArg(script, OpcodeIndex, args, ArgIndex, ArgValue);
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
         }
     }
 
@@ -46,7 +46,7 @@ namespace LIN
     public class FlagOpcode : Opcode
     {
         public FlagOpcode(string name, int numargs) : base(name, numargs) { }
-        public override string DecompileArg(Script script, int OpcodeIndex, byte[] args, int ArgIndex, byte ArgValue)
+        public override string DecompileArg(Game game,  byte[] args, int ArgIndex, byte ArgValue)
         {
             if (ArgIndex == 0)
             {
@@ -56,7 +56,7 @@ namespace LIN
 
             if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_CHAR_SPEAK || args[1] == (byte)Enums.DR_FLAG.FLAG_CHAR_DEAD)
             {
-                var name = Enum.GetName(typeof(Enums.DR1_CHAR), ArgValue);
+                var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
                 if (name != null) return name;
             }
 
@@ -66,17 +66,17 @@ namespace LIN
                 if (name != null) return name;
             }
 
-            return base.DecompileArg(script, OpcodeIndex,args, ArgIndex, ArgValue);
+            return base.DecompileArg(game,args, ArgIndex, ArgValue);
         }
     }
     public class SpriteOpcode : Opcode
     {
         public SpriteOpcode(string name, int numargs) : base(name, numargs) { }
-        public override string DecompileArg(Script script, int OpcodeIndex, byte[] args, int ArgIndex, byte ArgValue)
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
         {
             if (ArgIndex == 1)
             {
-                var name = Enum.GetName(typeof(Enums.DR1_CHAR), ArgValue);
+                var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
                 if (name != null) return name;
             }
             if (ArgIndex == 3)
@@ -90,7 +90,28 @@ namespace LIN
                 if (name != null) return name;
             }
 
-            return base.DecompileArg(script, OpcodeIndex, args, ArgIndex, ArgValue);
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+
+    public class VoiceOpcode : Opcode
+    {
+        public VoiceOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0)
+            {
+                var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
+                if (name != null) return name;
+            }
+
+            if (ArgIndex == 1)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_CHAPTER), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
         }
     }
 
@@ -105,7 +126,7 @@ namespace LIN
         }
         public string Name;
         public int NumArguments;
-        public virtual string DecompileArg(Script script, int OpcodeIndex, byte[] args, int ArgIndex, byte ArgValue)
+        public virtual string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
         {
             return ArgValue.ToString();
         }

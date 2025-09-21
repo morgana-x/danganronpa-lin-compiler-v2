@@ -28,11 +28,14 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_HANDBOOK));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_UI));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_TIME));
+
             Definitions[Game.Danganronpa1] = Definitions[Game.Base].ToDictionary(entry => entry.Key,
                                                entry => entry.Value);
             Definitions[Game.Danganronpa2] = Definitions[Game.Base].ToDictionary(entry => entry.Key,
                                                entry => entry.Value);
+
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_CHAR));
+            LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_CHAR));
         }
 
         public static byte TryGetDefinitionValue(string name, Game game = Game.Base)

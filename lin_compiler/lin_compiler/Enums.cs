@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LIN;
+using System;
 
 namespace dr_lin
 {
@@ -26,9 +27,9 @@ namespace dr_lin
             CHAR_ALTEREGO = 17,
             CHAR_GENOCIDERSHOU = 18,
             CHAR_HEADMASTER = 19,
-            CHAR_MAKOTOMOM = 20,
-            CHAR_MAKOTODAD = 21,
-            CHAR_MAKOTOSISTER = 22,
+            CHAR_MAKOTO_MOM = 20,
+            CHAR_MAKOTO_DAD = 21,
+            CHAR_MAKOTO_SISTER = 22,
             CHAR_KIYOTAKAMONDO = 23,
             CHAR_DAIYA = 24,
             CHAR_NARRATOR = 26,
@@ -36,6 +37,63 @@ namespace dr_lin
             CHAR_UNKNOWN = 30,
             CHAR_SYSTEM = 31,
         }
+
+        public enum DR2_CHAR
+        {
+            CHAR_HAJIME = 0,
+            CHAR_KOMAEDA = 1,
+            CHAR_BYAKUYA = 2,
+            CHAR_GUNDAM = 3,
+            CHAR_KAZUICHI = 4,
+            CHAR_TERUTERU = 5,
+            CHAR_NEKOMARU = 6,
+            CHAR_FUYUHIKU = 7,
+            CHAR_AKANE = 8,
+            CHAR_CHIAKI = 9,
+            CHAR_SONIA = 10,
+            CHAR_HIYIKO = 11,
+            CHAR_MAHIRU = 12,
+            CHAR_MIKAN = 13,
+            CHAR_IBUKI = 14,
+            CHAR_PEKO = 15,
+            CHAR_MONOKUMA = 16,
+            CHAR_MONOMI = 17,
+            CHAR_JUNKO = 18,
+            CHAR_MECHAMARU = 19,
+            CHAR_MAKOTO = 20,
+            CHAR_KYOKO = 21,
+            CHAR_BYAKUYA_REAL = 22,
+            CHAR_TERUTERU_MOM = 23,
+            CHAR_ALTEREGO = 24,
+            CHAR_MINIMARU = 25,
+            CHAR_MONOKUMA_AND_MONOMI = 26,
+
+            CHAR_UNKNOWN = 30,
+            CHAR_SYSTEM = 31,
+
+            CHAR_USAMI = 39,
+            CHAR_SPARKLING_JUSTICE = 40,
+
+            CHAR_JUNKOBIG = 48,
+
+            CHAR_GIRL_A = 50,
+            CHAR_GIRL_B = 51,
+            CHAR_GIRL_C = 52,
+            CHAR_GIRL_D = 53,
+            CHAR_GIRL_E = 54,
+            CHAR_GUY_F = 55,
+            
+            CHAR_UNKNOWN_2 = 56
+        }
+
+        public static Type GetCharEnum(Game game)
+        {
+            if (game == Game.Danganronpa2)
+                return typeof(DR2_CHAR);
+            
+            return typeof(DR1_CHAR);
+        }
+
 
         public enum DR_UI
         {
@@ -118,6 +176,18 @@ namespace dr_lin
         {
             FADE_IN,
             FADE_OUT
+        }
+
+        public enum DR_CHAPTER
+        {
+            CHAPTER_PROLOGUE,
+            CHAPTER_1,
+            CHAPTER_2,
+            CHAPTER_3,
+            CHAPTER_4,
+            CHAPTER_5,
+            CHAPTER_6,
+            CHAPTER_GENERIC
         }
 
 
