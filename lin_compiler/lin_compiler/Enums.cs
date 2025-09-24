@@ -134,7 +134,15 @@ namespace dr_lin
             SKILL_AMBIDEX = 22,
             SKILL_HANDIWORK = 23,
             SKILL_TRANCE = 24,
-            SKILL_RAISE = 27
+            SKILL_OBSERVATION = 25,
+            SKILL_RUN = 26,
+            SKILL_RAISE = 27,
+            SKILL_HOPE = 40,
+            SKILL_SP_MAX_PLUS_1 = 41,
+            SKILL_SP_MAX_PLUS_2 = 42,
+            SKILL_SP_MAX_PLUS_3 = 43,
+            SKILL_SP_MAX_99 = 44
+
         }
 
         public enum DR2_SKILL
