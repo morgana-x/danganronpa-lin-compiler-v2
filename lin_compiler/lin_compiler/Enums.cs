@@ -165,6 +165,13 @@ namespace dr_lin
             CAM_FARRIGHT
         }
 
+        public enum DR_FILTER
+        {
+            FILTER_NONE,
+            FILTER_SEPIA
+        }
+
+
         public enum DR_SPRITE_STATE
         {
             SPRITE_3D,

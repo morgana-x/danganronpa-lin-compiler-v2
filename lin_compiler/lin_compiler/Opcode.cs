@@ -166,6 +166,22 @@ namespace LIN
         }
     }
 
+    public class PostProcessingEffectOpcode : Opcode
+    {
+        public PostProcessingEffectOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 1)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_FILTER), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+
+
 
     public class Opcode
     {
@@ -192,7 +208,7 @@ namespace LIN
                 { 0x01, new Opcode("LoadSprite", 3) }, // Mostly Unknown 
                 { 0x02, new Opcode("Text", 2) },
                 { 0x03, new Opcode("TextboxFormat", 1) }, // Textbox format, 0 = other char speaking, 4 = player character speaking / thoughts
-                { 0x04, new Opcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
+                { 0x04, new PostProcessingEffectOpcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
                 { 0x05, new Opcode("Movie", 2) },
                 { 0x06, new Opcode("Animation", 8) },
                 { 0x08, new VoiceOpcode("Voice", 5) },

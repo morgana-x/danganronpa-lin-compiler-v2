@@ -33,6 +33,7 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_TIME));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_CHAPTER));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_COLOUR));
+            LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FILTER));
 
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_CHAR));
             LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_CHAR));
