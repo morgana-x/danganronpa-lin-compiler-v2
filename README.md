@@ -25,10 +25,10 @@ pass the `-dr2` (or `--danganronpa2`) argument.
 ### New Stuff!
 This fork allows source / decompiled files to have:
 + Comments (Either using // or /**/, same as c language style commenting)
-+ "Synatax", Decompiled files have psuedo indentations/bracketed blocks of code based on certain opcodes
++ "Syntax", Decompiled files have psuedo indentations/bracketed blocks of code based on certain opcodes
 + Batch processing, allows folders to be supplied, Example: `lin_compiler infolder outfolder --decompile` /  `lin_compiler infolder outfolder`
-+ More Opcode names
++ More names assigned to Opcodes
 + --dump argument, allows you to dump the decompiled contents of a folder of scripts into a singular file, Example: `lin_compiler --dump infolder\ output.txt`
-+ Enums and definitions, decompiled files automatically add built-in enums to the file
++ Enums and definitions, decompiled files automatically add built-in enums to specific decompiled opcodes and detect them when compiling
 + Enums/Definitions can be overrided / created with the `#DEFINE VALUE_NAME VALUE` statement, Examples: `#DEFINE CHR_KAEDE 18`,`#DEFINE CHR_MAKOTO 100` `#DEFINE MY_DEFINITION 200`
 
