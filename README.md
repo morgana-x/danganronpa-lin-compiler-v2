@@ -29,4 +29,6 @@ This fork allows source / decompiled files to have:
 + Batch processing, allows folders to be supplied, Example: `lin_compiler infolder outfolder --decompile` /  `lin_compiler infolder outfolder`
 + More Opcode names
 + --dump argument, allows you to dump the decompiled contents of a folder of scripts into a singular file, Example: `lin_compiler --dump infolder\ output.txt`
++ Enums and definitions, decompiled files automatically add built-in enums to the file
++ Enums/Definitions can be overrided / created with the `#DEFINE VALUE_NAME VALUE` statement, Examples: `#DEFINE CHR_KAEDE 18`,`#DEFINE CHR_MAKOTO 100` `#DEFINE MY_DEFINITION 200`
 
