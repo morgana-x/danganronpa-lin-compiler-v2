@@ -36,14 +36,17 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FILTER));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_JOINER));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_COMPARE));
+            LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_ARITHMETIC));
 
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_CHAR));
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_BGM));
             LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_SKILL));
+            LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.DR1_ITEM));
 
             LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_CHAR));
             LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_BGM));
             LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_SKILL));
+            LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.DR2_ITEM));
         }
 
         public static byte TryGetDefinitionValue(string name, Game game = Game.Base)

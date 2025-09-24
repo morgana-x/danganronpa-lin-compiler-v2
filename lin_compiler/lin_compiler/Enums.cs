@@ -142,11 +142,75 @@ namespace dr_lin
             SKILL_SP_MAX_PLUS_2 = 42,
             SKILL_SP_MAX_PLUS_3 = 43,
             SKILL_SP_MAX_99 = 44
-
         }
 
         public enum DR2_SKILL
-        { 
+        {
+        }
+
+        public enum DR1_ITEM
+        {
+            ITEM_MINERAL_WATER,
+            ITEM_COLA_COLA,
+            ITEM_CIVET_COFFEE,
+            ITEM_ROSE_HIP_TEA,
+            ITEM_SEA_SALT,
+            ITEM_POTATO_CHIPS,
+            ITEM_PRISMATIC_HARDTACK,
+            ITEM_BLACK_CROISSANT,
+            ITEM_SONIC_CUP_A_NOODLE,
+            ITEM_ROYAL_CURRY,
+            ITEM_RATION,
+            ITEM_FLOTATION_DONUT,
+            ITEM_OVERFLOWING_LUNCH_BOX,
+            ITEM_SUNFLOWER_SEEDS,
+            ITEM_BIRDS_WEED,
+            ITEM_KITTEN_HAIR_CLIP,
+            ITEM_EVERLASTING_BRACELET,
+            ITEM_LOVE_STATUS_RING,
+            ITEM_ZOLES_DIAMOND,
+            ITEM_HOPE_PEAKS_RING,
+            ITEM_BLUEBERRY_PERFUME,
+            ITEM_SCARAB_BROOCHY,
+            ITEM_GOD_OF_WAR_CHARM,
+            ITEM_MACS_GLOVES,
+            ITEM_GLASSES,
+            ITEM_G_SICK,
+            ITEM_ROLLER_SLIPPER,
+            ITEM_RED_SCARF,
+            ITEM_LEAF_COVERING,
+            ITEM_TORNEKOS_PANTS,
+            ITEM_BUNNY_EARMUFFS,
+            ITEM_FRESH_BINDINGS,
+            ITEM_JIMMY_DECAY_TSHIRT,
+            ITEM_EMPERORS_THONG,
+            ITEM_HAND_BRAY,
+            ITEM_WATERLOVER,
+            ITEM_DEMON_ANGEL_PRINESS_FIGURE,
+            ITEM_ASTRAL_BOY_DOLL,
+            ITEM_SHEERS,
+            ITEM_LAYERING_SHEERS,
+            ITEM_QUALITY_CHINCHILLA_COVER,
+            ITEM_KIRLIN_CAMERA,
+            ITEM_ADORABLE_REACTIONS_COLLECTION,
+            ITEM_TUMBLE_WEED,
+            ITEM_UNENDING_DANDELION,
+            ITEM_ROSE_IN_VITROY,
+            ITEM_CHERRY_BLOSSOM,
+            ITEM_SCHOOL_CREST = 92,
+            ITEM_DESPAIR_BAT = 93,
+            ITEM_CRAZY_DIAMOND = 94,
+            ITEM_SUPER_ROBO_JUSTICE = 95,
+            ITEM_LUNAR_JUMP = 96,
+            ITEM_DREAM_ISLAND_ROCKET = 97,
+            ITEM_MONOKUMA_HAIRTIE = 98,
+            ITEM_EASTER_EGG = 99
+
+
+        }
+
+        public enum DR2_ITEM
+        {
         }
 
 
@@ -173,6 +237,13 @@ namespace dr_lin
             return typeof(DR1_SKILL);
         }
 
+        public static Type GetPresentEnum(Game game)
+        {
+            if (game == Game.Danganronpa2)
+                return typeof(DR2_ITEM);
+
+            return typeof(DR1_ITEM);
+        }
 
         public enum DR_UI
         {
@@ -190,7 +261,7 @@ namespace dr_lin
             UI_CAM_PAN = 14,
             UI_CAM_LOOK = 15,
             UI_INVESTIGATE = 16,
-            UI_CHOICE = 18,
+            UI_CHOOSE_OPTION = 18,
             UI_CHOOSE_PRESENT = 19,
             UI_BLEEPTEXT = 23,
             UI_CAM_ZOOM = 25,
@@ -243,6 +314,12 @@ namespace dr_lin
         {
             AND = 6,
             OR = 7
+        }
+
+        public enum DR_ARITHMETIC
+        {
+            ADD = 1,
+            SUBTRACT = 2
         }
 
 

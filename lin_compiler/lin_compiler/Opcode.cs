@@ -250,6 +250,27 @@ namespace LIN
             return base.DecompileArg(game, args, ArgIndex, ArgValue);
         }
     }
+    public class PresentOpcode : Opcode
+    {
+        public PresentOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0)
+            {
+                var name = Enum.GetName(Enums.GetPresentEnum(game), ArgValue);
+                if (name != null) return name;
+            }
+
+            if (ArgIndex == 1)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_ARITHMETIC), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+
 
 
     public class Opcode
@@ -285,7 +306,7 @@ namespace LIN
                 { 0x0A, new Opcode("Sound", 3) },
                 { 0x0B, new Opcode("SoundB", 2) },
                 { 0x0C, new Opcode("AddTruthBullets", 2) },
-                { 0x0D, new Opcode("AddPresents", 3) },
+                { 0x0D, new PresentOpcode("AddPresents", 3) },
                 { 0x0E, new SkillOpcode("UnlockSkill", 2) },
                 { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
                 { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
@@ -307,7 +328,7 @@ namespace LIN
                 { 0x27, new Opcode("CheckCharacter", 1) },
                 { 0x29, new Opcode("CheckObject", 1) },
                 { 0x2A, new Opcode("SetLabel", 2) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
-                { 0x2B, new Opcode("SetChoiceText", 1) }, // Choice??
+                { 0x2B, new Opcode("SetOption", 1) }, // Choice??
                 { 0x2C, new Opcode("EndOfJump", 2) },
                 { 0x2D, new Opcode("CameraFlash",-1) },// IF CAUSING ISSUE THIS IS THE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 { 0x2E, new Opcode("CameraShake", 2) },
