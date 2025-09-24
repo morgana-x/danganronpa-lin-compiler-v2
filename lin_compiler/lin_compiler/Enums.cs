@@ -74,7 +74,7 @@ namespace dr_lin
             CHR_USAMI = 39,
             CHR_SPARKLING_JUSTICE = 40,
 
-            CHR_JUNKOBIG = 48,
+            CHR_JUNKO_BIG = 48,
 
             CHR_GIRL_A = 50,
             CHR_GIRL_B = 51,
@@ -177,6 +177,15 @@ namespace dr_lin
             FADE_IN,
             FADE_OUT
         }
+
+        public enum DR_COLOUR
+        {
+            COL_BLACK_SPECIAL,
+            COL_BLACK,
+            COL_WHITE,
+            COL_RED
+        }
+
 
         public enum DR_CHAPTER
         {

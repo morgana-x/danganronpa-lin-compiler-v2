@@ -156,6 +156,12 @@ namespace LIN
                 if (name != null) return name;
             }
 
+            if (ArgIndex == 1)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_COLOUR), ArgValue);
+                if (name != null) return name;
+            }
+
             return base.DecompileArg(game, args, ArgIndex, ArgValue);
         }
     }
