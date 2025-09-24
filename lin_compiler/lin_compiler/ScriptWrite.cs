@@ -159,7 +159,7 @@ namespace LIN
         }
         static public void WriteSource(Script s, string Filename, Game game = Game.Base, bool append = false)
         {
-            System.IO.StreamWriter File = new System.IO.StreamWriter(Filename, false, Encoding.Unicode);
+            System.IO.StreamWriter File = new System.IO.StreamWriter(Filename, false, Encoding.UTF8);
             WriteSource(s, File, game, append);
         }
 

@@ -29,7 +29,7 @@ namespace LIN
             // Default script type is textless
             s.Type = ScriptType.Textless;
             //Program.PrintLine("[read] reading source file...");
-            System.IO.StreamReader File = new System.IO.StreamReader(Filename, Encoding.Unicode);
+            System.IO.StreamReader File = new System.IO.StreamReader(Filename, Encoding.UTF8);
             List<ScriptEntry> ScriptData = new List<ScriptEntry>();
             StringBuilder sb = new StringBuilder();
             uint sourceLine = 0;
