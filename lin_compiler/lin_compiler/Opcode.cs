@@ -59,9 +59,9 @@ namespace LIN
                 if (name != null) return name;
             }*/
 
-            if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_HANDBOOK)
+            if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_SYSTEM)
             {
-                var name = Enum.GetName(typeof(Enums.DR_FLAG_HANDBOOK), ArgValue);
+                var name = Enum.GetName(typeof(Enums.DR_FLAG_SYSTEM), ArgValue);
                 if (name != null) return name;
             }
 
@@ -129,6 +129,36 @@ namespace LIN
         }
     }
 
+    public class GameStateOpcode : Opcode
+    {
+        public GameStateOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 3 && args[0] == 0 && args[1] == 0 && args[2] == 0)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_TIME), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+
+
+    public class ScreenFadeOpcode : Opcode
+    {
+        public ScreenFadeOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_FADE), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
 
 
     public class Opcode
@@ -179,7 +209,7 @@ namespace LIN
                 { 0x1F, new Opcode("ScreenFlash", 7) },
                 { 0x20, new Opcode("SpriteFlash", 5) },
                 { 0x21, new SpeakerOpcode("Speaker", 1) },
-                { 0x22, new Opcode("ScreenFade", 3) },
+                { 0x22, new ScreenFadeOpcode("ScreenFade", 3) },
                 { 0x23, new Opcode("ObjectState", 5) },
                 { 0x25, new ChangeUIOpcode("ChangeUi", 2) },
                 { 0x26, new FlagOpcode("SetFlag", 3) }, // Argument 1 is the group, argument 2 is the ID, and argument 3 is the state.
@@ -193,7 +223,7 @@ namespace LIN
                 { 0x2F, new Opcode(null, 10) },
                 { 0x30, new Opcode("ShowBackground", 3) },
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
-                { 0x33, new Opcode(null, 4) },
+                { 0x33, new GameStateOpcode("SetGameState", 4) },
                 { 0x34, new Opcode("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
                 { 0x35, new FlagOpcode("CheckFlagA", -1) }, // each check is 4 args
                 { 0x36, new FlagOpcode("CheckFlagB", -1) }, // each check is 4 args

@@ -128,19 +128,20 @@ namespace dr_lin
 
         public enum DR_FLAG
         {
-            FLAG_HANDBOOK = 0,
+            FLAG_SYSTEM = 0,
             FLAG_MAP_UNLOCK = 1,
             FLAG_CHR_SPEAK = 15,
             FLAG_CHR_DEAD = 17
         }
 
-        public enum DR_FLAG_HANDBOOK
+        public enum DR_FLAG_SYSTEM
         {
             HANDBOOK_ENABLED = 4,
             HANDBOOK_MAP_ENABLED = 5,
             HANDBOOK_TRUTHBULLET_ENABLED = 6,
             HANDBOOK_SAVE_ENABLED = 7,
-            HANDBOOK_TRUTHBULLET_KNOWN = 19
+            HANDBOOK_TRUTHBULLET_KNOWN = 19,
+            ROOM_EXIT_ENABLED = 12
         }
 
         public enum DR_TIME
@@ -164,7 +165,7 @@ namespace dr_lin
 
         public enum DR_SPRITE_STATE
         {
-            SPRITE_INVISIBLE,
+            SPRITE_3D,
             SPRITE_SHOW,
             SPRITE_SHOW_DELAY,
             SPRITE_HIDE_2,

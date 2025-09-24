@@ -28,7 +28,7 @@ namespace dr_lin
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_CAM_DIR));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_SPRITE_STATE));
-            LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_HANDBOOK));
+            LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_FLAG_SYSTEM));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_UI));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_TIME));
             LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DR_CHAPTER));
