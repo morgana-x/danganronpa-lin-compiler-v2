@@ -226,7 +226,7 @@ namespace LIN
                 { 0x19, new Opcode("LoadScript", 3) },
                 { 0x1A, new Opcode("StopScript", 0) },
                 { 0x1B, new Opcode("RunScript", 3) },
-                { 0x1C, new Opcode(null, 0) },
+                { 0x1C, new Opcode("RestartScript", 0) },
                 { 0x1E, new SpriteOpcode("Sprite", 5) },
                 { 0x1F, new Opcode("ScreenFlash", 7) },
                 { 0x20, new Opcode("SpriteFlash", 5) },
