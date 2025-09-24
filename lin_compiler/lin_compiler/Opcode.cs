@@ -53,8 +53,8 @@ namespace LIN
                 if (name != null) return name;
             }
 
-           if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_CHR_DEAD)
-           {
+            if (ArgIndex == 1 && args[0] == (byte)Enums.DR_FLAG.FLAG_CHR_DEAD)
+            {
                 var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
                 if (name != null) return name;
             }
