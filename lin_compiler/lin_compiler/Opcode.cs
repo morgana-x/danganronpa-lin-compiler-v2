@@ -68,6 +68,47 @@ namespace LIN
             return base.DecompileArg(game,args, ArgIndex, ArgValue);
         }
     }
+    public class CheckFlagOpcode : Opcode
+    {
+        public CheckFlagOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0 || ArgIndex == 5 || ArgIndex == 10 || ArgIndex == 15 || ArgIndex == 20 || ArgIndex == 25 || ArgIndex == 30 || ArgIndex == 35)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_FLAG), ArgValue);
+                if (name != null) return name;
+            }
+
+            if (ArgIndex == 1 || ArgIndex == 6 || ArgIndex == 11 || ArgIndex == 16 || ArgIndex == 21 || ArgIndex == 26 || ArgIndex == 31 || ArgIndex == 36)
+            {
+                if (args[ArgIndex - 1] == (byte)Enums.DR_FLAG.FLAG_CHR_DEAD)
+                {
+
+                    var name = Enum.GetName(Enums.GetCharEnum(game), ArgValue);
+                    if (name != null) return name;
+                }
+                if (args[ArgIndex - 1] == (byte)Enums.DR_FLAG.FLAG_SYSTEM)
+                {
+                    var name = Enum.GetName(typeof(Enums.DR_FLAG_SYSTEM), ArgValue);
+                    if (name != null) return name;
+                }
+            }
+
+            if (ArgIndex == 2 || ArgIndex == 7 || ArgIndex == 12 || ArgIndex == 17 || ArgIndex == 22 || ArgIndex == 27 || ArgIndex == 32 || ArgIndex == 37)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_FLAG_COMPARE), ArgValue);
+                if (name != null) return name;
+            }
+
+            if (ArgIndex == 4 || ArgIndex == 9  || ArgIndex == 14 || ArgIndex == 19 || ArgIndex == 24 || ArgIndex == 29 || ArgIndex == 34 || ArgIndex == 39)
+            {
+                var name = Enum.GetName(typeof(Enums.DR_FLAG_JOINER), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
     public class SpriteOpcode : Opcode
     {
         public SpriteOpcode(string name, int numargs) : base(name, numargs) { }
@@ -181,6 +222,34 @@ namespace LIN
         }
     }
 
+    public class SkillOpcode : Opcode
+    {
+        public SkillOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0)
+            {
+                var name = Enum.GetName(Enums.GetSkillEnum(game), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
+    public class MusicOpcode : Opcode
+    {
+        public MusicOpcode(string name, int numargs) : base(name, numargs) { }
+        public override string DecompileArg(Game game, byte[] args, int ArgIndex, byte ArgValue)
+        {
+            if (ArgIndex == 0)
+            {
+                var name = Enum.GetName(Enums.GetBGMEnum(game), ArgValue);
+                if (name != null) return name;
+            }
+
+            return base.DecompileArg(game, args, ArgIndex, ArgValue);
+        }
+    }
 
 
     public class Opcode
@@ -212,12 +281,12 @@ namespace LIN
                 { 0x05, new Opcode("Movie", 2) },
                 { 0x06, new Opcode("Animation", 8) },
                 { 0x08, new VoiceOpcode("Voice", 5) },
-                { 0x09, new Opcode("Music", 3) },
+                { 0x09, new MusicOpcode("Music", 3) },
                 { 0x0A, new Opcode("Sound", 3) },
                 { 0x0B, new Opcode("SoundB", 2) },
                 { 0x0C, new Opcode("AddTruthBullets", 2) },
                 { 0x0D, new Opcode("AddPresents", 3) },
-                { 0x0E, new Opcode("UnlockSkill", 2) },
+                { 0x0E, new SkillOpcode("UnlockSkill", 2) },
                 { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
                 { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
                 { 0x11, new Opcode(null, 4) }, // Relationship setting?
@@ -247,8 +316,8 @@ namespace LIN
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
                 { 0x33, new GameStateOpcode("SetGameState", 4) },
                 { 0x34, new Opcode("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
-                { 0x35, new FlagOpcode("CheckFlagA", -1) }, // each check is 4 args
-                { 0x36, new FlagOpcode("CheckFlagB", -1) }, // each check is 4 args
+                { 0x35, new CheckFlagOpcode("CheckFlagA", -1) }, // each check is 4 args
+                { 0x36, new CheckFlagOpcode("CheckFlagB", -1) }, // each check is 4 args
                 { 0x38, new Opcode(null, -1) },
                 { 0x39, new Opcode(null, 5) },
                 { 0x3A, new Opcode("WaitInput", 0) },

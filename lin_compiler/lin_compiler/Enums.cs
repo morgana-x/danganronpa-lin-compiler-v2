@@ -86,12 +86,83 @@ namespace dr_lin
             CHR_UNKNOWN_2 = 56
         }
 
+        public enum DR1_BGM
+        {
+            BGM_OPENING = 0,
+            BGM_MENU_START = 1,
+            BGM_RESET = 255
+        }
+
+        public enum DR2_BGM
+        {
+            BGM_OPENING = 0,
+            BGM_MENU_START = 1,
+            BGM_BEAUTIFUL_RUIN = 2,
+            BGM_BEAUTIFUL_RUIN_SUMMER_SALT = 3,
+            BGM_IKOROSHIA = 4,
+            BGM_EKOROSHIA = 5,
+            BGM_RE_BEAUTIFUL_MORNING = 6,
+            BGM_BEAUTIFUL_DAYS_PIANO = 7,
+            BGM_TROPICAL_DESPAIR = 8,
+            BGM_RESET = 255
+        }
+
+        public enum DR1_SKILL
+        {
+            SKILL_INFLUENCE_ATTENTIVE = 0,
+            SKILL_INFLUENCE_ENVIOUS = 1,
+            SKILL_FOCUS_EXTRAORDINARY = 2,
+            SKILL_FOCUS_MENACING = 3,
+            SKILL_LOST_IN_THOUGHT = 4,
+            SKILL_CHARISMA = 5,
+            SKILL_COOL_COMPOSED = 6,
+            SKILL_TRANQUILITY = 7,
+            SKILL_DOWNSHIFT = 8,
+            SKILL_UPSHIFT = 9,
+            SKILL_ROBOT_JOCK = 10,
+            SKILL_TRIGGER_HAPPY = 11,
+            SKILL_CRYSTAL_PREDICTION = 12,
+            SKILL_CHEAT_CODE = 13,
+            SKILL_ALGORITHM = 14,
+            SKILL_KINETIC_DEPTH = 15,
+            SKILL_STEEL_PATIENCE = 16,
+            SKILL_NEURAL_LIBERATION = 17,
+            SKILL_DELUSION = 18,
+            SKILL_BREATHING = 19,
+            SKILL_MELODIOUS_VOICE = 20,
+            SKILL_VOCABULARY = 21,
+            SKILL_AMBIDEX = 22,
+            SKILL_HANDIWORK = 23,
+            SKILL_TRANCE = 24,
+            SKILL_RAISE = 27
+        }
+
+        public enum DR2_SKILL
+        { 
+        }
+
+
         public static Type GetCharEnum(Game game)
         {
             if (game == Game.Danganronpa2)
                 return typeof(DR2_CHAR);
             
             return typeof(DR1_CHAR);
+        }
+
+        public static Type GetBGMEnum(Game game)
+        {
+            if (game == Game.Danganronpa2)
+                return typeof(DR2_BGM);
+
+            return typeof(DR1_BGM);
+        }
+        public static Type GetSkillEnum(Game game)
+        {
+            if (game == Game.Danganronpa2)
+                return typeof(DR2_SKILL);
+
+            return typeof(DR1_SKILL);
         }
 
 
@@ -132,8 +203,10 @@ namespace dr_lin
         {
             FLAG_SYSTEM = 0,
             FLAG_MAP_UNLOCK = 1,
-            FLAG_CHR_SPEAK = 15,
-            FLAG_CHR_DEAD = 17
+            FLAG_OBJ_INVESTIGATED = 13,
+            FLAG_MAP_INVESTIGATED = 14,
+            FLAG_CHR_INVESTIGATED = 15,
+            FLAG_CHR_DEAD = 16
         }
 
         public enum DR_FLAG_SYSTEM
@@ -145,6 +218,25 @@ namespace dr_lin
             HANDBOOK_TRUTHBULLET_KNOWN = 19,
             ROOM_EXIT_ENABLED = 12
         }
+
+        // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinFlagCheck.kt#L3
+        public enum DR_FLAG_COMPARE
+        {
+            NOT_EQUAL = 0,
+            EQUAL = 1,
+            LESS_OR_EQUAL = 2,
+            GREATER_OR_EQUAL = 3,
+            LESS_THAN = 4,
+            GREATER_THAN = 5,
+        }
+
+        // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinJoinerFlagCheck.kt    public enum DR_COMPARE
+        public enum DR_FLAG_JOINER
+        {
+            AND = 6,
+            OR = 7
+        }
+
 
         public enum DR_TIME
         {
