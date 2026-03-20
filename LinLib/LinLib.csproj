@@ -8,13 +8,10 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\net10.0\LinLib.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\net10.0\LinLib.xml</DocumentationFile>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Content Include="..\README.md">
-        <Link>README.md</Link>
-      </Content>
-    </ItemGroup>
-
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\LinLib.xml</DocumentationFile>
+    </PropertyGroup>
 </Project>

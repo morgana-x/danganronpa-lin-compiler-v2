@@ -1,55 +1,46 @@
-using System;
-using System.Collections.Generic;
+#pragma warning disable 1591
 
-namespace LIN
+namespace LinLib.LIN;
+
+public enum ScriptType
 {
-    public enum ScriptType
-    {
-        Textless = 1,
-        Text = 2,
-    }
+    TEXTLESS = 1,
+    TEXT = 2
+}
 
-    internal class ScriptEntry
-    {
-        public byte Opcode;
-        public byte[] Args;
-        public string Text;
-    }
+internal class ScriptEntry
+{
+    public byte[] Args = null!;
+    public byte Opcode;
+    public string Text = null!;
+}
 
-    internal class Script
-    {
-        public byte[] File;
-        public ScriptType Type;
-        public int HeaderSize;
-        public int FileSize;
-        public int TextBlockPos;
-        public List<ScriptEntry> ScriptData;
-        public int TextEntries;
+internal class Script
+{
+    public byte[] File = null!;
+    public int FileSize;
+    public int HeaderSize;
+    public List<ScriptEntry> ScriptData = null!;
+    public int TextBlockPos;
+    public int TextEntries;
+    public ScriptType Type;
 
-        public Script(string Filename, bool Compiled = true, Game game = Game.Base)
+    public Script(string filename, bool compiled = true, Game game = Game.BASE)
+    {
+        if (compiled)
         {
-            if (Compiled)
-            {
-                if (!ScriptRead.ReadCompiled(this, System.IO.File.ReadAllBytes(Filename), game))
-                {
-                    throw new Exception("[load] error: failed to load script.");
-                }
-            }
-            else
-            {
-                if (!ScriptRead.ReadSource(this, Filename, game))
-                {
-                    throw new Exception("[load] error: failed to load script.");
-                }
-            }
-        }
-
-        public Script(byte[] Bytes, Game game = Game.Base)
-        {
-            if (!ScriptRead.ReadCompiled(this, Bytes, game))
-            {
+            if (!ScriptRead.ReadCompiled(this, System.IO.File.ReadAllBytes(filename), game))
                 throw new Exception("[load] error: failed to load script.");
-            }
         }
+        else
+        {
+            if (!ScriptRead.ReadSource(this, filename, game))
+                throw new Exception("[load] error: failed to load script.");
+        }
+    }
+
+    public Script(byte[] bytes, Game game = Game.BASE)
+    {
+        if (!ScriptRead.ReadCompiled(this, bytes, game)) throw new Exception("[load] error: failed to load script.");
     }
 }

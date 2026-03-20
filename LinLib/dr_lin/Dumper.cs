@@ -1,42 +1,37 @@
-using LIN;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
+using LinLib.LIN;
 
-namespace dr_lin
+namespace LinLib.dr_lin;
+
+internal static class Dumper
 {
-    internal static class Dumper
+    public static void DumpDirectory(string inPath, string outFile, Game game = Game.DANGANRONPA1)
     {
-        public static void DumpDirectory(string in_path, string out_file, Game game = Game.Danganronpa1)
-        {
-            Console.WriteLine("Dumping files from " + in_path + " to " + out_file);
-            string[] FilePathsIn = Directory.GetFiles(in_path);
-            System.IO.StreamWriter OutFileWriter = new System.IO.StreamWriter(out_file, false, Encoding.Unicode);
+        Console.WriteLine("Dumping files from " + inPath + " to " + outFile);
+        var filePathsIn = Directory.GetFiles(inPath);
+        var outFileWriter = new StreamWriter(outFile, false, Encoding.Unicode);
 
-            foreach (string filePath in FilePathsIn) 
+        foreach (var filePath in filePathsIn)
+        {
+            if (!filePath.EndsWith(".lin"))
+                continue;
+            Console.WriteLine("Processing " + filePath);
+            outFileWriter.WriteLine("# [" + filePath + "]");
+
+            try
             {
-                if (!filePath.EndsWith(".lin"))
-                    continue;
-                Console.WriteLine("Processing " + filePath);
-                OutFileWriter.WriteLine( "# [" + filePath + "]");
-       
-                try
-                {
-                    Script s = new Script(filePath, true, game);
-                    ScriptWrite.WriteSource(s, OutFileWriter, game, true);
-                }
-                catch
-                {
-                    OutFileWriter.WriteLine("CRITICAL ERROR OCCURED WHILE EXTRACTING THE FILE");
-                }
-                OutFileWriter.WriteLine("\n\n\n\n");
+                var s = new Script(filePath, true, game);
+                ScriptWrite.WriteSource(s, outFileWriter, game, true);
             }
-            OutFileWriter.Dispose();
-            OutFileWriter.Close();
+            catch
+            {
+                outFileWriter.WriteLine("CRITICAL ERROR OCCURED WHILE EXTRACTING THE FILE");
+            }
+
+            outFileWriter.WriteLine("\n\n\n\n");
         }
+
+        outFileWriter.Dispose();
+        outFileWriter.Close();
     }
 }
