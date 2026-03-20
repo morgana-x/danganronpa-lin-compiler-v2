@@ -1,7 +1,7 @@
 using LIN;
 using System;
 
-namespace dr_lin
+namespace LinLib
 {
     public class Enums
     {

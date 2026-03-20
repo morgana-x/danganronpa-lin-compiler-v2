@@ -1,6 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lin_compiler", "lin_compiler\lin_compiler.csproj", "{8A49B362-A02E-4DFD-A151-633828F136CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinLib", "LinLib\LinLib.csproj", "{8A49B362-A02E-4DFD-A151-633828F136CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

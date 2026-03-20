@@ -1,8 +1,6 @@
 using dr_lin;
 using LIN;
-
-namespace lin_compiler;
-
+namespace LinLib;
 public class LinLib
 {
     public LinLib()
