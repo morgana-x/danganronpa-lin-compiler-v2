@@ -11,4 +11,10 @@
       <DocumentationFile>bin\Release\net10.0\lin_compiler.xml</DocumentationFile>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Content Include="..\README.md">
+        <Link>README.md</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>
