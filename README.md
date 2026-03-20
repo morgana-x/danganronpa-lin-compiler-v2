@@ -20,4 +20,6 @@ Note: Every time a method asks for an `int game`, 0 = Danganronpa 1 and 1 = Dang
 - `DecompileLin(string input, string output, int game)` - Takes in the path of a .lin file and converts it to a .txt file in `output` (must include name of output file).
 - `CompileLin(string input, string output, int game)`- Takes in the path of a .txt file and converts it to a .lin file in `output` (must include name of output file).
 
+The library also exposes the Enums it uses for reference.
+
 ### Please refer to the original repo for more information.
