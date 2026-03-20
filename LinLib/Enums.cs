@@ -2,6 +2,8 @@ using LinLib.LIN;
 
 #pragma warning disable 1591
 
+namespace LinLib;
+
 public class Enums
 {
     public enum DR_ARITHMETIC
