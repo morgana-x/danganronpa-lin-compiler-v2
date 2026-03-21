@@ -43,6 +43,30 @@ public static class LinCalls
         Opcode.GenerateOpcodeLookup();
         BatchProcesser.BatchProcessDirectory(input, false, (Game)game, output);
     }
+    
+    /// <summary>
+    ///     Converts every .lin file in a folder into a .txt file
+    /// </summary>
+    /// <param name="input">Directory with the .lin files</param>
+    /// <param name="output">Path to generate the final .txt files in</param>
+    /// <param name="game">DR1 = 0, DR2 = 1</param>
+    public static async Task BatchDecompileDirectoryAsync(string input, string output, int game)
+    {
+        Opcode.GenerateOpcodeLookup();
+        await BatchProcesser.BatchProcessDirectoryAsync(input, true, (Game)game, output);
+    }
+
+    /// <summary>
+    ///     Converts every .txt file in a folder into a .lin file
+    /// </summary>
+    /// <param name="input">Directory with the .txt files</param>
+    /// <param name="output">Path to generate the final .lin files in</param>
+    /// <param name="game">DR1 = 0, DR2 = 1</param>
+    public static async Task BatchCompileDirectoryAsync(string input, string output, int game)
+    {
+        Opcode.GenerateOpcodeLookup();
+        await BatchProcesser.BatchProcessDirectoryAsync(input, false, (Game)game, output);
+    }
 
     /// <summary>
     ///     Decompiles a .lin file to a readable .txt file
