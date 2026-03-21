@@ -2,9 +2,19 @@ using System.Text;
 
 namespace LinLib.LIN;
 
-internal static class ScriptWrite
+/// <summary>
+/// Script writing handler
+/// </summary>
+public static class ScriptWrite
 {
-    public static void WriteSource(Script s, StreamWriter file, Game game = Game.Base, bool append = false)
+    /// <summary>
+    /// Writes a decompiled script file
+    /// </summary>
+    /// <param name="s">The compiled script</param>
+    /// <param name="file">The file to write the decompiled script to</param>
+    /// <param name="game">Danganronpa 1 or 2</param>
+    /// <param name="append">Whether to append the contents of the compiled script to the output file or to replace the latter's contents</param>
+    public static void WriteSource(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
     {
         var indentLevel = 0;
         var shouldPlaceBracket = 0;
@@ -128,7 +138,7 @@ internal static class ScriptWrite
         if (!append) file.Close();
     }
 
-    private static async Task WriteSourceAsync(Script s, StreamWriter file, Game game = Game.Base, bool append = false)
+    private static async Task WriteSourceAsync(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
     {
         var indentLevel = 0;
         var shouldPlaceBracket = 0;
@@ -252,30 +262,52 @@ internal static class ScriptWrite
         if (!append) file.Close();
     }
 
-    public static void WriteSource(Script s, string filename, Game game = Game.Base, bool append = false)
+    /// <summary>
+    /// Creates a file and then starts the write decompiled script file operation on said file
+    /// </summary>
+    /// <param name="s">The compiled script</param>
+    /// <param name="filename">The path to the file to write the decompiled script to</param>
+    /// <param name="game">Danganronpa 1 or 2</param>
+    /// <param name="append">Whether to append the contents of the compiled script to the output file or to replace the latter's contents</param>
+    public static void WriteSource(Script s, string filename, Game game = Game.BASE, bool append = false)
     {
         var file = new StreamWriter(filename, false, Encoding.UTF8);
         WriteSource(s, file, game, append);
     }
     
-    public static async Task WriteSourceAsync(Script s, string filename, Game game = Game.Base, bool append = false)
+    /// <summary>
+    /// Creates a file and then starts the write decompiled script file asynchronously operation on said file
+    /// </summary>
+    /// <param name="s">The compiled script</param>
+    /// <param name="filename">The path to the file to write the decompiled script to</param>
+    /// <param name="game">Danganronpa 1 or 2</param>
+    /// <param name="append">Whether to append the contents of the compiled script to the output file or to replace the latter's contents</param>
+
+    public static async Task WriteSourceAsync(Script s, string filename, Game game = Game.BASE, bool append = false)
     {
         var file = new StreamWriter(filename, false, Encoding.UTF8);
         await WriteSourceAsync(s, file, game, append);
     }
 
+    /// <summary>
+    /// Writes a compiled script file to the specified file.
+    /// </summary>
+    /// <param name="s">Decompiled script</param>
+    /// <param name="filename">Path to the final compiled script</param>
+    /// <exception cref="Exception">The given file isn't a decompiled script file.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The script type isn't valid.</exception>
     public static void WriteCompiled(Script s, string filename)
     {
         var file = new List<byte>();
 
         // Header
         file.AddRange(BitConverter.GetBytes((int)s.Type));
-        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.Text ? 16 : 12));
+        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.TEXT ? 16 : 12));
         switch (s.Type)
         {
-            case ScriptType.Textless:
+            case ScriptType.TEXTLESS:
                 break;
-            case ScriptType.Text:
+            case ScriptType.TEXT:
                 file.AddRange(BitConverter.GetBytes(s.TextBlockPos));
                 break;
             default: throw new Exception("[write] error: unknown script type.");
@@ -284,7 +316,7 @@ internal static class ScriptWrite
         file.AddRange(BitConverter.GetBytes(s.FileSize));
 
         var textData = new Dictionary<int, string>();
-        if (s.Type == ScriptType.Text)
+        if (s.Type == ScriptType.TEXT)
         {
             s.TextEntries = 0;
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
@@ -315,10 +347,10 @@ internal static class ScriptWrite
 
         switch (s.Type)
         {
-            case ScriptType.Textless:
+            case ScriptType.TEXTLESS:
                 s.FileSize = s.TextBlockPos;
                 break;
-            case ScriptType.Text:
+            case ScriptType.TEXT:
             {
                 file.AddRange(BitConverter.GetBytes(s.TextEntries));
                 var startPoints = new int[s.TextEntries];
@@ -378,18 +410,25 @@ internal static class ScriptWrite
         File.WriteAllBytes(filename, file.ToArray());
     }
     
+    /// <summary>
+    /// Asynchronously writes a compiled script file to the specified file.
+    /// </summary>
+    /// <param name="s">Decompiled script</param>
+    /// <param name="filename">Path to the final compiled script</param>
+    /// <exception cref="Exception">The given file isn't a decompiled script file.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The script type isn't valid.</exception>
     public static async Task WriteCompiledAsync(Script s, string filename)
     {
         var file = new List<byte>();
 
         // Header
         file.AddRange(BitConverter.GetBytes((int)s.Type));
-        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.Text ? 16 : 12));
+        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.TEXT ? 16 : 12));
         switch (s.Type)
         {
-            case ScriptType.Textless:
+            case ScriptType.TEXTLESS:
                 break;
-            case ScriptType.Text:
+            case ScriptType.TEXT:
                 file.AddRange(BitConverter.GetBytes(s.TextBlockPos));
                 break;
             default: throw new Exception("[write] error: unknown script type.");
@@ -398,7 +437,7 @@ internal static class ScriptWrite
         file.AddRange(BitConverter.GetBytes(s.FileSize));
 
         var textData = new Dictionary<int, string>();
-        if (s.Type == ScriptType.Text)
+        if (s.Type == ScriptType.TEXT)
         {
             s.TextEntries = 0;
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
@@ -429,10 +468,10 @@ internal static class ScriptWrite
 
         switch (s.Type)
         {
-            case ScriptType.Textless:
+            case ScriptType.TEXTLESS:
                 s.FileSize = s.TextBlockPos;
                 break;
-            case ScriptType.Text:
+            case ScriptType.TEXT:
             {
                 file.AddRange(BitConverter.GetBytes(s.TextEntries));
                 var startPoints = new int[s.TextEntries];

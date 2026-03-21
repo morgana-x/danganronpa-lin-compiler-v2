@@ -4,9 +4,9 @@ using LinLib.LIN;
 namespace LinLib;
 
 /// <summary>
-///     Main Class of linlib
+/// Main API of linlib
 /// </summary>
-public static class LinCalls
+public static class LinApi
 {
     /// <summary>
     ///     Dumps entire directory into a single text file
@@ -43,7 +43,7 @@ public static class LinCalls
         Opcode.GenerateOpcodeLookup();
         BatchProcesser.BatchProcessDirectory(input, false, (Game)game, output);
     }
-    
+
     /// <summary>
     ///     Converts every .lin file in a folder into a .txt file
     /// </summary>
@@ -67,7 +67,7 @@ public static class LinCalls
         Opcode.GenerateOpcodeLookup();
         await BatchProcesser.BatchProcessDirectoryAsync(input, false, (Game)game, output);
     }
-
+    
     /// <summary>
     ///     Decompiles a .lin file to a readable .txt file
     /// </summary>

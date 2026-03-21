@@ -4,18 +4,18 @@ namespace LinLib.LIN;
 
 public enum ScriptType
 {
-    Textless = 1,
-    Text = 2
+    TEXTLESS = 1,
+    TEXT = 2
 }
 
-internal class ScriptEntry
+public class ScriptEntry
 {
     public byte[] Args = null!;
     public byte Opcode;
     public string Text = null!;
 }
 
-internal class Script
+public class Script
 {
     public byte[] File = null!;
     public int FileSize;
@@ -25,7 +25,7 @@ internal class Script
     public int TextEntries;
     public ScriptType Type;
 
-    public Script(string filename, bool compiled = true, Game game = Game.Base)
+    public Script(string filename, bool compiled = true, Game game = Game.BASE)
     {
         if (compiled)
         {

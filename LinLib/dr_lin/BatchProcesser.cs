@@ -2,8 +2,18 @@ using LinLib.LIN;
 
 namespace LinLib.dr_lin;
 
-internal static class BatchProcesser
+/// <summary>
+/// Batch processing handler
+/// </summary>
+public static class BatchProcesser
 {
+    /// <summary>
+    /// Batch processes a directory
+    /// </summary>
+    /// <param name="folder">Folder with the files to be processed</param>
+    /// <param name="decompile"> Set whether to decompile .lin files to .txt files or the opposite</param>
+    /// <param name="game">Set the game (DR1 or DR2)</param>
+    /// <param name="outFolder">Set the output folder for the processed files</param>
     public static void BatchProcessDirectory(string folder, bool decompile, Game game, string? outFolder)
     {
         if (string.IsNullOrEmpty(outFolder))
@@ -42,6 +52,13 @@ internal static class BatchProcesser
         Console.WriteLine($"Finished {(decompile ? "Decompiling" : "Recompiling")} {files.Length} files!");
     }
 
+    /// <summary>
+    /// Batch processes a directory asynchronously
+    /// </summary>
+    /// <param name="folder">Folder with the files to be processed</param>
+    /// <param name="decompile"> Set whether to decompile .lin files to .txt files or the opposite</param>
+    /// <param name="game">Set the game (DR1 or DR2)</param>
+    /// <param name="outFolder">Set the output folder for the processed files</param>
     public static async Task BatchProcessDirectoryAsync(string folder, bool decompile, Game game, string? outFolder)
     {
         if (string.IsNullOrEmpty(outFolder))
@@ -58,7 +75,7 @@ internal static class BatchProcesser
         Console.WriteLine($"{(decompile ? "Decompiling" : "Recompiling")} {files.Length} files...");
         if (!Directory.Exists(outFolder)) Directory.CreateDirectory(outFolder);
         await Parallel.ForEachAsync(files, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-            async (file, ct) =>
+            async (file, _) =>
             {
                 var script = new Script(file, decompile, game);
                 var outPath = outFolder + Path.GetFileNameWithoutExtension(file) + (decompile ? ".txt" : ".lin");

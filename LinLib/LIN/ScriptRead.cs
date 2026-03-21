@@ -3,7 +3,10 @@ using LinLib.dr_lin;
 
 namespace LinLib.LIN;
 
-internal static class ScriptRead
+/// <summary>
+/// Script reading functions
+/// </summary>
+public static class ScriptRead
 {
     private static void SkipWhitespace(StreamReader file, ref char c)
     {
@@ -22,11 +25,18 @@ internal static class ScriptRead
         return sb.ToString();
     }
 
-    public static bool ReadSource(Script s, string filename, Game game = Game.Base)
+    /// <summary>
+    /// Reads a decompiled script
+    /// </summary>
+    /// <param name="s">The empty script instance</param>
+    /// <param name="filename">The decompiled txt file to read</param>
+    /// <param name="game">Danganronpa 1 or 2</param>
+    /// <returns>Whether the read was successful</returns>
+    public static bool ReadSource(Script s, string filename, Game game = Game.BASE)
     {
         Definition.LoadDefinitions();
         // Default script type is textless
-        s.Type = ScriptType.Textless;
+        s.Type = ScriptType.TEXTLESS;
         //Program.PrintLine("[read] reading source file...");
         var file = new StreamReader(filename, Encoding.UTF8);
         var scriptData = new List<ScriptEntry>();
@@ -43,7 +53,7 @@ internal static class ScriptRead
                 while (char.IsWhiteSpace(c) || c == '{' || c == '}')
                 {
                     c = (char)file.Read();
-                    if (c is '\n' or '\r') sourceLine++;
+                    if (c == '\n' || c == '\r') sourceLine++;
                     if (c == '/')
                     {
                         c = (char)file.Read();
@@ -144,7 +154,7 @@ internal static class ScriptRead
                     while (c != ')' && file.Peek() != -1)
                         c = (char)file.Read();
 
-                    s.Type = ScriptType.Text;
+                    s.Type = ScriptType.TEXT;
                     s.TextEntries++;
                     e.Text = sb.ToString();
                     e.Args = new byte[2];
@@ -184,7 +194,15 @@ internal static class ScriptRead
         }
     }
 
-    public static bool ReadCompiled(Script s, byte[] bytes, Game game = Game.Base)
+    /// <summary>
+    /// Reads a compiled script file
+    /// </summary>
+    /// <param name="s">Empty script instance</param>
+    /// <param name="bytes">The binary compiled file to read</param>
+    /// <param name="game">Danganronpa 1 or 2</param>
+    /// <returns>Whether the operation was successfull</returns>
+    /// <exception cref="Exception">The given file isn't a compiled file</exception>
+    public static bool ReadCompiled(Script s, byte[] bytes, Game game = Game.BASE)
     {
         //Program.PrintLine("[read] reading compiled file...");
         s.File = bytes;
@@ -193,14 +211,14 @@ internal static class ScriptRead
         s.HeaderSize = BitConverter.ToInt32(s.File, 0x4);
         switch (s.Type)
         {
-            case ScriptType.Textless:
+            case ScriptType.TEXTLESS:
                 s.FileSize = BitConverter.ToInt32(s.File, 0x8);
                 if (s.FileSize == 0)
                     s.FileSize = s.File.Length;
                 s.TextBlockPos = s.FileSize;
                 s.ScriptData = ReadScriptData(s, game);
                 break;
-            case ScriptType.Text:
+            case ScriptType.TEXT:
                 s.TextBlockPos = BitConverter.ToInt32(s.File, 0x8);
                 s.FileSize = BitConverter.ToInt32(s.File, 0xC);
                 if (s.FileSize == 0)
@@ -216,7 +234,7 @@ internal static class ScriptRead
         return true;
     }
 
-    private static List<ScriptEntry> ReadScriptData(Script s, Game game = Game.Base)
+    private static List<ScriptEntry> ReadScriptData(Script s, Game game = Game.BASE)
     {
         //Program.PrintLine("[read] reading script data...");
         var scriptData = new List<ScriptEntry>();
@@ -241,6 +259,7 @@ internal static class ScriptRead
                     }
 
                     e.Args = args.ToArray();
+                    scriptData.Add(e);
                 }
                 else
                 {
@@ -250,9 +269,9 @@ internal static class ScriptRead
                         e.Args[a] = s.File[i + 1];
                         i++;
                     }
-                }
 
-                scriptData.Add(e);
+                    scriptData.Add(e);
+                }
             }
             else
             {

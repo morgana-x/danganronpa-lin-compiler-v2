@@ -3,9 +3,18 @@ using LinLib.LIN;
 
 namespace LinLib.dr_lin;
 
-internal static class Dumper
+/// <summary>
+/// Handles dumping of a large set of files
+/// </summary>
+public static class Dumper
 {
-    public static void DumpDirectory(string inPath, string outFile, Game game = Game.Danganronpa1)
+    /// <summary>
+    /// Dumps all .lin files in a directory into a single .txt file
+    /// </summary>
+    /// <param name="inPath">Path of the directory</param>
+    /// <param name="outFile">Path of the resulting txt file</param>
+    /// <param name="game">Danganronpa 1 or Danganronpa 2</param>
+    public static void DumpDirectory(string inPath, string outFile, Game game = Game.DANGANRONPA1)
     {
         Console.WriteLine("Dumping files from " + inPath + " to " + outFile);
         var filePathsIn = Directory.GetFiles(inPath);
