@@ -12,6 +12,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\LinLib.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\LinLib.xml</DocumentationFile>
     </PropertyGroup>
 </Project>

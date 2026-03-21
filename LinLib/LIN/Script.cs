@@ -4,8 +4,8 @@ namespace LinLib.LIN;
 
 public enum ScriptType
 {
-    TEXTLESS = 1,
-    TEXT = 2
+    Textless = 1,
+    Text = 2
 }
 
 internal class ScriptEntry
@@ -25,7 +25,7 @@ internal class Script
     public int TextEntries;
     public ScriptType Type;
 
-    public Script(string filename, bool compiled = true, Game game = Game.BASE)
+    public Script(string filename, bool compiled = true, Game game = Game.Base)
     {
         if (compiled)
         {
@@ -37,10 +37,5 @@ internal class Script
             if (!ScriptRead.ReadSource(this, filename, game))
                 throw new Exception("[load] error: failed to load script.");
         }
-    }
-
-    public Script(byte[] bytes, Game game = Game.BASE)
-    {
-        if (!ScriptRead.ReadCompiled(this, bytes, game)) throw new Exception("[load] error: failed to load script.");
     }
 }

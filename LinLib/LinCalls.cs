@@ -4,7 +4,7 @@ using LinLib.LIN;
 namespace LinLib;
 
 /// <summary>
-/// Main Class of linlib
+///     Main Class of linlib
 /// </summary>
 public static class LinCalls
 {
@@ -67,6 +67,6 @@ public static class LinCalls
     {
         Opcode.GenerateOpcodeLookup();
         var script = new Script(input, false, (Game)game);
-        ScriptWrite.WriteCompiled(script, output, (Game)game);
+        ScriptWrite.WriteCompiled(script, output);
     }
 }

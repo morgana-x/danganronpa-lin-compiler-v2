@@ -5,7 +5,7 @@ namespace LinLib.dr_lin;
 
 internal static class Dumper
 {
-    public static void DumpDirectory(string inPath, string outFile, Game game = Game.DANGANRONPA1)
+    public static void DumpDirectory(string inPath, string outFile, Game game = Game.Danganronpa1)
     {
         Console.WriteLine("Dumping files from " + inPath + " to " + outFile);
         var filePathsIn = Directory.GetFiles(inPath);

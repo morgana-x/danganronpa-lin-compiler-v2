@@ -2,54 +2,53 @@ using LinLib.LIN;
 
 namespace LinLib.dr_lin;
 
-internal class Definition
+internal abstract class Definition
 {
-    public static Dictionary<Game, Dictionary<string, byte>> Definitions = new()
+    private static readonly Dictionary<Game, Dictionary<string, byte>> Definitions = new()
     {
-        [Game.DANGANRONPA1] = new Dictionary<string, byte>(),
-        [Game.DANGANRONPA2] = new Dictionary<string, byte>()
+        [Game.Danganronpa1] = new Dictionary<string, byte>(),
+        [Game.Danganronpa2] = new Dictionary<string, byte>()
     };
 
-    public static Dictionary<string, byte> ScriptDefinedDefinitions = new();
+    private static readonly Dictionary<string, byte> ScriptDefinedDefinitions = new();
 
     public static void LoadDefinitions()
     {
         ScriptDefinedDefinitions.Clear(); // Definitions that get set by the script, clear when reading new script
 
         // Only load this once when nessecary
-        if (Definitions[Game.BASE].Count != 0) return;
+        if (Definitions[Game.Base].Count != 0) return;
 
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FADE));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_CAM_DIR));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FLAG));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_SPRITE_STATE));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FLAG_SYSTEM));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_UI));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_TIME));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_CHAPTER));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_COLOUR));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FILTER));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FLAG_JOINER));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_FLAG_COMPARE));
-        LoadDefinitonsFromEnum(Game.BASE, typeof(Enums.DR_ARITHMETIC));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFade));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrCamDir));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFlag));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrSpriteState));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFlagSystem));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrUi));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrTime));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrChapter));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrColour));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFilter));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFlagJoiner));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrFlagCompare));
+        LoadDefinitonsFromEnum(Game.Base, typeof(Enums.DrArithmetic));
 
-        LoadDefinitonsFromEnum(Game.DANGANRONPA1, typeof(Enums.DR1_CHAR));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA1, typeof(Enums.DR1_BGM));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA1, typeof(Enums.DR1_SKILL));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA1, typeof(Enums.DR1_ITEM));
+        LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.Dr1Char));
+        LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.Dr1Bgm));
+        LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.Dr1Skill));
+        LoadDefinitonsFromEnum(Game.Danganronpa1, typeof(Enums.Dr1Item));
 
-        LoadDefinitonsFromEnum(Game.DANGANRONPA2, typeof(Enums.DR2_CHAR));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA2, typeof(Enums.DR2_BGM));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA2, typeof(Enums.DR2_SKILL));
-        LoadDefinitonsFromEnum(Game.DANGANRONPA2, typeof(Enums.DR2_ITEM));
+        LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.Dr2Char));
+        LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.Dr2Bgm));
+        LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.Dr2Skill));
+        LoadDefinitonsFromEnum(Game.Danganronpa2, typeof(Enums.Dr2Item));
     }
 
-    public static byte TryGetDefinitionValue(string name, Game game = Game.BASE)
+    public static byte TryGetDefinitionValue(string name, Game game = Game.Base)
     {
-        if (ScriptDefinedDefinitions.ContainsKey(name)) return ScriptDefinedDefinitions[name];
-        if (Definitions[game].ContainsKey(name)) return Definitions[game][name];
-        if (Definitions[Game.BASE].ContainsKey(name)) return Definitions[Game.BASE][name];
-        throw new Exception($"Tried to parse unknown definition {name}!");
+        if (ScriptDefinedDefinitions.TryGetValue(name, out var scriptDefinedDefinition)) return scriptDefinedDefinition;
+        if (Definitions[game].TryGetValue(name, out var gameDefinition)) return gameDefinition;
+        return Definitions[Game.Base].TryGetValue(name, out var baseDefinition) ? baseDefinition : throw new Exception($"Tried to parse unknown definition {name}!");
     }
 
     // For scripts to define reusable values
@@ -58,7 +57,7 @@ internal class Definition
         ScriptDefinedDefinitions[name] = value;
     }
 
-    public static void LoadDefinitonsFromEnum(Game game, Type e)
+    private static void LoadDefinitonsFromEnum(Game game, Type e)
     {
         var names = Enum.GetNames(e);
         var values = (int[])Enum.GetValues(e);

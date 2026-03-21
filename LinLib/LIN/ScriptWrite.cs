@@ -4,7 +4,7 @@ namespace LinLib.LIN;
 
 internal static class ScriptWrite
 {
-    public static void WriteSource(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
+    public static void WriteSource(Script s, StreamWriter file, Game game = Game.Base, bool append = false)
     {
         var indentLevel = 0;
         var shouldPlaceBracket = 0;
@@ -12,6 +12,7 @@ internal static class ScriptWrite
         var textEntryId = 0;
         foreach (var e in s.ScriptData)
         {
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
             if (e.Opcode == 0x02)
             {
                 file.Write("//text " + textEntryId);
@@ -19,17 +20,17 @@ internal static class ScriptWrite
                 textEntryId++;
             }
 
-            if ((e.Opcode == 0x2B || e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBrackedChoice > 0)
+            if (e.Opcode is 0x2B or 0x29 or 0x27 && shouldPlaceBrackedChoice > 0)
             {
                 shouldPlaceBrackedChoice -= 1;
                 if (indentLevel > 0) indentLevel -= 1;
                 file.Write(new string('\t', indentLevel));
                 file.Write('}');
                 file.Write('\n');
-                if (e.Opcode == 0x29 || e.Opcode == 0x27) indentLevel = 0;
+                if (e.Opcode is 0x29 or 0x27) indentLevel = 0;
             }
 
-            if ((e.Opcode == 0x29 || e.Opcode == 0x27) &&
+            if (e.Opcode is 0x29 or 0x27 &&
                 shouldPlaceBracket >
                 0) // || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
             {
@@ -76,7 +77,7 @@ internal static class ScriptWrite
                 if (text.EndsWith('\0')) text = text.Replace("\0", string.Empty);
 
                 // Escapes
-                text = text.Replace("\\", "\\\\");
+                text = text.Replace("\\", @"\\");
                 text = text.Replace("\"", "\\\"");
                 text = text.Replace("\r", "\\r");
                 text = text.Replace("\n", "\\n");
@@ -98,8 +99,7 @@ internal static class ScriptWrite
             }
 
             file.WriteLine();
-            if (e.Opcode == 0x29 || e.Opcode == 0x27 || e.Opcode == 0x3C ||
-                e.Opcode == 0x2B) // Check Object, Check Character, If_Flag
+            if (e.Opcode is 0x29 or 0x27 or 0x3C or 0x2B) // Check Object, Check Character, If_Flag
             {
                 file.Write(new string('\t', indentLevel));
                 file.Write('{');
@@ -119,57 +119,54 @@ internal static class ScriptWrite
                 file.WriteLine(new string('\t', indentLevel) + '}');
             }
 
-            if (s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBracket > 0)
-            {
-                shouldPlaceBracket -= 1;
-                if (indentLevel > 0) indentLevel -= 1;
-                file.WriteLine(new string('\t', indentLevel) + '}');
-            }
+            if (s.ScriptData.IndexOf(e) != s.ScriptData.Count - 1 || shouldPlaceBracket <= 0) continue;
+            shouldPlaceBracket -= 1;
+            if (indentLevel > 0) indentLevel -= 1;
+            file.WriteLine(new string('\t', indentLevel) + '}');
         }
 
         if (!append) file.Close();
     }
 
-    public static void WriteSource(Script s, string filename, Game game = Game.BASE, bool append = false)
+    public static void WriteSource(Script s, string filename, Game game = Game.Base, bool append = false)
     {
         var file = new StreamWriter(filename, false, Encoding.UTF8);
         WriteSource(s, file, game, append);
     }
 
-    public static void WriteCompiled(Script s, string filename, Game game = Game.BASE)
+    public static void WriteCompiled(Script s, string filename)
     {
         var file = new List<byte>();
 
         // Header
         file.AddRange(BitConverter.GetBytes((int)s.Type));
-        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.TEXT ? 16 : 12));
+        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.Text ? 16 : 12));
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
-                file.AddRange(BitConverter.GetBytes(s.FileSize));
+            case ScriptType.Textless:
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
                 file.AddRange(BitConverter.GetBytes(s.TextBlockPos));
-                file.AddRange(BitConverter.GetBytes(s.FileSize));
                 break;
             default: throw new Exception("[write] error: unknown script type.");
         }
 
+        file.AddRange(BitConverter.GetBytes(s.FileSize));
+
         var textData = new Dictionary<int, string>();
-        if (s.Type == ScriptType.TEXT)
+        if (s.Type == ScriptType.Text)
         {
             s.TextEntries = 0;
-            foreach (var e in s.ScriptData)
-                if (e.Opcode == 0x02)
-                {
-                    while (textData.ContainsKey(s.TextEntries)) s.TextEntries++;
-                    textData.Add(s.TextEntries, e.Text);
+            foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
+            {
+                while (textData.ContainsKey(s.TextEntries)) s.TextEntries++;
+                textData.Add(s.TextEntries, e.Text);
 
-                    e.Args[0] = (byte)((s.TextEntries >> 8) & 0xFF);
-                    e.Args[1] = (byte)(s.TextEntries & 0xFF);
+                e.Args[0] = (byte)((s.TextEntries >> 8) & 0xFF);
+                e.Args[1] = (byte)(s.TextEntries & 0xFF);
 
-                    s.TextEntries++;
-                }
+                s.TextEntries++;
+            }
 
             s.TextEntries = Math.Max(s.TextEntries, textData.Keys.Max() + 1);
         }
@@ -186,61 +183,66 @@ internal static class ScriptWrite
         s.TextBlockPos = file.Count;
         for (var i = 0; i < 4; i++) file[0x08 + i] = BitConverter.GetBytes(s.TextBlockPos)[i];
 
-        if (s.Type == ScriptType.TEXTLESS)
+        switch (s.Type)
         {
-            s.FileSize = s.TextBlockPos;
-        }
-        else if (s.Type == ScriptType.TEXT)
-        {
-            file.AddRange(BitConverter.GetBytes(s.TextEntries));
-            var startPoints = new int[s.TextEntries];
-            var total = 8 + s.TextEntries * 4;
-
-            for (var i = 0; i < s.TextEntries; i++)
+            case ScriptType.Textless:
+                s.FileSize = s.TextBlockPos;
+                break;
+            case ScriptType.Text:
             {
-                var text = "";
-                if (textData.ContainsKey(i)) text = textData[i];
-                if (!text.EndsWith('\0')) text += '\0';
+                file.AddRange(BitConverter.GetBytes(s.TextEntries));
+                var startPoints = new int[s.TextEntries];
+                var total = 8 + s.TextEntries * 4;
 
-                var byteText = Encoding.Unicode.GetBytes(text);
-                if (byteText[0] != 0xFF || byteText[1] != 0xFE)
+                for (var i = 0; i < s.TextEntries; i++)
                 {
-                    var temp = new byte[byteText.Length + 2];
-                    temp[0] = 0xFF;
-                    temp[1] = 0xFE;
-                    byteText.CopyTo(temp, 2);
-                    byteText = temp;
+                    var text = "";
+                    if (textData.TryGetValue(i, out var value)) text = value;
+                    if (!text.EndsWith('\0')) text += '\0';
+
+                    var byteText = Encoding.Unicode.GetBytes(text);
+                    if (byteText[0] != 0xFF || byteText[1] != 0xFE)
+                    {
+                        var temp = new byte[byteText.Length + 2];
+                        temp[0] = 0xFF;
+                        temp[1] = 0xFE;
+                        byteText.CopyTo(temp, 2);
+                        byteText = temp;
+                    }
+
+                    startPoints[i] = total;
+                    total += byteText.Length;
                 }
 
-                startPoints[i] = total;
-                total += byteText.Length;
-            }
+                foreach (var sp in startPoints) file.AddRange(BitConverter.GetBytes(sp));
+                file.AddRange(BitConverter.GetBytes(total));
 
-            foreach (var sp in startPoints) file.AddRange(BitConverter.GetBytes(sp));
-            file.AddRange(BitConverter.GetBytes(total));
-
-            for (var i = 0; i < s.TextEntries; i++)
-            {
-                var text = "";
-                if (textData.ContainsKey(i)) text = textData[i];
-                if (!text.EndsWith('\0')) text += '\0';
-
-                var byteText = Encoding.Unicode.GetBytes(text);
-                if (byteText[0] != 0xFF || byteText[1] != 0xFE)
+                for (var i = 0; i < s.TextEntries; i++)
                 {
-                    var temp = new byte[byteText.Length + 2];
-                    temp[0] = 0xFF;
-                    temp[1] = 0xFE;
-                    byteText.CopyTo(temp, 2);
-                    byteText = temp;
+                    var text = "";
+                    if (textData.TryGetValue(i, out var value)) text = value;
+                    if (!text.EndsWith('\0')) text += '\0';
+
+                    var byteText = Encoding.Unicode.GetBytes(text);
+                    if (byteText[0] != 0xFF || byteText[1] != 0xFE)
+                    {
+                        var temp = new byte[byteText.Length + 2];
+                        temp[0] = 0xFF;
+                        temp[1] = 0xFE;
+                        byteText.CopyTo(temp, 2);
+                        byteText = temp;
+                    }
+
+                    file.AddRange(byteText);
                 }
 
-                file.AddRange(byteText);
+                while (file.Count % 4 != 0) file.Add(0x00);
+                s.FileSize = file.Count;
+                for (var i = 0; i < 4; i++) file[0x0C + i] = BitConverter.GetBytes(s.FileSize)[i];
+                break;
             }
-
-            while (file.Count % 4 != 0) file.Add(0x00);
-            s.FileSize = file.Count;
-            for (var i = 0; i < 4; i++) file[0x0C + i] = BitConverter.GetBytes(s.FileSize)[i];
+            default:
+                throw new ArgumentOutOfRangeException(s.Type.ToString(), "Invalid script type.");
         }
 
         File.WriteAllBytes(filename, file.ToArray());

@@ -22,11 +22,11 @@ internal static class ScriptRead
         return sb.ToString();
     }
 
-    public static bool ReadSource(Script s, string filename, Game game = Game.BASE)
+    public static bool ReadSource(Script s, string filename, Game game = Game.Base)
     {
         Definition.LoadDefinitions();
         // Default script type is textless
-        s.Type = ScriptType.TEXTLESS;
+        s.Type = ScriptType.Textless;
         //Program.PrintLine("[read] reading source file...");
         var file = new StreamReader(filename, Encoding.UTF8);
         var scriptData = new List<ScriptEntry>();
@@ -43,7 +43,7 @@ internal static class ScriptRead
                 while (char.IsWhiteSpace(c) || c == '{' || c == '}')
                 {
                     c = (char)file.Read();
-                    if (c == '\n' || c == '\r') sourceLine++;
+                    if (c is '\n' or '\r') sourceLine++;
                     if (c == '/')
                     {
                         c = (char)file.Read();
@@ -144,7 +144,7 @@ internal static class ScriptRead
                     while (c != ')' && file.Peek() != -1)
                         c = (char)file.Read();
 
-                    s.Type = ScriptType.TEXT;
+                    s.Type = ScriptType.Text;
                     s.TextEntries++;
                     e.Text = sb.ToString();
                     e.Args = new byte[2];
@@ -184,7 +184,7 @@ internal static class ScriptRead
         }
     }
 
-    public static bool ReadCompiled(Script s, byte[] bytes, Game game = Game.BASE)
+    public static bool ReadCompiled(Script s, byte[] bytes, Game game = Game.Base)
     {
         //Program.PrintLine("[read] reading compiled file...");
         s.File = bytes;
@@ -193,14 +193,14 @@ internal static class ScriptRead
         s.HeaderSize = BitConverter.ToInt32(s.File, 0x4);
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
+            case ScriptType.Textless:
                 s.FileSize = BitConverter.ToInt32(s.File, 0x8);
                 if (s.FileSize == 0)
                     s.FileSize = s.File.Length;
                 s.TextBlockPos = s.FileSize;
                 s.ScriptData = ReadScriptData(s, game);
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
                 s.TextBlockPos = BitConverter.ToInt32(s.File, 0x8);
                 s.FileSize = BitConverter.ToInt32(s.File, 0xC);
                 if (s.FileSize == 0)
@@ -216,7 +216,7 @@ internal static class ScriptRead
         return true;
     }
 
-    private static List<ScriptEntry> ReadScriptData(Script s, Game game = Game.BASE)
+    private static List<ScriptEntry> ReadScriptData(Script s, Game game = Game.Base)
     {
         //Program.PrintLine("[read] reading script data...");
         var scriptData = new List<ScriptEntry>();
@@ -224,8 +224,10 @@ internal static class ScriptRead
             if (s.File[i] == 0x70)
             {
                 i++;
-                var e = new ScriptEntry();
-                e.Opcode = s.File[i];
+                var e = new ScriptEntry
+                {
+                    Opcode = s.File[i]
+                };
 
                 var argCount = Opcode.GetOpcodeArgCount(e.Opcode, game);
                 if (argCount == -1)
@@ -239,7 +241,6 @@ internal static class ScriptRead
                     }
 
                     e.Args = args.ToArray();
-                    scriptData.Add(e);
                 }
                 else
                 {
@@ -249,9 +250,9 @@ internal static class ScriptRead
                         e.Args[a] = s.File[i + 1];
                         i++;
                     }
-
-                    scriptData.Add(e);
                 }
+
+                scriptData.Add(e);
             }
             else
             {
@@ -260,7 +261,7 @@ internal static class ScriptRead
                 {
                     if (s.File[i] != 0x00)
                     {
-                        Console.WriteLine($"[read] error: expected 0x00, got 0x{s.File[i].ToString("X2")}.");
+                        Console.WriteLine($"[read] error: expected 0x00, got 0x{s.File[i]:X2}.");
                         Console.WriteLine(
                             "SCRIPT IS NOW BROKEN, please check the last opcode at the end of the file and report the error! (If you're feeling generous :)");
                         break;
@@ -279,11 +280,11 @@ internal static class ScriptRead
     private static void ReadTextEntries(Script s)
     {
         //Program.PrintLine("[read] reading text entries...");
-        for (var i = 0; i < s.ScriptData.Count; i++)
-            if (s.ScriptData[i].Opcode == 0x02)
+        foreach (var t in s.ScriptData)
+            if (t.Opcode == 0x02)
             {
-                var first = s.ScriptData[i].Args[0];
-                var second = s.ScriptData[i].Args[1];
+                var first = t.Args[0];
+                var second = t.Args[1];
                 var textId = (first << 8) | second;
 
                 if (textId >= s.TextEntries) throw new Exception("[read] error: text id out of range.");
@@ -291,12 +292,12 @@ internal static class ScriptRead
                 var textPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (textId + 1) * 4);
                 var nextTextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (textId + 2) * 4);
                 if (textId == s.TextEntries - 1) nextTextPos = s.FileSize - s.TextBlockPos;
-                s.ScriptData[i].Text =
+                t.Text =
                     Encoding.Unicode.GetString(s.File, s.TextBlockPos + textPos + 2, nextTextPos - textPos - 2);
             }
             else
             {
-                s.ScriptData[i].Text = null!;
+                t.Text = null!;
             }
     }
 }

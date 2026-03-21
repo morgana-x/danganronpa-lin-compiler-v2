@@ -2,7 +2,7 @@ using LinLib.LIN;
 
 namespace LinLib.dr_lin;
 
-internal class BatchProcesser
+internal static class BatchProcesser
 {
     public static void BatchProcessDirectory(string folder, bool decompile, Game game, string? outFolder)
     {
@@ -29,7 +29,7 @@ internal class BatchProcesser
                 if (decompile)
                     ScriptWrite.WriteSource(script, outPath, game);
                 else
-                    ScriptWrite.WriteCompiled(script, outPath, game);
+                    ScriptWrite.WriteCompiled(script, outPath);
             }
             catch (Exception e)
             {
@@ -41,4 +41,5 @@ internal class BatchProcesser
 
         Console.WriteLine($"Finished {(decompile ? "Decompiling" : "Recompiling")} {files.Length} files!");
     }
+    
 }
