@@ -34,7 +34,8 @@ public static class ScriptRead
     /// <returns>Whether the read was successful</returns>
     public static bool ReadSource(Script s, string filename, Game game = Game.BASE)
     {
-        Definition.LoadDefinitions();
+        var definitionClass = new Definition();
+        definitionClass.LoadDefinitions();
         // Default script type is textless
         s.Type = ScriptType.TEXTLESS;
         //Program.PrintLine("[read] reading source file...");
@@ -104,7 +105,7 @@ public static class ScriptRead
                     sb.Clear();
                     var defValue = byte.Parse(ReadString(file, sb, ref c).Trim());
 
-                    Definition.ScriptDefineDefinition(defName, defValue);
+                    definitionClass.ScriptDefineDefinition(defName, defValue);
                     continue;
                 }
 
@@ -173,7 +174,7 @@ public static class ScriptRead
                         {
                             var trimmed = a.Trim();
                             if (!byte.TryParse(trimmed, out var value))
-                                value = Definition.TryGetDefinitionValue(trimmed, game);
+                                value = definitionClass.TryGetDefinitionValue(trimmed, game);
                             args.Add(value);
                         }
 
