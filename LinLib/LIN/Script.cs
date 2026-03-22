@@ -4,8 +4,8 @@ namespace LinLib.LIN;
 
 public enum ScriptType
 {
-    TEXTLESS = 1,
-    TEXT = 2
+    Textless = 1,
+    Text = 2
 }
 
 public class ScriptEntry

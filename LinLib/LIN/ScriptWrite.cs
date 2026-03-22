@@ -302,12 +302,12 @@ public static class ScriptWrite
 
         // Header
         file.AddRange(BitConverter.GetBytes((int)s.Type));
-        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.TEXT ? 16 : 12));
+        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.Text ? 16 : 12));
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
+            case ScriptType.Textless:
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
                 file.AddRange(BitConverter.GetBytes(s.TextBlockPos));
                 break;
             default: throw new Exception("[write] error: unknown script type.");
@@ -316,7 +316,7 @@ public static class ScriptWrite
         file.AddRange(BitConverter.GetBytes(s.FileSize));
 
         var textData = new Dictionary<int, string>();
-        if (s.Type == ScriptType.TEXT)
+        if (s.Type == ScriptType.Text)
         {
             s.TextEntries = 0;
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
@@ -347,10 +347,10 @@ public static class ScriptWrite
 
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
+            case ScriptType.Textless:
                 s.FileSize = s.TextBlockPos;
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
             {
                 file.AddRange(BitConverter.GetBytes(s.TextEntries));
                 var startPoints = new int[s.TextEntries];
@@ -423,12 +423,12 @@ public static class ScriptWrite
 
         // Header
         file.AddRange(BitConverter.GetBytes((int)s.Type));
-        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.TEXT ? 16 : 12));
+        file.AddRange(BitConverter.GetBytes(s.Type == ScriptType.Text ? 16 : 12));
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
+            case ScriptType.Textless:
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
                 file.AddRange(BitConverter.GetBytes(s.TextBlockPos));
                 break;
             default: throw new Exception("[write] error: unknown script type.");
@@ -437,7 +437,7 @@ public static class ScriptWrite
         file.AddRange(BitConverter.GetBytes(s.FileSize));
 
         var textData = new Dictionary<int, string>();
-        if (s.Type == ScriptType.TEXT)
+        if (s.Type == ScriptType.Text)
         {
             s.TextEntries = 0;
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
@@ -468,10 +468,10 @@ public static class ScriptWrite
 
         switch (s.Type)
         {
-            case ScriptType.TEXTLESS:
+            case ScriptType.Textless:
                 s.FileSize = s.TextBlockPos;
                 break;
-            case ScriptType.TEXT:
+            case ScriptType.Text:
             {
                 file.AddRange(BitConverter.GetBytes(s.TextEntries));
                 var startPoints = new int[s.TextEntries];
