@@ -13,11 +13,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Directory with the .lin files</param>
     /// <param name="output">Path to generate the final .txt file in</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static void DumpDirectory(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static void DumpDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        Dumper.DumpDirectory(input, output, (Game)game);
+        Dumper.DumpDirectory(input, output, game);
     }
 
     /// <summary>
@@ -25,11 +25,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Directory with the .lin files</param>
     /// <param name="output">Path to generate the final .txt files in</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static void BatchDecompileDirectory(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static void BatchDecompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcesser.BatchProcessDirectory(input, true, (Game)game, output);
+        BatchProcesser.BatchProcessDirectory(input, true, game, output);
     }
 
     /// <summary>
@@ -37,11 +37,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Directory with the .txt files</param>
     /// <param name="output">Path to generate the final .lin files in</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static void BatchCompileDirectory(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static void BatchCompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcesser.BatchProcessDirectory(input, false, (Game)game, output);
+        BatchProcesser.BatchProcessDirectory(input, false, game, output);
     }
 
     /// <summary>
@@ -49,11 +49,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Directory with the .lin files</param>
     /// <param name="output">Path to generate the final .txt files in</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static async Task BatchDecompileDirectoryAsync(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static async Task BatchDecompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcesser.BatchProcessDirectoryAsync(input, true, (Game)game, output);
+        await BatchProcesser.BatchProcessDirectoryAsync(input, true, game, output);
     }
 
     /// <summary>
@@ -61,11 +61,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Directory with the .txt files</param>
     /// <param name="output">Path to generate the final .lin files in</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static async Task BatchCompileDirectoryAsync(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static async Task BatchCompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcesser.BatchProcessDirectoryAsync(input, false, (Game)game, output);
+        await BatchProcesser.BatchProcessDirectoryAsync(input, false, game, output);
     }
     
     /// <summary>
@@ -73,12 +73,12 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Path to .lin file</param>
     /// <param name="output">Directory to .txt output</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static void DecompileLin(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static void DecompileLin(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        var script = new Script(input, true, (Game)game);
-        ScriptWrite.WriteSource(script, output, (Game)game);
+        var script = new Script(input, true, game);
+        ScriptWrite.WriteSource(script, output, game);
     }
 
     /// <summary>
@@ -86,11 +86,11 @@ public static class LinApi
     /// </summary>
     /// <param name="input">Path to .txt file</param>
     /// <param name="output">Path to .lin output</param>
-    /// <param name="game">DR1 = 0, DR2 = 1</param>
-    public static void CompileLin(string input, string output, int game)
+    /// <param name="game">Use LinLib.LIN.Game</param>
+    public static void CompileLin(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        var script = new Script(input, false, (Game)game);
+        var script = new Script(input, false, game);
         ScriptWrite.WriteCompiled(script, output);
     }
 }
