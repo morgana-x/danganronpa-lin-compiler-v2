@@ -28,9 +28,12 @@ public static class BatchProcesser
 
         var files = Directory.GetFiles(folder);
         Console.WriteLine($"{(decompile ? "Decompiling" : "Recompiling")} {files.Length} files...");
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         if (!Directory.Exists(outFolder)) Directory.CreateDirectory(outFolder);
         foreach (var file in files)
         {
+            if (!file.EndsWith(".lin") || file.EndsWith(".txt"))
+                continue;
             var script = new Script(file, decompile, game);
             var outPath = outFolder + Path.GetFileNameWithoutExtension(file) + (decompile ? ".txt" : ".lin");
             Console.WriteLine(outPath);
@@ -48,8 +51,9 @@ public static class BatchProcesser
                 Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
-
+        stopwatch.Stop();
         Console.WriteLine($"Finished {(decompile ? "Decompiling" : "Recompiling")} {files.Length} files!");
+        Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
     }
 
     /// <summary>
@@ -73,31 +77,38 @@ public static class BatchProcesser
 
         var files = Directory.GetFiles(folder);
         Console.WriteLine($"{(decompile ? "Decompiling" : "Recompiling")} {files.Length} files...");
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         if (!Directory.Exists(outFolder)) Directory.CreateDirectory(outFolder);
         await Parallel.ForEachAsync(files, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-            async (file, _) =>
+            async (file, ct) =>
             {
-                var script = new Script(file, decompile, game);
-                var outPath = outFolder + Path.GetFileNameWithoutExtension(file) + (decompile ? ".txt" : ".lin");
-                Console.WriteLine(outPath);
-                try
+                if (file.EndsWith(".lin") || file.EndsWith(".txt"))
                 {
-                    if (decompile)
+
+                    var script = new Script(file, decompile, game);
+                    var outPath = outFolder + Path.GetFileNameWithoutExtension(file) + (decompile ? ".txt" : ".lin");
+                    Console.WriteLine(outPath);
+                    try
                     {
-                        await ScriptWrite.WriteSourceAsync(script, outPath, game);
+                        if (decompile)
+                        {
+                            await ScriptWrite.WriteSourceAsync(script, outPath, game);
+                        }
+                        else
+                        {
+                            await ScriptWrite.WriteCompiledAsync(script, outPath);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        await ScriptWrite.WriteCompiledAsync(script, outPath);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Error occured while processing {file}. Error:\n{e}");
+                        Console.ForegroundColor = ConsoleColor.Gray;
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error occured while processing {file}. Error:\n{e}");
-                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
             });
+        stopwatch.Stop();
+        Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
         Console.WriteLine($"Finished {(decompile ? "Decompiling" : "Recompiling")} {files.Length} files!");
     }
 }

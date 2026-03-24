@@ -27,16 +27,18 @@ namespace lin_compiler
             Console.WriteLine("-d, --decompile\t\tdecompile the input file (default is compile)");
             Console.WriteLine("-dr2, --danganronpa2\tenable danganronpa 2 mode");
             Console.WriteLine("-s, --silent\t\tsuppress all non-error messages");
+            Console.WriteLine("-a, --async\t\tactivate asynchronous mode (only for folder batch processing");
             Console.WriteLine();
             Environment.Exit(0);
         }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Game game = Game.BASE;
             bool decompile = false;
             string input, output;
             bool dump = false;
+            bool async = false;
 
             // Parse arguments
             List<string> plainArgs = new List<string>();
@@ -51,6 +53,7 @@ namespace lin_compiler
                     if (a == "-dr2" || a == "--danganronpa2") { game = Game.DANGANRONPA2; }
                     if (a == "-s" || a == "--silent")         { _silentMode = true; }
                     if (a == "-dmp" || a == "--dump") { dump = true; }
+                    if (a == "-a" || a == "--async")   { async = true; }
                 }
                 else
                 {
@@ -84,12 +87,21 @@ namespace lin_compiler
 
             if (Directory.Exists(input))
             {
-                BatchProcesser.BatchProcessDirectory(input, decompile, game, plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
-              //  Console.ForegroundColor = ConsoleColor.Yellow;
-             //   Console.WriteLine("Press any key to close/continue.");
-             //   Console.ForegroundColor = ConsoleColor.Gray;
-               // Console.ReadKey();
+                if (!async)
+                {
+                    // ReSharper disable once MethodHasAsyncOverload
+                    BatchProcesser.BatchProcessDirectory(input, decompile, game,
+                        plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
+                    //  Console.ForegroundColor = ConsoleColor.Yellow;
+                    //   Console.WriteLine("Press any key to close/continue.");
+                    //   Console.ForegroundColor = ConsoleColor.Gray;
+                    // Console.ReadKey();
+                    return;
+                }
+                
+                await BatchProcesser.BatchProcessDirectoryAsync(input, decompile, game, plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
                 return;
+
             }
 
             // Execute desired functionality
