@@ -1,9 +1,5 @@
 using LinLib.dr_lin;
-using System;
-using System.Collections.Generic;
 using System.Text;
-using LinLib.dr_lin;
-using LinLib.LIN;
 
 namespace LinLib.LIN
 {
@@ -12,22 +8,23 @@ namespace LinLib.LIN
 /// </summary>
 public static class ScriptRead
     {
-        static void SkipWhitespace(System.IO.StreamReader File, ref char c)
+        static void SkipWhitespace(StreamReader file, ref char c)
         {
-            while (c == ' ' || c == '\t' && File.Peek() != -1)
-                c = (char)File.Read();
+            while (c == ' ' || c == '\t' && file.Peek() != -1)
+                c = (char)file.Read();
         }
 
-        static string ReadString(System.IO.StreamReader File, StringBuilder sb, ref char c)
+        static string ReadString(StreamReader file, StringBuilder sb, ref char c)
         {
-            while (c != ' ' && c != '\n' && c != '\r' && File.Peek() != -1)
+            while (c != ' ' && c != '\n' && c != '\r' && file.Peek() != -1)
             {
                 sb.Append(c);
-                c = (char)File.Read();
+                c = (char)file.Read();
             }
 
             return sb.ToString();
         }
+
         /// <summary>
         /// Reads a decompiled script
         /// </summary>
@@ -35,84 +32,83 @@ public static class ScriptRead
         /// <param name="filename">The decompiled txt file to read</param>
         /// <param name="game">Danganronpa 1 or 2</param>
         /// <returns>Whether the read was successful</returns>
-
-        public static bool ReadSource(Script s, string Filename, Game game = Game.BASE)
+        public static bool ReadSource(Script s, string filename, Game game = Game.BASE)
         {
             var definitionClass = new Definition();
             definitionClass.LoadDefinitions();
             // Default script type is textless
             s.Type = ScriptType.Textless;
             //Program.PrintLine("[read] reading source file...");
-            System.IO.StreamReader File = new System.IO.StreamReader(Filename, Encoding.UTF8);
-            List<ScriptEntry> ScriptData = new List<ScriptEntry>();
+            var file = new StreamReader(filename, Encoding.UTF8);
+            List<ScriptEntry> scriptData = new List<ScriptEntry>();
             StringBuilder sb = new StringBuilder();
             uint sourceLine = 0;
             try
             {
-                while (File.Peek() != -1)
+                while (file.Peek() != -1)
                 {
-                    char c = (char)File.Read();
+                    char c = (char)file.Read();
                     ScriptEntry e = new ScriptEntry();
 
            
                     while (char.IsWhiteSpace(c) || c == '{' || c == '}')
                     {
-                        c = (char)File.Read();
+                        c = (char)file.Read();
                         if (c == '\n' || c == '\r') sourceLine++;
                         if (c == '/')
                         {
-                            c = (char)File.Read();
+                            c = (char)file.Read();
                             if (c == '/')
                             {
                                 while (c != '\n')
                                 {
-                                    c = (char)File.Read();
+                                    c = (char)file.Read();
                                 }
                             }
                             else if (c == '*')
                             {
                                 while (true)
                                 {
-                                    c = (char)File.Read();
+                                    c = (char)file.Read();
                                     if (c == '*')
                                     {
-                                        c = (char)File.Read();
+                                        c = (char)file.Read();
                                         if (c == '/')
                                         {
                                             break;
                                         }
                                     }
                                 }
-                                c = (char)File.Read();
+                                c = (char)file.Read();
                             }
                         }
                     }
-                    if (File.Peek() == -1) break;
+                    if (file.Peek() == -1) break;
 
                     // Get opcode
                     sb.Clear();
 
-                    while (c != '(' && File.Peek() != -1)
+                    while (c != '(' && file.Peek() != -1)
                     {
                         if (sb.Length > 0 && sb[0] == '#' && c == ' ') break;
                         sb.Append(c);
-                        c = (char)File.Read();
+                        c = (char)file.Read();
                     }
-                    if (File.Peek() != -1) c = (char)File.Read();
+                    if (file.Peek() != -1) c = (char)file.Read();
 
                     if (sb.ToString().Trim().ToLower() == "#define")
                     {
-                        SkipWhitespace(File, ref c);
+                        SkipWhitespace(file, ref c);
 
                         sb.Clear();
-                        string def_name = ReadString(File, sb, ref c).Trim();
+                        string defName = ReadString(file, sb, ref c).Trim();
           
-                        SkipWhitespace(File, ref c);
+                        SkipWhitespace(file, ref c);
 
                         sb.Clear();
-                        byte def_value = byte.Parse(ReadString(File, sb, ref c).Trim());
+                        byte defValue = byte.Parse(ReadString(file, sb, ref c).Trim());
 
-                        definitionClass.ScriptDefineDefinition(def_name, def_value);
+                        definitionClass.ScriptDefineDefinition(defName, defValue);
                         continue;
                     }
 
@@ -120,34 +116,34 @@ public static class ScriptRead
 
                     // Get args
                     sb.Clear();
-                    while (char.IsWhiteSpace(c)) c = (char)File.Read(); if (File.Peek() == -1) break;
+                    while (char.IsWhiteSpace(c)) c = (char)file.Read(); if (file.Peek() == -1) break;
                     if (e.Opcode == 0x02)
                     {
-                        while (c != '"' && File.Peek() != -1)
-                            c = (char)File.Read();
-                        if (File.Peek() != -1) c = (char)File.Read();
-                        while (c != '"' && File.Peek() != -1)
+                        while (c != '"' && file.Peek() != -1)
+                            c = (char)file.Read();
+                        if (file.Peek() != -1) c = (char)file.Read();
+                        while (c != '"' && file.Peek() != -1)
                         {
                             if (c == '\\')
                             {
-                                char peek = (char)File.Peek();
+                                char peek = (char)file.Peek();
                                 switch (peek)
                                 {
                                     case '\\':
                                         sb.Append('\\');
-                                        c = (char)File.Read();
+                                        c = (char)file.Read();
                                         break;
                                     case '"':
                                         sb.Append('"');
-                                        c = (char)File.Read();
+                                        c = (char)file.Read();
                                         break;
                                     case 'n':
                                         sb.Append('\n');
-                                        c = (char)File.Read();
+                                        c = (char)file.Read();
                                         break;
                                     case 'r':
                                         sb.Append('\r');
-                                        c = (char)File.Read();
+                                        c = (char)file.Read();
                                         break;
                                     default:
                                         sb.Append(c);
@@ -156,10 +152,10 @@ public static class ScriptRead
                             }
                             else
                                 sb.Append(c);
-                            c = (char)File.Read();
+                            c = (char)file.Read();
                         }
-                        while (c != ')' && File.Peek() != -1)
-                            c = (char)File.Read();
+                        while (c != ')' && file.Peek() != -1)
+                            c = (char)file.Read();
 
                         s.Type = ScriptType.Text;
                         s.TextEntries++;
@@ -168,34 +164,34 @@ public static class ScriptRead
                     }
                     else
                     {
-                        while (c != ')' && File.Peek() != -1)
+                        while (c != ')' && file.Peek() != -1)
                         {
                             sb.Append(c);
-                            c = (char)File.Read();
+                            c = (char)file.Read();
                         }
-                        List<byte> Args = new List<byte>();
+                        List<byte> args = new List<byte>();
                         if (sb.ToString().Trim().Length > 0)
                         {
                             foreach (string a in sb.ToString().Trim().Split(','))
                             {
                                 var trimmed = a.Trim();
-                                byte value = 0;
+                                byte value;
                                 if (!byte.TryParse(trimmed, out value))
                                     value = definitionClass.TryGetDefinitionValue(trimmed, game);
-                                Args.Add(value);
+                                args.Add(value);
                             }
                         }
-                        e.Args = Args.ToArray();
+                        e.Args = args.ToArray();
                     }
 
-                    ScriptData.Add(e);
+                    scriptData.Add(e);
                 }
-                s.ScriptData = ScriptData;
+                s.ScriptData = scriptData;
 
                 return true;
             }
             catch(Exception e) {
-                Console.WriteLine($"Error at line {sourceLine}. ({sb.ToString()})\n{e.ToString()}");
+                Console.WriteLine($"Error at line {sourceLine}. ({sb})\n{e}");
                 return false; 
             }
         }
@@ -209,10 +205,10 @@ public static class ScriptRead
         /// <returns>Whether the operation was successfull</returns>
         /// <exception cref="Exception">The given file isn't a compiled file</exception>
 
-        public static bool ReadCompiled(Script s, byte[] Bytes, Game game = Game.BASE)
+        public static bool ReadCompiled(Script s, byte[] bytes, Game game = Game.BASE)
         {
             //Program.PrintLine("[read] reading compiled file...");
-            s.File = Bytes;
+            s.File = bytes;
             //Program.PrintLine("[read] reading header...");
             s.Type = (ScriptType)BitConverter.ToInt32(s.File, 0x0);
             s.HeaderSize = BitConverter.ToInt32(s.File, 0x4);
@@ -244,7 +240,7 @@ public static class ScriptRead
         private static List<ScriptEntry> ReadScriptData(Script s, Game game = Game.BASE)
         {
             //Program.PrintLine("[read] reading script data...");
-            List<ScriptEntry> ScriptData = new List<ScriptEntry>();
+            List<ScriptEntry> scriptData = new List<ScriptEntry>();
             for (int i = s.HeaderSize; i < s.TextBlockPos; i++)
             {
                 if (s.File[i] == 0x70)
@@ -253,29 +249,29 @@ public static class ScriptRead
                     ScriptEntry e = new ScriptEntry();
                     e.Opcode = s.File[i];
 
-                    int ArgCount = Opcode.GetOpcodeArgCount(e.Opcode, game);
-                    if (ArgCount == -1)
+                    int argCount = Opcode.GetOpcodeArgCount(e.Opcode, game);
+                    if (argCount == -1)
                     {
                         // Vararg
-                        List<byte> Args = new List<byte>();
+                        List<byte> args = new List<byte>();
                         while (s.File[i + 1] != 0x70)
                         {
-                            Args.Add(s.File[i + 1]);
+                            args.Add(s.File[i + 1]);
                             i++;
                         }
-                        e.Args = Args.ToArray();
-                        ScriptData.Add(e);
+                        e.Args = args.ToArray();
+                        scriptData.Add(e);
                         continue;
                     }
                     else
                     {
-                        e.Args = new byte[ArgCount];
+                        e.Args = new byte[argCount];
                         for (int a = 0; a < e.Args.Length; a++)
                         {
                             e.Args[a] = s.File[i + 1];
                             i++;
                         }
-                        ScriptData.Add(e);
+                        scriptData.Add(e);
                     }
                 }
                 else
@@ -292,34 +288,34 @@ public static class ScriptRead
                         }
                         i++;
                     }
-                    return ScriptData;
+                    return scriptData;
                 }
             }
-            return ScriptData;
+            return scriptData;
         }
 
         private static void ReadTextEntries(Script s)
         {
             //Program.PrintLine("[read] reading text entries...");
-            List<int> TextIDs = new List<int>(s.TextEntries);
+            List<int> textIDs = new List<int>(s.TextEntries);
             for (int i = 0; i < s.ScriptData.Count; i++)
             {
                 if (s.ScriptData[i].Opcode == 0x02)
                 {
                     byte first = s.ScriptData[i].Args[0];
                     byte second = s.ScriptData[i].Args[1];
-                    int TextID = first << 8 | second;
+                    int textId = first << 8 | second;
 
-                    if (TextID >= s.TextEntries)
+                    if (textId >= s.TextEntries)
                     {
                         throw new Exception("[read] error: text id out of range.");
                     }
 
-                    TextIDs.Add(TextID);
-                    int TextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (TextID + 1) * 4);
-                    int NextTextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (TextID + 2) * 4);
-                    if (TextID == s.TextEntries - 1) NextTextPos = s.FileSize - s.TextBlockPos;
-                    s.ScriptData[i].Text = Encoding.Unicode.GetString(s.File, s.TextBlockPos + TextPos + 2, NextTextPos - TextPos - 2);
+                    textIDs.Add(textId);
+                    int textPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (textId + 1) * 4);
+                    int nextTextPos = BitConverter.ToInt32(s.File, s.TextBlockPos + (textId + 2) * 4);
+                    if (textId == s.TextEntries - 1) nextTextPos = s.FileSize - s.TextBlockPos;
+                    s.ScriptData[i].Text = Encoding.Unicode.GetString(s.File, s.TextBlockPos + textPos + 2, nextTextPos - textPos - 2);
                 }
                 else
                 {

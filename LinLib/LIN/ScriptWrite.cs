@@ -14,252 +14,301 @@ public static class ScriptWrite
     /// <param name="file">The file to write the decompiled script to</param>
     /// <param name="game">Danganronpa 1 or 2</param>
     /// <param name="append">Whether to append the contents of the compiled script to the output file or to replace the latter's contents</param>
-    public static void WriteSource(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
-    {
-        var indentLevel = 0;
-        var shouldPlaceBracket = 0;
-        var shouldPlaceBrackedChoice = 0;
-        var textEntryId = 0;
-        foreach (var e in s.ScriptData)
+    static public void WriteSource(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
         {
-            // ReSharper disable once ConvertIfStatementToSwitchStatement
-            if (e.Opcode == 0x02)
+            int indentLevel = 0;
+            int shouldPlaceBracket = 0;
+            int shouldPlaceBrackedChoice = 0;
+            foreach (ScriptEntry e in s.ScriptData)
             {
-                file.Write("//text " + textEntryId);
-                file.WriteLine();
-                textEntryId++;
-            }
 
-            if (e.Opcode is 0x2B or 0x29 or 0x27 && shouldPlaceBrackedChoice > 0)
-            {
-                shouldPlaceBrackedChoice -= 1;
-                if (indentLevel > 0) indentLevel -= 1;
-                file.Write(new string('\t', indentLevel));
-                file.Write('}');
-                file.Write('\n');
-                if (e.Opcode is 0x29 or 0x27) indentLevel = 0;
-            }
+                if (( (e.Opcode == 0x2B || e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBrackedChoice > 0))
+                {
+                    shouldPlaceBrackedChoice -= 1;
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    file.Write(new string('\t', indentLevel));
+                    file.Write('}');
+                    file.Write('\n');
+                    if (e.Opcode == 0x29 || e.Opcode == 0x27)
+                    {
+                        indentLevel = 0;
+                    }
+                }
+                if ((e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBracket > 0)// || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
+                {
 
-            if (e.Opcode is 0x29 or 0x27 &&
-                shouldPlaceBracket >
-                0) // || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
-            {
-                shouldPlaceBracket -= 1;
-                if (indentLevel > 0) indentLevel -= 1;
-                file.Write(new string('\t', indentLevel));
-                file.Write('}');
-                file.Write('\n');
-            }
+                    if ((true))
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    file.Write(new string('\t', indentLevel));
+                    file.Write('}');
+                    file.Write('\n');
+                }
+                /*if (e.Opcode == 0x29 || e.Opcode == 0x27) // CheckObject, Check Character
+                {
 
-            /*
-            if (e.Opcode == 0x29 || e.Opcode == 0x27) // CheckObject, Check Character
-            {
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;//-= 1;
+                    }
+                    indentLevel += 1;
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                        File.WriteLine("}");
+                    }
+                }*/
+                if (s.ScriptData.IndexOf(e) > 1 && (s.ScriptData[s.ScriptData.IndexOf(e) - 2].Opcode == 0x3C)) // If flag check
+                {
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    file.Write(new string('\t', indentLevel));
+                    file.Write('}');
+                    file.Write('\n');
+                }
 
                 if (indentLevel > 0)
                 {
-                    indentLevel -= 1;//-= 1;
+                    file.Write(new string('\t', indentLevel));
+
+                   //File.Write(new string('\t', ((indentLevel > 0 && (e.Opcode == 0x29 || e.Opcode == 0x27)) ? indentLevel - 1 : indentLevel)));
                 }
-                indentLevel += 1;
-                if (shouldPlaceBracket > 0)
+                file.Write(Opcode.GetOpName(e.Opcode, game));
+                if (e.Opcode == 0x02)
+                {
+                    if (e.Text != null)
+                    {
+                        string text = e.Text;
+                        if (text.EndsWith('\0')) text = text.Replace("\0", string.Empty);
+
+                        // Escapes
+                        text = text.Replace("\\", "\\\\");
+                        text = text.Replace("\"", "\\\"");
+                        text = text.Replace("\r", "\\r");
+                        text = text.Replace("\n", "\\n");
+
+                        file.Write("(\"" + text + "\")");
+                    }
+                }
+                else
+                {
+                    file.Write("(");
+                    if (e.Args.Length > 0)
+                    {
+                        for (int a = 0; a < e.Args.Length; a++)
+                        {
+                            if (a > 0) file.Write(", ");
+                            file.Write(Opcode.GetOpcodeById(e.Opcode, game).DecompileArg(game, e.Args, a,  e.Args[a]));
+                        }
+                    }
+                    file.Write(")");
+                }
+                file.WriteLine();
+                if (e.Opcode == 0x29 || e.Opcode == 0x27 || e.Opcode == 0x3C || (e.Opcode == 0x2B)) // Check Object, Check Character, If_Flag
+                {
+                    file.Write(new string('\t', indentLevel));
+                    file.Write('{');
+                    file.Write('\n');
+                    indentLevel += 1;
+                    if (e.Opcode != 0x2B)
+                    {
+                        shouldPlaceBracket += 1;
+                    }
+                    else
+                    {
+                        shouldPlaceBrackedChoice += 1;
+                    }
+                    
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBrackedChoice > 0))
+                {
+                    shouldPlaceBrackedChoice -= 1;
+                    
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    file.WriteLine(new string('\t', indentLevel) + '}');
+
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBracket > 0))
                 {
                     shouldPlaceBracket -= 1;
-                    File.WriteLine("}");
-                }
-
-            }
-            */
-            if (s.ScriptData.IndexOf(e) > 1 &&
-                s.ScriptData[s.ScriptData.IndexOf(e) - 2].Opcode == 0x3C) // If flag check
-            {
-                if (indentLevel > 0) indentLevel -= 1;
-                if (shouldPlaceBracket > 0) shouldPlaceBracket -= 1;
-                file.Write(new string('\t', indentLevel));
-                file.Write('}');
-                file.Write('\n');
-            }
-
-            if (indentLevel > 0) file.Write(new string('\t', indentLevel));
-            //File.Write(new string('\t', ((indentLevel > 0 && (e.Opcode == 0x29 || e.Opcode == 0x27)) ? indentLevel - 1 : indentLevel)));
-            file.Write(Opcode.GetOpName(e.Opcode, game));
-            if (e.Opcode == 0x02)
-            {
-                var text = e.Text;
-                if (text.EndsWith('\0')) text = text.Replace("\0", string.Empty);
-
-                // Escapes
-                text = text.Replace("\\", @"\\");
-                text = text.Replace("\"", "\\\"");
-                text = text.Replace("\r", "\\r");
-                text = text.Replace("\n", "\\n");
-
-
-                file.Write("(\"" + text + "\")");
-            }
-            else
-            {
-                file.Write("(");
-                if (e.Args.Length > 0)
-                    for (var a = 0; a < e.Args.Length; a++)
+                    if (indentLevel > 0)
                     {
-                        if (a > 0) file.Write(", ");
-                        file.Write(Opcode.GetOpcodeById(e.Opcode, game).DecompileArg(game, e.Args, a, e.Args[a]));
+                        indentLevel -= 1;
                     }
+                    file.WriteLine(new string('\t', indentLevel) + '}');
+                }
+          
 
-                file.Write(")");
             }
-
-            file.WriteLine();
-            if (e.Opcode is 0x29 or 0x27 or 0x3C or 0x2B) // Check Object, Check Character, If_Flag
+            if (!append)
             {
-                file.Write(new string('\t', indentLevel));
-                file.Write('{');
-                file.Write('\n');
-                indentLevel += 1;
-                if (e.Opcode != 0x2B)
-                    shouldPlaceBracket += 1;
-                else
-                    shouldPlaceBrackedChoice += 1;
+                file.Close();
             }
-
-            if (s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBrackedChoice > 0)
-            {
-                shouldPlaceBrackedChoice -= 1;
-
-                if (indentLevel > 0) indentLevel -= 1;
-                file.WriteLine(new string('\t', indentLevel) + '}');
-            }
-
-            if (s.ScriptData.IndexOf(e) != s.ScriptData.Count - 1 || shouldPlaceBracket <= 0) continue;
-            shouldPlaceBracket -= 1;
-            if (indentLevel > 0) indentLevel -= 1;
-            file.WriteLine(new string('\t', indentLevel) + '}');
         }
-
-        if (!append) file.Close();
-    }
-
     private static async Task WriteSourceAsync(Script s, StreamWriter file, Game game = Game.BASE, bool append = false)
     {
-        var indentLevel = 0;
-        var shouldPlaceBracket = 0;
-        var shouldPlaceBrackedChoice = 0;
-        var textEntryId = 0;
-        foreach (var e in s.ScriptData)
-        {
-            // ReSharper disable once ConvertIfStatementToSwitchStatement
-            if (e.Opcode == 0x02)
+int indentLevel = 0;
+            int shouldPlaceBracket = 0;
+            int shouldPlaceBrackedChoice = 0;
+            foreach (ScriptEntry e in s.ScriptData)
             {
-                await file.WriteAsync("//text " + textEntryId);
-                await file.WriteLineAsync();
-                textEntryId++;
-            }
 
-            if (e.Opcode is 0x2B or 0x29 or 0x27 && shouldPlaceBrackedChoice > 0)
-            {
-                shouldPlaceBrackedChoice -= 1;
-                if (indentLevel > 0) indentLevel -= 1;
-                await file.WriteAsync(new string('\t', indentLevel));
-                await file.WriteAsync('}');
-                await file.WriteAsync('\n');
-                if (e.Opcode is 0x29 or 0x27) indentLevel = 0;
-            }
+                if (( (e.Opcode == 0x2B || e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBrackedChoice > 0))
+                {
+                    shouldPlaceBrackedChoice -= 1;
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    await file.WriteAsync(new string('\t', indentLevel));
+                    await file.WriteAsync('}');
+                    await file.WriteAsync('\n');
+                    if (e.Opcode == 0x29 || e.Opcode == 0x27)
+                    {
+                        indentLevel = 0;
+                    }
+                }
+                if ((e.Opcode == 0x29 || e.Opcode == 0x27) && shouldPlaceBracket > 0)// || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
+                {
 
-            if (e.Opcode is 0x29 or 0x27 &&
-                shouldPlaceBracket >
-                0) // || (s.ScriptData.IndexOf(e) + 1 < s.ScriptData.Count) && s.ScriptData[s.ScriptData.IndexOf(e) + 1].Opcode == 0x29)))
-            {
-                shouldPlaceBracket -= 1;
-                if (indentLevel > 0) indentLevel -= 1;
-                await file.WriteAsync(new string('\t', indentLevel));
-                await file.WriteAsync('}');
-                await file.WriteAsync('\n');
-            }
+                    if ((true))
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    await file.WriteAsync(new string('\t', indentLevel));
+                    await file.WriteAsync('}');
+                    await file.WriteAsync('\n');
+                }
+                /*if (e.Opcode == 0x29 || e.Opcode == 0x27) // CheckObject, Check Character
+                {
 
-            /*
-            if (e.Opcode == 0x29 || e.Opcode == 0x27) // CheckObject, Check Character
-            {
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;//-= 1;
+                    }
+                    indentLevel += 1;
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                        File.WriteLine("}");
+                    }
+                }*/
+                if (s.ScriptData.IndexOf(e) > 1 && (s.ScriptData[s.ScriptData.IndexOf(e) - 2].Opcode == 0x3C)) // If flag check
+                {
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    if (shouldPlaceBracket > 0)
+                    {
+                        shouldPlaceBracket -= 1;
+                    }
+                    await file.WriteAsync(new string('\t', indentLevel));
+                    await file.WriteAsync('}');
+                    await file.WriteAsync('\n');
+                }
 
                 if (indentLevel > 0)
                 {
-                    indentLevel -= 1;//-= 1;
+                    await file.WriteAsync(new string('\t', indentLevel));
+
+                   //File.Write(new string('\t', ((indentLevel > 0 && (e.Opcode == 0x29 || e.Opcode == 0x27)) ? indentLevel - 1 : indentLevel)));
                 }
-                indentLevel += 1;
-                if (shouldPlaceBracket > 0)
+                await file.WriteAsync(Opcode.GetOpName(e.Opcode, game));
+                if (e.Opcode == 0x02)
+                {
+                    if (e.Text != null)
+                    {
+                        string text = e.Text;
+                        if (text.EndsWith('\0')) text = text.Replace("\0", string.Empty);
+
+                        // Escapes
+                        text = text.Replace("\\", "\\\\");
+                        text = text.Replace("\"", "\\\"");
+                        text = text.Replace("\r", "\\r");
+                        text = text.Replace("\n", "\\n");
+
+                        await file.WriteAsync("(\"" + text + "\")");
+                    }
+                }
+                else
+                {
+                    await file.WriteAsync("(");
+                    if (e.Args.Length > 0)
+                    {
+                        for (int a = 0; a < e.Args.Length; a++)
+                        {
+                            if (a > 0) await file.WriteAsync(", ");
+                            await file.WriteAsync(Opcode.GetOpcodeById(e.Opcode, game).DecompileArg(game, e.Args, a,  e.Args[a]));
+                        }
+                    }
+                    await file.WriteAsync(")");
+                }
+                await file.WriteLineAsync();
+                if (e.Opcode == 0x29 || e.Opcode == 0x27 || e.Opcode == 0x3C || (e.Opcode == 0x2B)) // Check Object, Check Character, If_Flag
+                {
+                    await file.WriteAsync(new string('\t', indentLevel));
+                    await file.WriteAsync('{');
+                    await file.WriteAsync('\n');
+                    indentLevel += 1;
+                    if (e.Opcode != 0x2B)
+                    {
+                        shouldPlaceBracket += 1;
+                    }
+                    else
+                    {
+                        shouldPlaceBrackedChoice += 1;
+                    }
+                    
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBrackedChoice > 0))
+                {
+                    shouldPlaceBrackedChoice -= 1;
+                    
+                    if (indentLevel > 0)
+                    {
+                        indentLevel -= 1;
+                    }
+                    await file.WriteLineAsync(new string('\t', indentLevel) + '}');
+
+                }
+                if ((s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBracket > 0))
                 {
                     shouldPlaceBracket -= 1;
-                    File.WriteLine("}");
-                }
-
-            }
-            */
-            if (s.ScriptData.IndexOf(e) > 1 &&
-                s.ScriptData[s.ScriptData.IndexOf(e) - 2].Opcode == 0x3C) // If flag check
-            {
-                if (indentLevel > 0) indentLevel -= 1;
-                if (shouldPlaceBracket > 0) shouldPlaceBracket -= 1;
-                await file.WriteAsync(new string('\t', indentLevel));
-                await file.WriteAsync('}');
-                await file.WriteAsync('\n');
-            }
-
-            if (indentLevel > 0) await file.WriteAsync(new string('\t', indentLevel));
-            //File.Write(new string('\t', ((indentLevel > 0 && (e.Opcode == 0x29 || e.Opcode == 0x27)) ? indentLevel - 1 : indentLevel)));
-            await file.WriteAsync(Opcode.GetOpName(e.Opcode, game));
-            if (e.Opcode == 0x02)
-            {
-                var text = e.Text;
-                if (text.EndsWith('\0')) text = text.Replace("\0", string.Empty);
-
-                // Escapes
-                text = text.Replace("\\", @"\\");
-                text = text.Replace("\"", "\\\"");
-                text = text.Replace("\r", "\\r");
-                text = text.Replace("\n", "\\n");
-
-
-                await file.WriteAsync("(\"" + text + "\")");
-            }
-            else
-            {
-                await file.WriteAsync("(");
-                if (e.Args.Length > 0)
-                    for (var a = 0; a < e.Args.Length; a++)
+                    if (indentLevel > 0)
                     {
-                        if (a > 0) await file.WriteAsync(", ");
-                        await file.WriteAsync(Opcode.GetOpcodeById(e.Opcode, game).DecompileArg(game, e.Args, a, e.Args[a]));
+                        indentLevel -= 1;
                     }
+                    await file.WriteLineAsync(new string('\t', indentLevel) + '}');
+                }
+          
 
-                await file.WriteAsync(")");
             }
-
-            await file.WriteLineAsync();
-            if (e.Opcode is 0x29 or 0x27 or 0x3C or 0x2B) // Check Object, Check Character, If_Flag
+            if (!append)
             {
-                await file.WriteAsync(new string('\t', indentLevel));
-                await file.WriteAsync('{');
-                await file.WriteAsync('\n');
-                indentLevel += 1;
-                if (e.Opcode != 0x2B)
-                    shouldPlaceBracket += 1;
-                else
-                    shouldPlaceBrackedChoice += 1;
+                file.Close();
             }
-
-            if (s.ScriptData.IndexOf(e) == s.ScriptData.Count - 1 && shouldPlaceBrackedChoice > 0)
-            {
-                shouldPlaceBrackedChoice -= 1;
-
-                if (indentLevel > 0) indentLevel -= 1;
-                await file.WriteLineAsync(new string('\t', indentLevel) + '}');
-            }
-
-            if (s.ScriptData.IndexOf(e) != s.ScriptData.Count - 1 || shouldPlaceBracket <= 0) continue;
-            shouldPlaceBracket -= 1;
-            if (indentLevel > 0) indentLevel -= 1;
-            await file.WriteLineAsync(new string('\t', indentLevel) + '}');
-        }
-
-        if (!append) file.Close();
     }
 
     /// <summary>
@@ -269,7 +318,7 @@ public static class ScriptWrite
     /// <param name="filename">The path to the file to write the decompiled script to</param>
     /// <param name="game">Danganronpa 1 or 2</param>
     /// <param name="append">Whether to append the contents of the compiled script to the output file or to replace the latter's contents</param>
-    public static void WriteSource(Script s, string filename, Game game = Game.BASE, bool append = false)
+    static public void WriteSource(Script s, string filename, Game game = Game.BASE, bool append = false)
     {
         var file = new StreamWriter(filename, false, Encoding.UTF8);
         WriteSource(s, file, game, append);
@@ -322,7 +371,7 @@ public static class ScriptWrite
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
             {
                 while (textData.ContainsKey(s.TextEntries)) s.TextEntries++;
-                textData.Add(s.TextEntries, e.Text);
+                if (e.Text != null) textData.Add(s.TextEntries, e.Text);
 
                 e.Args[0] = (byte)((s.TextEntries >> 8) & 0xFF);
                 e.Args[1] = (byte)(s.TextEntries & 0xFF);
@@ -443,7 +492,7 @@ public static class ScriptWrite
             foreach (var e in s.ScriptData.Where(e => e.Opcode == 0x02))
             {
                 while (textData.ContainsKey(s.TextEntries)) s.TextEntries++;
-                textData.Add(s.TextEntries, e.Text);
+                if (e.Text != null) textData.Add(s.TextEntries, e.Text);
 
                 e.Args[0] = (byte)((s.TextEntries >> 8) & 0xFF);
                 e.Args[1] = (byte)(s.TextEntries & 0xFF);

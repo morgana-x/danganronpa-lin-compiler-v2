@@ -12,7 +12,7 @@ public class ScriptEntry
 {
     public byte[] Args = null!;
     public byte Opcode;
-    public string Text = null!;
+    public string? Text = null!;
 }
 
 public class Script

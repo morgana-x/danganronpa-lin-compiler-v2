@@ -9,3 +9,10 @@
 /LinLib/bin/Release
 /LinLib/obj/Release
 /LinLib/obj/
+/lin_compiler/.vs/
+/lin_compiler/bin/Debug
+/lin_compiler/obj/Debug
+/lin_compiler/bin/Release
+/lin_compiler/obj/Release
+/lin_compiler/obj/
+
