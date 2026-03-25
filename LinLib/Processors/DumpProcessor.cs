@@ -1,12 +1,12 @@
 using System.Text;
 using LinLib.LIN;
 
-namespace LinLib.dr_lin;
+namespace LinLib.Processors;
 
 /// <summary>
 /// Handles dumping of a large set of files
 /// </summary>
-public static class Dumper
+public static class DumpProcessor
 {
     /// <summary>
     /// Dumps all .lin files in a directory into a single .txt file

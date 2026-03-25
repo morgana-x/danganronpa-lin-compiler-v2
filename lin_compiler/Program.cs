@@ -1,5 +1,5 @@
-﻿using LinLib.dr_lin;
-using LinLib.LIN;
+﻿using LinLib.LIN;
+using LinLib.Processors;
 
 namespace lin_compiler
 {
@@ -77,7 +77,7 @@ namespace lin_compiler
             if (dump)
             {
                 Console.WriteLine("Dumping selected");
-                Dumper.DumpDirectory(input, output, game);
+                DumpProcessor.DumpDirectory(input, output, game);
               //  Console.ForegroundColor = ConsoleColor.Yellow;
                // Console.WriteLine("Press any key to close/continue.");
               //  Console.ForegroundColor = ConsoleColor.Gray;
@@ -90,7 +90,7 @@ namespace lin_compiler
                 if (!async)
                 {
                     // ReSharper disable once MethodHasAsyncOverload
-                    BatchProcesser.BatchProcessDirectory(input, decompile, game,
+                    BatchProcessor.BatchProcessDirectory(input, decompile, game,
                         plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
                     //  Console.ForegroundColor = ConsoleColor.Yellow;
                     //   Console.WriteLine("Press any key to close/continue.");
@@ -99,7 +99,7 @@ namespace lin_compiler
                     return;
                 }
                 
-                await BatchProcesser.BatchProcessDirectoryAsync(input, decompile, game, plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
+                await BatchProcessor.BatchProcessDirectoryAsync(input, decompile, game, plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
                 return;
 
             }

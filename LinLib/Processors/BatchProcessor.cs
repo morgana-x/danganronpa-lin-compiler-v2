@@ -1,11 +1,11 @@
 using LinLib.LIN;
 
-namespace LinLib.dr_lin;
+namespace LinLib.Processors;
 
 /// <summary>
 /// Batch processing handler
 /// </summary>
-public static class BatchProcesser
+public static class BatchProcessor
 {
     /// <summary>
     /// Batch processes a directory

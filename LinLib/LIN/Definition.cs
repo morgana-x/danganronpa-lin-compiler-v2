@@ -1,6 +1,4 @@
-using LinLib.LIN;
-
-namespace LinLib.dr_lin;
+namespace LinLib.LIN;
 
 /// <summary>
 /// Handles definitions used throughout the library, for use when reading the opcodes in the .lin file

@@ -1,4 +1,3 @@
-using LinLib.dr_lin;
 using System.Text;
 
 namespace LinLib.LIN

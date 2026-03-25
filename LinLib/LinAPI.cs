@@ -1,5 +1,5 @@
-using LinLib.dr_lin;
 using LinLib.LIN;
+using LinLib.Processors;
 
 namespace LinLib;
 
@@ -17,7 +17,7 @@ public static class LinApi
     public static void DumpDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        Dumper.DumpDirectory(input, output, game);
+        DumpProcessor.DumpDirectory(input, output, game);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public static class LinApi
     public static void BatchDecompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcesser.BatchProcessDirectory(input, true, game, output);
+        BatchProcessor.BatchProcessDirectory(input, true, game, output);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public static class LinApi
     public static void BatchCompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcesser.BatchProcessDirectory(input, false, game, output);
+        BatchProcessor.BatchProcessDirectory(input, false, game, output);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public static class LinApi
     public static async Task BatchDecompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcesser.BatchProcessDirectoryAsync(input, true, game, output);
+        await BatchProcessor.BatchProcessDirectoryAsync(input, true, game, output);
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public static class LinApi
     public static async Task BatchCompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcesser.BatchProcessDirectoryAsync(input, false, game, output);
+        await BatchProcessor.BatchProcessDirectoryAsync(input, false, game, output);
     }
     
     /// <summary>
