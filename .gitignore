@@ -1,10 +1,18 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
 /.vs
-/lin_compiler/.vs/lin_compiler
-/lin_compiler/lin_compiler/bin/Debug
-/lin_compiler/lin_compiler/obj/Debug
-/lin_compiler/lin_compiler/bin/Release
-/lin_compiler/lin_compiler/obj/Release
+/LinLib/.vs/
+/LinLib/bin/Debug
+/LinLib/obj/Debug
+/LinLib/bin/Release
+/LinLib/obj/Release
+/LinLib/obj/
+/lin_compiler/.vs/
+/lin_compiler/bin/Debug
+/lin_compiler/obj/Debug
+/lin_compiler/bin/Release
+/lin_compiler/obj/Release
+/lin_compiler/obj/
+

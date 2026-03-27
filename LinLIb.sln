@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinLib", "LinLib\LinLib.csproj", "{8A49B362-A02E-4DFD-A151-633828F136CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lin_compiler", "lin_compiler\lin_compiler.csproj", "{B5B43358-C555-4588-ABBC-8B68A631213E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A49B362-A02E-4DFD-A151-633828F136CF} = {8A49B362-A02E-4DFD-A151-633828F136CF}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A49B362-A02E-4DFD-A151-633828F136CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A49B362-A02E-4DFD-A151-633828F136CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A49B362-A02E-4DFD-A151-633828F136CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A49B362-A02E-4DFD-A151-633828F136CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5B43358-C555-4588-ABBC-8B68A631213E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5B43358-C555-4588-ABBC-8B68A631213E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5B43358-C555-4588-ABBC-8B68A631213E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5B43358-C555-4588-ABBC-8B68A631213E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
