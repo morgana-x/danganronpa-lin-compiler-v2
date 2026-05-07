@@ -379,6 +379,28 @@ public class TrialCameraOpcode(string name, int numargs) : Opcode(name, numargs)
 
 }
 
+public class TrialCameraOpcodeDr2(string name, int numargs) : Opcode(name, numargs)
+{
+    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    {
+        if (argIndex == 0)
+        {
+            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
+            if (name != null) return name;
+        }
+        
+        /* // For now it's best to refer to https://docs.google.com/spreadsheets/d/1ewULVgmZAZ9urdq1nZHiRvUlW3bEwXk-6QgYqUSlKsM/edit?gid=0#gid=0
+         // For DR2
+        if (argIndex == 2)
+        {
+            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
+            if (name != null) return name;
+        }*/
+        return base.DecompileArg(game, args, argIndex, argValue);
+    }
+
+}
+
 
 public class Opcode
 {
@@ -455,7 +477,7 @@ public class Opcode
             Game.DANGANRONPA2, new Dictionary<byte, Opcode>
             {
                 { 0x01, new Opcode(null, 4) },
-                { 0x14, new Opcode(null, 6) },
+                { 0x14, new TrialCameraOpcodeDr2("TrialCamera", 6) },
                 { 0x15, new Opcode(null, 4) },
                 { 0x19, new Opcode("LoadScript", 5) },
                 { 0x1B, new Opcode(null, 5) },
