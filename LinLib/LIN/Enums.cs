@@ -60,14 +60,14 @@ public static class Enums
         ITEM_FLOTATION_DONUT,
         ITEM_OVERFLOWING_LUNCH_BOX,
         ITEM_SUNFLOWER_SEEDS,
-        ITEM_BIRDS_WEED,
-        ITEM_KITTEN_HAIR_CLIP,
+        ITEM_BIRDSEED,
+        ITEM_KITTEN_HAIRCLIP,
         ITEM_EVERLASTING_BRACELET,
         ITEM_LOVE_STATUS_RING,
         ITEM_ZOLES_DIAMOND,
-        ITEM_HOPE_PEAKS_RING,
+        ITEM_HOPES_PEAK_RING,
         ITEM_BLUEBERRY_PERFUME,
-        ITEM_SCARAB_BROOCHY,
+        ITEM_SCARAB_BROOCH,
         ITEM_GOD_OF_WAR_CHARM,
         ITEM_MACS_GLOVES,
         ITEM_GLASSES,
@@ -89,10 +89,55 @@ public static class Enums
         ITEM_QUALITY_CHINCHILLA_COVER,
         ITEM_KIRLIN_CAMERA,
         ITEM_ADORABLE_REACTIONS_COLLECTION,
-        ITEM_TUMBLE_WEED,
+        ITEM_TUMBLEWEED,
         ITEM_UNENDING_DANDELION,
-        ITEM_ROSE_IN_VITROY,
-        ITEM_CHERRY_BLOSSOM,
+        ITEM_ROSE_IN_VITRO,
+        ITEM_CHERRY_BLOSSOM_BOUQUET,
+        ITEM_ROSE_WHIP,
+        ITEM_ZANTESTUKEN,
+        ITEM_MURAMASA,
+        IETM_RAYGUN_ZURION,
+        ITEM_GOLDEN_GUN,
+        ITEM_BERSERKER_ARMOR,
+        ITEM_SELF_DESTRUCTING_CASSETTE,
+        ITEM_SILENT_RECEIVER,
+        ITEM_PRETTY_HUNGRY_CATERPILLAR,
+        ITEM_OLD_TIMEY_RADIO,
+        ITEM_MR_FASTBALL,
+        ITEM_ANTIQUE_DOLL,
+        ITEM_CRYSTAL_SKULL,
+        ITEM_GOLDEN_AIRPLANE,
+        ITEM_PRINCIPLE_SHOTOKUS_GLOBE,
+        ITEM_MOON_ROCK,
+        ITEM_ASURA_TEARS,
+        ITEM_SECRETS_OF_THE_OMOPLATA,
+        ITEM_MILLENNIUM_PRIZE_PROBLEMS,
+        ITEM_THE_FUNPLANE,
+        ITEM_PROJECT_ZOMBIE,
+        ITEM_PAGAN_DANCER,
+        ITEM_TIPS_AND_TIPS,
+        ITEM_MAIDENS_HANDBAG,
+        ITEM_KOKESHI_DYNAMO,
+        ITEM_THE_SECOND_BUTTON,
+        ITEM_SOMEONES_GRADUATION_ALBUM,
+        ITEM_VISE,
+        ITEM_SACRED_TREE_SPRIG,
+        ITEM_PUMICE,
+        ITEM_OBLAAT,
+        ITEM_WATER_FLUTE,
+        ITEM_BOJOBO_DOLLS,
+        ITEM_SMALL_LIGHT,
+        ITEM_VOICE_CHANGING_BOWTIE,
+        ITEM_ANCIENT_TOUR_TICKETS,
+        ITEM_NOVELIST_FOUNTAIN_PEN,
+        ITEM_IF_FAX,
+        ITEM_CAT_DOG_MAGAZINE,
+        ITEM_METEORITE_ARROWHEAD,
+        ITEM_CHIN_DRILL,
+        ITEM_GREEN_COSTUME,
+        ITEM_RED_COSTUME,
+        ITEM_A_MANS_FANTASY,
+        ITEM_ESCAPE_BUTTON,
         ITEM_SCHOOL_CREST = 92,
         ITEM_DESPAIR_BAT = 93,
         ITEM_CRAZY_DIAMOND = 94,
@@ -212,6 +257,7 @@ public static class Enums
 
     public enum DrArithmetic
     {
+        SET = 0,
         ADD = 1,
         SUBTRACT = 2
     }
@@ -268,6 +314,11 @@ public static class Enums
         FLAG_CHR_DEAD = 16
     }
 
+    public enum DrFlagD
+    {
+        FLAG_RELATION = 0,
+    }
+
     // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinFlagCheck.kt#L3
     public enum DrFlagCompare
     {
@@ -319,6 +370,7 @@ public static class Enums
 
     public enum DrUi
     {
+        UI_THOUGHT = 0,
         UI_TEXTBOX = 1,
         UI_NAME = 2,
         UI_HUD = 3,

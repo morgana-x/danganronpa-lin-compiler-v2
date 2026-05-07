@@ -6,6 +6,9 @@
         <RootNamespace>lin_compiler</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+		<SelfContained>false</SelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>

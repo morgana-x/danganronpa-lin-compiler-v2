@@ -1,4 +1,5 @@
 using System.Globalization;
+using static LinLib.LIN.SetRelationOpcode;
 
 #pragma warning disable 1591
 
@@ -65,7 +66,52 @@ public class FlagOpcode(string name, int numargs) : Opcode(name, numargs)
     }
 }
 
-public class CheckFlagOpcode(string name, int numargs) : Opcode(name, numargs)
+public class CheckFlagAOpcode(string name, int numargs) : Opcode(name, numargs)
+{
+    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    {
+        if (argIndex == 0 || argIndex == 5 || argIndex == 10 || argIndex == 15 || argIndex == 20 || argIndex == 25 ||
+            argIndex == 30 || argIndex == 35)
+        {
+            var name = Enum.GetName(typeof(Enums.DrFlag), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 1 || argIndex == 6 || argIndex == 11 || argIndex == 16 || argIndex == 21 || argIndex == 26 ||
+            argIndex == 31 || argIndex == 36)
+        {
+            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_CHR_DEAD)
+            {
+                var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
+                if (name != null) return name;
+            }
+
+            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_SYSTEM)
+            {
+                var name = Enum.GetName(typeof(Enums.DrFlagSystem), argValue);
+                if (name != null) return name;
+            }
+        }
+
+        if (argIndex == 2 || argIndex == 7 || argIndex == 12 || argIndex == 17 || argIndex == 22 || argIndex == 27 ||
+            argIndex == 32 || argIndex == 37)
+        {
+            var name = Enum.GetName(typeof(Enums.DrFlagCompare), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 4 || argIndex == 9 || argIndex == 14 || argIndex == 19 || argIndex == 24 || argIndex == 29 ||
+            argIndex == 34 || argIndex == 39)
+        {
+            var name = Enum.GetName(typeof(Enums.DrFlagJoiner), argValue);
+            if (name != null) return name;
+        }
+
+        return base.DecompileArg(game, args, argIndex, argValue);
+    }
+}
+
+public class CheckFlagBOpcode(string name, int numargs) : Opcode(name, numargs)
 {
     public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
     {
@@ -266,6 +312,53 @@ public class PresentOpcode(string name, int numargs) : Opcode(name, numargs)
     }
 }
 
+
+public class CheckFlagDOpcode(string name, int numargs) : Opcode(name, numargs)
+{
+    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    {
+        if (argIndex == 0)
+        {
+            var name = Enum.GetName(typeof(Enums.DrFlagD), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 1 && (args[0] == (byte)Enums.DrFlagD.FLAG_RELATION))
+        {
+            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 2)
+        {
+            var name = Enum.GetName(typeof(Enums.DrFlagCompare), argValue);
+            if (name != null) return name;
+        }
+
+        return base.DecompileArg(game, args, argIndex, argValue);
+    }
+}
+
+public class SetRelationOpcode(string name, int numargs) : Opcode(name, numargs)
+{
+    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    {
+        if (argIndex == 0)
+        {
+            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 1)
+        {
+            var name = Enum.GetName(typeof(Enums.DrArithmetic), argValue);
+            if (name != null) return name;
+        }
+        return base.DecompileArg(game, args, argIndex, argValue);
+    }
+
+}
+
 public class Opcode
 {
     private static readonly Dictionary<Game, Dictionary<string, byte>> OpcodesByName = new();
@@ -293,7 +386,7 @@ public class Opcode
                 { 0x0E, new SkillOpcode("UnlockSkill", 2) },
                 { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
                 { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
-                { 0x11, new Opcode(null, 4) }, // Relationship setting?
+                { 0x11, new SetRelationOpcode("ChangeRelation", 4) }, // Relationship setting?
                 { 0x14, new Opcode("TrialCamera", 3) }, //Character, Motion, Position
                 { 0x15, new Opcode("LoadMap", 3) }, // Room, State, Padding, Time of Day
                 { 0x19, new Opcode("LoadScript", 3) },
@@ -324,10 +417,10 @@ public class Opcode
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
                 { 0x33, new GameStateOpcode("SetGameState", 4) },
                 { 0x34, new Opcode("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
-                { 0x35, new CheckFlagOpcode("CheckFlagA", -1) }, // each check is 4 args
-                { 0x36, new CheckFlagOpcode("CheckFlagB", -1) }, // each check is 4 args
-                { 0x38, new Opcode(null, -1) },
-                { 0x39, new Opcode(null, 5) },
+                { 0x35, new CheckFlagAOpcode("CheckFlagA", -1) }, // each check is 4 args
+                { 0x36, new CheckFlagBOpcode("CheckFlagB", -1) }, // each check is 4 args
+                { 0x38, new Opcode("CheckFlagC", -1) },
+                { 0x39, new CheckFlagDOpcode("CheckFlagD", 5) },
                 { 0x3A, new Opcode("WaitInput", 0) },
                 { 0x3B, new Opcode("WaitFrame", 0) },
                 { 0x3C, new Opcode("If_FlagCheck", 0) },
