@@ -320,14 +320,14 @@ public static class Enums
     }
 
     // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinFlagCheck.kt#L3
-    public enum DrFlagCompare
+    public enum DrFlagCompare // These are actually inverted, and the If_Flagcheck is actually a If_NotFlagCheck! but we lie for easier reading!
     {
         NOT_EQUAL = 0,
         EQUAL = 1,
-        LESS_OR_EQUAL = 2,
-        GREATER_OR_EQUAL = 3,
-        LESS_THAN = 4,
-        GREATER_THAN = 5
+        LESS_OR_EQUAL = 4,
+        GREATER_OR_EQUAL = 5,
+        LESS_THAN = 3,
+        GREATER_THAN = 2
     }
 
     // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinJoinerFlagCheck.kt    public enum DR_COMPARE
