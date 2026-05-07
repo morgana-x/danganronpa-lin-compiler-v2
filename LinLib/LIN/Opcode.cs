@@ -359,6 +359,27 @@ public class SetRelationOpcode(string name, int numargs) : Opcode(name, numargs)
 
 }
 
+public class TrialCameraOpcode(string name, int numargs) : Opcode(name, numargs)
+{
+    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    {
+        if (argIndex == 0)
+        {
+            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
+            if (name != null) return name;
+        }
+
+        if (argIndex == 2)
+        {
+            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
+            if (name != null) return name;
+        }
+        return base.DecompileArg(game, args, argIndex, argValue);
+    }
+
+}
+
+
 public class Opcode
 {
     private static readonly Dictionary<Game, Dictionary<string, byte>> OpcodesByName = new();
@@ -387,7 +408,7 @@ public class Opcode
                 { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
                 { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
                 { 0x11, new SetRelationOpcode("ChangeRelation", 4) }, // Relationship setting?
-                { 0x14, new Opcode("TrialCamera", 3) }, //Character, Motion, Position
+                { 0x14, new TrialCameraOpcode("TrialCamera", 3) }, //Character, Motionr bshr, Motion, Position
                 { 0x15, new Opcode("LoadMap", 3) }, // Room, State, Padding, Time of Day
                 { 0x19, new Opcode("LoadScript", 3) },
                 { 0x1A, new Opcode("StopScript", 0) },

@@ -36,6 +36,7 @@ public class Definition
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagJoiner));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagCompare));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrArithmetic));
+        LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrCamMotion));
 
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Char));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Bgm));
