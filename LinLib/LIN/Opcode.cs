@@ -462,7 +462,7 @@ public class Opcode
                 { 0x34, new Opcode("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
                 { 0x35, new CheckFlagAOpcode("CheckFlagA", -1) }, // each check is 4 args
                 { 0x36, new CheckFlagBOpcode("CheckFlagB", -1) }, // each check is 4 args
-                { 0x38, new Opcode("CheckFlagC", -1) },
+                { 0x38, new CheckFlagDOpcode("CheckFlagC", -1) },
                 { 0x39, new CheckFlagDOpcode("CheckFlagD", 5) },
                 { 0x3A, new Opcode("WaitInput", 0) },
                 { 0x3B, new Opcode("WaitFrame", 0) },
