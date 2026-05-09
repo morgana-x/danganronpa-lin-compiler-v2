@@ -1268,6 +1268,12 @@ public static class Enums
 		TC_SPECIAL_10_END
     }
 
+    public enum DrGamestate
+    {
+	    STATE_TIME = 0,
+	    STATE_SKILL_POINTS = 12
+    }
+
 
     public static Type GetCharEnum(Game game)
     {

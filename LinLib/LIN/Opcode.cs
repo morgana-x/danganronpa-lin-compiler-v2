@@ -220,6 +220,17 @@ public class GameStateOpcode(string name, int numargs) : Opcode(name, numargs)
 {
     public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
     {
+        if (argIndex == 0)
+        {
+            var name = Enum.GetName(typeof(Enums.DrGamestate), argValue);
+            if (name != null) return name;
+        }
+        if (argIndex == 1)
+        {
+            var name = Enum.GetName(typeof(Enums.DrArithmetic), argValue);
+            if (name != null) return name;
+        }
+        
         if (argIndex == 3 && args[0] == 0 && args[1] == 0 && args[2] == 0)
         {
             var name = Enum.GetName(typeof(Enums.DrTime), argValue);
