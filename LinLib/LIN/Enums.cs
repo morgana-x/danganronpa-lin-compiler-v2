@@ -8,7 +8,7 @@ public static class Enums
     {
         BGM_OPENING,
         BGM_MENU_START,
-        BGM_BEAUTIFUL_DEATH,
+       /* BGM_BEAUTIFUL_DEATH,
         BGM_WELCOME_TO_DESPAIR,
         BGM_BEAUTIFUL_MORNING,
 		BGM_TO_SURVIVE,
@@ -40,7 +40,7 @@ public static class Enums
 		BGM_SUPER_BTB,
 		BGM_SUPER_FINAL_BTB,
 		BGM_GOODBYE_DESPAIR_HIGH_SCHOOL,
-		BGM_REBIRTH_REBUILD,
+		BGM_REBIRTH_REBUILD,*/
         BGM_RESET = 255
     }
 
