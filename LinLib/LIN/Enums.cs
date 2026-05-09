@@ -324,10 +324,10 @@ public static class Enums
     {
         NOT_EQUAL = 0,
         EQUAL = 1,
-        LESS_OR_EQUAL = 4,
-        GREATER_OR_EQUAL = 5,
-        LESS_THAN = 3,
-        GREATER_THAN = 2
+        LESS_OR_EQUAL = 2,
+        GREATER_OR_EQUAL = 3,
+        LESS_THAN = 4,
+        GREATER_THAN = 5
     }
 
     // https://github.com/SpiralFramework/Spiral/blob/f43cfdc845deabaecfc1183a16f77370faf8ec60/osl/src/main/kotlin/info/spiralframework/osl/EnumLinJoinerFlagCheck.kt    public enum DR_COMPARE
