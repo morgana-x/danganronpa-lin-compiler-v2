@@ -1271,7 +1271,9 @@ public static class Enums
     public enum DrGamestate
     {
 	    STATE_TIME = 0,
-	    STATE_SKILL_POINTS = 12
+	    STATE_SKILL_POINTS = 12,
+	    STATE_HANDBOOK_REGULATIONS = 17,
+	    STATE_CHAPTER_SCENE = 20,
     }
 
 
