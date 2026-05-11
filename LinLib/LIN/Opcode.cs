@@ -30,10 +30,10 @@ public class Opcode
                 }, // Textbox format, 0 = other char speaking, 4 = player character speaking / thoughts
                 { 0x04, new PostProcessingEffectOpcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
                 { 0x05, new Opcode("Movie", [1, 1]) },
-                { 0x06, new Opcode("Animation", [2, 1, 1, 1, 1, 1, 1]) },
+                { 0x06, new Opcode("Animation", [2, 2, 2, 1, 1]) },
                 { 0x08, new VoiceOpcode("Voice", [1, 1, 2, 1]) },
                 { 0x09, new MusicOpcode("Music", 3) },
-                { 0x0A, new Opcode("Sound", 3) },
+                { 0x0A, new Opcode("SoundA", [2, 1]) },
                 { 0x0B, new Opcode("SoundB", 2) },
                 { 0x0C, new Opcode("AddTruthBullets", 2) },
                 { 0x0D, new PresentOpcode("AddPresents", 3) },
@@ -86,6 +86,7 @@ public class Opcode
             Game.DANGANRONPA2, new Dictionary<byte, Opcode>
             {
                 { 0x01, new Opcode(null, 4) },
+                { 0x0A, new Opcode("SoundA", [2, 1])},
                 { 0x14, new TrialCameraOpcodeDr2("TrialCamera", [1, 2, 2, 1]) },
                 { 0x15, new Opcode(null, 4) },
                 { 0x1A, new Opcode("StopScript", 0)},

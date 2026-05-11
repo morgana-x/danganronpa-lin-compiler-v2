@@ -1311,8 +1311,11 @@ public static class Enums
 	    STATE_SPAWN_POS = 8,
 	    STATE_TRIAL_TIMER = 11,
 	    STATE_SKILL_POINTS = 12,
+	    STATE_TRIAL_HEALTH = 13,
+	    STATE_MONOCOINS = 16,
 	    STATE_HANDBOOK_REGULATIONS = 17,
 	    STATE_CHAPTER_SCENE = 20,
+	    STATE_FIND_MONOCOIN = 30,
     }
 
     public enum DrScreenEffect
