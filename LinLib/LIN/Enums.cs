@@ -308,14 +308,15 @@ public static class Enums
 
     public enum DrChapter
     {
-        CHAPTER_PROLOGUE,
-        CHAPTER1,
-        CHAPTER2,
-        CHAPTER3,
-        CHAPTER4,
-        CHAPTER5,
-        CHAPTER6,
-        CHAPTER99 = 99
+        CH_PRO,
+        CH_1,
+        CH_2,
+        CH_3,
+        CH_4,
+        CH_5,
+        CH_6,
+        CH_EPI,
+        CH_ANY = 99
     }
 
     public enum DrColour
