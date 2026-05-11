@@ -5,13 +5,13 @@ namespace LinLib.LIN;
 /// </summary>
 public class Definition
 {
-    private readonly Dictionary<Game, Dictionary<string, byte>> _definitions = new()
+    private readonly Dictionary<Game, Dictionary<string, int>> _definitions = new()
     {
-        [Game.DANGANRONPA1] = new Dictionary<string, byte>(),
-        [Game.DANGANRONPA2] = new Dictionary<string, byte>()
+        [Game.DANGANRONPA1] = new Dictionary<string, int>(),
+        [Game.DANGANRONPA2] = new Dictionary<string, int>()
     };
 
-    private readonly Dictionary<string, byte> _scriptDefinedDefinitions = new();
+    private readonly Dictionary<string, int> _scriptDefinedDefinitions = new();
 
     /// <summary>
     /// Loads definitions
@@ -58,7 +58,7 @@ public class Definition
     /// <param name="game">The game associated with this definition. (DR1 or DR2)</param>
     /// <returns>The opcode associated with the definition</returns>
     /// <exception cref="Exception"></exception>
-    public byte TryGetDefinitionValue(string name, Game game = Game.BASE)
+    public int TryGetDefinitionValue(string name, Game game = Game.BASE)
     {
         if (_scriptDefinedDefinitions.TryGetValue(name, out var value)) return value;
         if (_definitions[game].ContainsKey(name)) return _definitions[game][name];
@@ -84,7 +84,7 @@ public class Definition
         for (var i = 0; i < names.Length; i++)
         {
             if (_definitions[game].ContainsKey(names[i])) continue;
-            _definitions[game].Add(names[i], (byte)values[i]);
+            _definitions[game].Add(names[i], values[i]);
         }
     }
 }

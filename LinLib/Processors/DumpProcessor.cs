@@ -32,9 +32,10 @@ public static class DumpProcessor
                 var s = new Script(filePath, true, game);
                 ScriptWrite.WriteSource(s, outFileWriter, game, true);
             }
-            catch
+            catch(Exception e)
             {
                 outFileWriter.WriteLine("CRITICAL ERROR OCCURED WHILE EXTRACTING THE FILE");
+                outFileWriter.WriteLine(e.ToString());
             }
 
             outFileWriter.WriteLine("\n\n\n\n");

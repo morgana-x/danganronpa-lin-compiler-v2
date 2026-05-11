@@ -73,6 +73,7 @@ public static class Enums
         CHR_DAIYA = 24,
         CHR_NARRATOR = 26,
         CHR_USAMI = 27,
+        CHR_DEBATE = 28,
         CHR_UNKNOWN = 30,
         CHR_SYSTEM = 31
     }
@@ -1304,6 +1305,7 @@ public static class Enums
     public enum DrGamestate
     {
 	    STATE_TIME = 0,
+	    STATE_TRIAL_TIMER = 11,
 	    STATE_SKILL_POINTS = 12,
 	    STATE_HANDBOOK_REGULATIONS = 17,
 	    STATE_CHAPTER_SCENE = 20,

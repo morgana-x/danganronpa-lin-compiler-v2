@@ -159,7 +159,7 @@ public static class ScriptRead
                         s.Type = ScriptType.Text;
                         s.TextEntries++;
                         e.Text = sb.ToString();
-                        e.Args = new byte[2];
+                        e.Args = new int[2];
                     }
                     else
                     {
@@ -168,14 +168,14 @@ public static class ScriptRead
                             sb.Append(c);
                             c = (char)file.Read();
                         }
-                        List<byte> args = new List<byte>();
+                        List<int> args = new List<int>();
                         if (sb.ToString().Trim().Length > 0)
                         {
                             foreach (string a in sb.ToString().Trim().Split(','))
                             {
                                 var trimmed = a.Trim();
-                                byte value;
-                                if (!byte.TryParse(trimmed, out value))
+                                int value;
+                                if (!int.TryParse(trimmed, out value))
                                     value = definitionClass.TryGetDefinitionValue(trimmed, game);
                                 args.Add(value);
                             }
@@ -245,33 +245,12 @@ public static class ScriptRead
                 if (s.File[i] == 0x70)
                 {
                     i++;
+                    
                     ScriptEntry e = new ScriptEntry();
                     e.Opcode = s.File[i];
-
-                    int argCount = Opcode.GetOpcodeArgCount(e.Opcode, game);
-                    if (argCount == -1)
-                    {
-                        // Vararg
-                        List<byte> args = new List<byte>();
-                        while (s.File[i + 1] != 0x70)
-                        {
-                            args.Add(s.File[i + 1]);
-                            i++;
-                        }
-                        e.Args = args.ToArray();
-                        scriptData.Add(e);
-                        continue;
-                    }
-                    else
-                    {
-                        e.Args = new byte[argCount];
-                        for (int a = 0; a < e.Args.Length; a++)
-                        {
-                            e.Args[a] = s.File[i + 1];
-                            i++;
-                        }
-                        scriptData.Add(e);
-                    }
+                    e.Args = Opcode.GetOpcodeById(e.Opcode, game).ReadArgs(s.File, ref i);
+                    
+                    scriptData.Add(e);
                 }
                 else
                 {
@@ -282,6 +261,7 @@ public static class ScriptRead
                         {
                             Console.WriteLine($"[read] error: expected 0x00, got 0x{s.File[i].ToString("X2")}.");
                             Console.WriteLine("SCRIPT IS NOW BROKEN, please check the last opcode at the end of the file and report the error! (If you're feeling generous :)");
+                            Console.WriteLine("Last opcode was " + scriptData.Last().Opcode.ToString("X2"));
                             break;
                             //throw new Exception("[read] error: expected 0x00, got 0x" + s.File[i].ToString("X2") + ".");
                         }
@@ -301,9 +281,7 @@ public static class ScriptRead
             {
                 if (s.ScriptData[i].Opcode == 0x02)
                 {
-                    byte first = s.ScriptData[i].Args[0];
-                    byte second = s.ScriptData[i].Args[1];
-                    int textId = first << 8 | second;
+                    int textId = s.ScriptData[i].Args[0];
 
                     if (textId >= s.TextEntries)
                     {

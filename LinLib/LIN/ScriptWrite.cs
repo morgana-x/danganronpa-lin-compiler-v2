@@ -386,7 +386,10 @@ int indentLevel = 0;
         {
             file.Add(0x70);
             file.Add(e.Opcode);
-            file.AddRange(e.Args);
+            if (e.Text != null)
+                file.AddRange([(byte)e.Args[0], (byte)e.Args[1]]);
+            else
+                Opcode.GetOpcodeById(e.Opcode).WriteArgs(ref file, e.Args);
         }
 
         while (file.Count % 4 != 0) file.Add(0x00);
@@ -507,7 +510,7 @@ int indentLevel = 0;
         {
             file.Add(0x70);
             file.Add(e.Opcode);
-            file.AddRange(e.Args);
+            Opcode.GetOpcodeById(e.Opcode).WriteArgs(ref file, e.Args);
         }
 
         while (file.Count % 4 != 0) file.Add(0x00);

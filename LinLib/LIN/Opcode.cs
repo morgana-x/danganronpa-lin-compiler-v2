@@ -1,5 +1,5 @@
 using System.Globalization;
-using static LinLib.LIN.SetRelationOpcode;
+using LinLib.LIN.Opcodes;
 
 #pragma warning disable 1591
 
@@ -12,406 +12,6 @@ public enum Game
     DANGANRONPA2
 }
 
-public class ChangeUiOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrUi), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class SpeakerOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class FlagOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlag), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1 && args[0] == (byte)Enums.DrFlag.FLAG_CHR_DEAD)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1 && args[0] == (byte)Enums.DrFlag.FLAG_SYSTEM)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagSystem), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class CheckFlagAOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0 || argIndex == 5 || argIndex == 10 || argIndex == 15 || argIndex == 20 || argIndex == 25 ||
-            argIndex == 30 || argIndex == 35)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlag), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1 || argIndex == 6 || argIndex == 11 || argIndex == 16 || argIndex == 21 || argIndex == 26 ||
-            argIndex == 31 || argIndex == 36)
-        {
-            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_CHR_DEAD)
-            {
-                var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-                if (name != null) return name;
-            }
-
-            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_SYSTEM)
-            {
-                var name = Enum.GetName(typeof(Enums.DrFlagSystem), argValue);
-                if (name != null) return name;
-            }
-        }
-
-        if (argIndex == 2 || argIndex == 7 || argIndex == 12 || argIndex == 17 || argIndex == 22 || argIndex == 27 ||
-            argIndex == 32 || argIndex == 37)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagCompare), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 4 || argIndex == 9 || argIndex == 14 || argIndex == 19 || argIndex == 24 || argIndex == 29 ||
-            argIndex == 34 || argIndex == 39)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagJoiner), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class CheckFlagBOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0 || argIndex == 5 || argIndex == 10 || argIndex == 15 || argIndex == 20 || argIndex == 25 ||
-            argIndex == 30 || argIndex == 35)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlag), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1 || argIndex == 6 || argIndex == 11 || argIndex == 16 || argIndex == 21 || argIndex == 26 ||
-            argIndex == 31 || argIndex == 36)
-        {
-            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_CHR_DEAD)
-            {
-                var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-                if (name != null) return name;
-            }
-
-            if (args[argIndex - 1] == (byte)Enums.DrFlag.FLAG_SYSTEM)
-            {
-                var name = Enum.GetName(typeof(Enums.DrFlagSystem), argValue);
-                if (name != null) return name;
-            }
-        }
-
-        if (argIndex == 2 || argIndex == 7 || argIndex == 12 || argIndex == 17 || argIndex == 22 || argIndex == 27 ||
-            argIndex == 32 || argIndex == 37)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagCompare), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 4 || argIndex == 9 || argIndex == 14 || argIndex == 19 || argIndex == 24 || argIndex == 29 ||
-            argIndex == 34 || argIndex == 39)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagJoiner), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class SpriteOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 3)
-        {
-            var name = Enum.GetName(typeof(Enums.DrSpriteState), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 4)
-        {
-            var name = Enum.GetName(typeof(Enums.DrCamDir), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class VoiceOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrChapter), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class StudentEntryOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class GameStateOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrGamestate), argValue);
-            if (name != null) return name;
-        }
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrArithmetic), argValue);
-            if (name != null) return name;
-        }
-        
-        if (argIndex == 3 && args[0] == 0 && args[1] == 0 && args[2] == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrTime), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class ScreenFadeOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFade), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrColour), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class PostProcessingEffectOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFilter), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class SkillOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetSkillEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class MusicOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetBgmEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class PresentOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetPresentEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrArithmetic), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-
-public class CheckFlagDOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagD), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1 && (args[0] == (byte)Enums.DrFlagD.FLAG_RELATION))
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 2)
-        {
-            var name = Enum.GetName(typeof(Enums.DrFlagCompare), argValue);
-            if (name != null) return name;
-        }
-
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-}
-
-public class SetRelationOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 1)
-        {
-            var name = Enum.GetName(typeof(Enums.DrArithmetic), argValue);
-            if (name != null) return name;
-        }
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-
-}
-
-public class TrialCameraOpcode(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-
-        if (argIndex == 2)
-        {
-            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
-            if (name != null) return name;
-        }
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-
-}
-
-public class TrialCameraOpcodeDr2(string name, int numargs) : Opcode(name, numargs)
-{
-    public override string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
-    {
-        if (argIndex == 0)
-        {
-            var name = Enum.GetName(Enums.GetCharEnum(game), argValue);
-            if (name != null) return name;
-        }
-        
-        /* // For now it's best to refer to https://docs.google.com/spreadsheets/d/1ewULVgmZAZ9urdq1nZHiRvUlW3bEwXk-6QgYqUSlKsM/edit?gid=0#gid=0
-         // For DR2
-        if (argIndex == 2)
-        {
-            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
-            if (name != null) return name;
-        }*/
-        return base.DecompileArg(game, args, argIndex, argValue);
-    }
-
-}
-
 
 public class Opcode
 {
@@ -422,26 +22,26 @@ public class Opcode
         {
             Game.DANGANRONPA1, new Dictionary<byte, Opcode>
             {
-                { 0x00, new Opcode(null, 2) },
+                { 0x00, new Opcode("TextCount", [2]) },
                 { 0x01, new Opcode("LoadSprite", 3) }, // Mostly Unknown 
-                { 0x02, new Opcode("Text", 2) },
+                { 0x02, new Opcode("Text", [2]) },
                 {
                     0x03, new Opcode("TextboxFormat", 1)
                 }, // Textbox format, 0 = other char speaking, 4 = player character speaking / thoughts
                 { 0x04, new PostProcessingEffectOpcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
-                { 0x05, new Opcode("Movie", 2) },
-                { 0x06, new Opcode("Animation", 8) },
-                { 0x08, new VoiceOpcode("Voice", 5) },
+                { 0x05, new Opcode("Movie", [2]) },
+                { 0x06, new Opcode("Animation", [2, 1, 1, 1, 1, 1, 1]) },
+                { 0x08, new VoiceOpcode("Voice", [1, 1, 2, 1]) },
                 { 0x09, new MusicOpcode("Music", 3) },
                 { 0x0A, new Opcode("Sound", 3) },
                 { 0x0B, new Opcode("SoundB", 2) },
                 { 0x0C, new Opcode("AddTruthBullets", 2) },
                 { 0x0D, new PresentOpcode("AddPresents", 3) },
                 { 0x0E, new SkillOpcode("UnlockSkill", 2) },
-                { 0x0F, new StudentEntryOpcode("StudentTitleEntry", 3) },
-                { 0x10, new StudentEntryOpcode("StudentReportInfo", 3) },
-                { 0x11, new SetRelationOpcode("ChangeRelation", 4) }, // Relationship setting?
-                { 0x14, new TrialCameraOpcode("TrialCamera", 3) }, //Character, Motionr bshr, Motion, Position
+                { 0x0F, new StudentEntryOpcode("StudentTitleEntry", [1, 2]) },
+                { 0x10, new StudentEntryOpcode("StudentReportInfo", [1, 2]) },
+                { 0x11, new SetRelationOpcode("ChangeRelation", [1, 1, 2]) }, // Relationship setting?
+                { 0x14, new TrialCameraOpcode("TrialCamera", [1, 1, 1]) }, //Character, Motionr bshr, Motion, Position
                 { 0x15, new Opcode("LoadMap", 3) }, // Room, State, Padding, Time of Day
                 { 0x19, new Opcode("LoadScript", 3) },
                 { 0x1A, new Opcode("StopScript", 0) },
@@ -454,12 +54,10 @@ public class Opcode
                 { 0x22, new ScreenFadeOpcode("ScreenFade", 3) },
                 { 0x23, new Opcode("ObjectState", 5) },
                 { 0x25, new ChangeUiOpcode("ChangeUi", 2) },
-                {
-                    0x26, new FlagOpcode("SetFlag", 3)
-                }, // Argument 1 is the group, argument 2 is the ID, and argument 3 is the state.
+                { 0x26, new SetFlagOpcode("SetFlag", 3) }, // Argument 1 is the group, argument 2 is the ID, and argument 3 is the state.
                 { 0x27, new Opcode("CheckCharacter", 1) },
                 { 0x29, new Opcode("CheckObject", 1) },
-                { 0x2A, new Opcode("SetLabel", 2) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
+                { 0x2A, new Opcode("SetLabel", [2]) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
                 { 0x2B, new Opcode("SetOption", 1) }, // Choice??
                 { 0x2C, new Opcode("EndOfJump", 2) },
                 {
@@ -469,12 +67,12 @@ public class Opcode
                 { 0x2F, new Opcode(null, 10) },
                 { 0x30, new Opcode("ShowBackground", 3) },
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
-                { 0x33, new GameStateOpcode("SetGameState", 4) },
-                { 0x34, new Opcode("GotoLabel", 2) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
+                { 0x33, new GameStateOpcode("SetGameState", [1, 1, 2]) },
+                { 0x34, new Opcode("GotoLabel", [2]) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
                 { 0x35, new CheckFlagAOpcode("CheckFlagA", -1) }, // each check is 4 args
                 { 0x36, new CheckFlagBOpcode("CheckFlagB", -1) }, // each check is 4 args
                 { 0x38, new CheckFlagDOpcode("CheckFlagC", -1) },
-                { 0x39, new CheckFlagDOpcode("CheckFlagD", 5) },
+                { 0x39, new CheckFlagDOpcode("CheckFlagD", -1) },
                 { 0x3A, new Opcode("WaitInput", 0) },
                 { 0x3B, new Opcode("WaitFrame", 0) },
                 { 0x3C, new Opcode("If_FlagCheck", 0) },
@@ -507,14 +105,85 @@ public class Opcode
 
     private readonly string? _name;
     private readonly int _numArguments;
+    
+    private int[] _argSizes;
 
-    protected Opcode(string? name, int numargs)
+
+
+    internal Opcode(string? name, int numargs)
     {
         _name = name;
         _numArguments = numargs;
+        
+        if (numargs < 0)
+            numargs = 0;
+        
+        _argSizes = new int[numargs];
+        
+        for (int i = 0; i < numargs; i++)
+            _argSizes[i] = 1;
     }
 
-    public virtual string DecompileArg(Game game, byte[] args, int argIndex, byte argValue)
+    internal Opcode(string? name, IEnumerable<int> argSizes)
+    {
+        _name = name;
+        _numArguments = argSizes.Count();
+        _argSizes = argSizes.ToArray();
+        
+    }
+
+    public virtual void WriteArgs(ref List<byte> file, int[] args)
+    {
+        for (int i = 0; i < args.Length; i++)
+        {
+            var a = args[i];
+
+            if (_argSizes.Length == 0 || _numArguments == -1 || i >= _argSizes.Length)
+            {
+                file.Add((byte)(a));
+                continue;
+            }
+            
+      
+            for (int j = _argSizes[i] - 1; j >= 0; j--)
+                file.Add((byte)((a >> (8 * j)) & 0xFF));
+            
+           
+        }
+    }
+    
+    public virtual int[] ReadArgs(byte[] file, ref int i)
+    {
+       
+        if (_numArguments == -1)
+        {
+            var vargs = new List<int>();
+            while (file[i + 1] != 0x70)
+            {
+                vargs.Add(file[i + 1]);
+                i++;
+            }
+
+            return vargs.ToArray();
+        }
+        
+        int[] args = new int[_numArguments];
+        
+        for (int a = 0; a < _numArguments; a++)
+        {
+            for (int j = _argSizes[a] - 1; j >= 0; j--)
+            {
+                args[a] += (file[i + 1] << (8 * j)) & 0xFF;
+                i++;
+            }
+        }
+        
+        
+        return args;
+    }
+    
+
+    public virtual string DecompileArg(Game game, int[] args, int argIndex, int argValue)
     {
         return argValue.ToString();
     }

@@ -10,7 +10,7 @@ public enum ScriptType
 
 public class ScriptEntry
 {
-    public byte[] Args = null!;
+    public int[] Args = null!;
     public byte Opcode;
     public string? Text = null!;
 }
