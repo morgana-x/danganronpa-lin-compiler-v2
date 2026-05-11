@@ -1302,13 +1302,30 @@ public static class Enums
 		TC_SPECIAL_10_END
     }
 
-    public enum DrGamestate
+    public enum DrGameState
     {
 	    STATE_TIME = 0,
+	    STATE_WAIT = 5,
+	    STATE_WAIT_NO_SKIP = 6,
+	    STATE_SPAWN_POS = 8,
 	    STATE_TRIAL_TIMER = 11,
 	    STATE_SKILL_POINTS = 12,
 	    STATE_HANDBOOK_REGULATIONS = 17,
 	    STATE_CHAPTER_SCENE = 20,
+    }
+
+    public enum DrScreenEffect
+    {
+	    EFFECT_ALL,
+	    EFFECT_SCROLL_DOWN,
+	    EFFECT_CRT,
+	    EFFECT_DISTORT_COLOUR,
+	    EFFECT_RIPPLE,
+	    EFFECT_BLACK_BLOTCH,
+	    EFFECT_DROP,
+	    EFFECT_DISPLACE_INVERT,
+	    EFFECT_RIPPLE_BLOCK,
+	    EFFECT_CIRCLE_WIPE,
     }
 
 

@@ -38,7 +38,8 @@ public class Definition
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrArithmetic));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrCamMotion));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagD));
-        LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrGamestate));
+        LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrGameState));
+        LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrScreenEffect));
 
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Char));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Bgm));

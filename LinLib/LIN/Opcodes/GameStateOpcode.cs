@@ -16,7 +16,7 @@ public class GameStateOpcode : Opcode
     {
         if (argIndex == 0)
         {
-            var name = Enum.GetName(typeof(Enums.DrGamestate), argValue);
+            var name = Enum.GetName(typeof(Enums.DrGameState), argValue);
             if (name != null) return name;
         }
         if (argIndex == 1)

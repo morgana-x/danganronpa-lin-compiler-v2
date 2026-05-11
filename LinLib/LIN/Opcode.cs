@@ -29,7 +29,7 @@ public class Opcode
                     0x03, new Opcode("TextboxFormat", 1)
                 }, // Textbox format, 0 = other char speaking, 4 = player character speaking / thoughts
                 { 0x04, new PostProcessingEffectOpcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
-                { 0x05, new Opcode("Movie", [2]) },
+                { 0x05, new Opcode("Movie", [1, 1]) },
                 { 0x06, new Opcode("Animation", [2, 1, 1, 1, 1, 1, 1]) },
                 { 0x08, new VoiceOpcode("Voice", [1, 1, 2, 1]) },
                 { 0x09, new MusicOpcode("Music", 3) },
@@ -59,7 +59,7 @@ public class Opcode
                 { 0x29, new Opcode("CheckObject", 1) },
                 { 0x2A, new Opcode("SetLabel", [2]) }, // Arguments 1 and 2 make up the label [ID] // See 0x34
                 { 0x2B, new Opcode("SetOption", 1) }, // Choice??
-                { 0x2C, new Opcode("EndOfJump", 2) },
+       
                 {
                     0x2D, new Opcode("CameraFlash", -1)
                 }, // IF CAUSING ISSUE THIS IS THE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -86,19 +86,30 @@ public class Opcode
             Game.DANGANRONPA2, new Dictionary<byte, Opcode>
             {
                 { 0x01, new Opcode(null, 4) },
-                { 0x14, new TrialCameraOpcodeDr2("TrialCamera", 6) },
+                { 0x14, new TrialCameraOpcodeDr2("TrialCamera", [1, 2, 2, 1]) },
                 { 0x15, new Opcode(null, 4) },
-                { 0x19, new Opcode("LoadScript", 5) },
-                { 0x1B, new Opcode(null, 5) },
+                { 0x1A, new Opcode("StopScript", 0)},
+                { 0x19, new Opcode("LoadScript", [1, 2, 2]) },
+                { 0x1B, new Opcode("RunScript", [1, 2, 2]) },
                 { 0x29, new Opcode(null, 0xD) },
                 { 0x2A, new Opcode(null, 0xC) },
+                { 0x2C, new Opcode("EndOfJump", [2]) },
+                { 0x2D, new Opcode("CameraFlash", [1, 2, 2, 1, 1, 1, 1, 1, 1, 1])},
                 { 0x2E, new Opcode(null, 5) },
                 { 0x30, new Opcode(null, 2) },
-                { 0x34, new Opcode(null, 1) },
-                { 0x3A, new Opcode("SetGameState", 4) },
-                { 0x3B, new Opcode("StartJump", 2) },
+                { 0x32, new Opcode("SelectOption", 1)},
+                { 0x34, new Opcode(null, -1) },
+                { 0x37, new Opcode("ShowCG", [1, 1, 1])},
+                { 0x3A, new Opcode("SetGameState", [1, 1, 2]) },
+                { 0x3B, new Opcode("StartJump", [2]) },
+                { 0x3D, new ScreenEffectOpcode("ScreenEffect", [1, 1, 2, 1])},
+                { 0x3E, new Opcode("Hangman", 2)},
+                { 0x46, new CheckFlagAOpcode("CheckFlagG", -1)},
+                { 0x49, new CheckFlagDOpcode("CheckFlagF", -1)},
+                { 0x4A, new CheckFlagDOpcode("CheckFlagE", -1)},
                 { 0x4B, new Opcode("WaitInput", -1) },
-                { 0x4C, new Opcode("WaitFrame", 0) }
+                { 0x4C, new Opcode("WaitFrame", 0) },
+                { 0x4D, new Opcode("If_FlagCheck", 0)}
             }
         }
     };
