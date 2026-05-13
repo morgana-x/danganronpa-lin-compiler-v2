@@ -22,7 +22,7 @@ public class Opcode
         {
             Game.DANGANRONPA1, new Dictionary<byte, Opcode>
             {
-                { 0x00, new Opcode("TextCount", [2]) { EndianLittle = false}},
+                { 0x00, new Opcode("TextCount", [2]) { EndianLittle = true}},
                 { 0x01, new Opcode("LoadSprite", 3) }, // Mostly Unknown 
                 { 0x02, new Opcode("Text", [2]) },
                 {
@@ -120,7 +120,7 @@ public class Opcode
     
     private int[] _argSizes;
 
-    public bool EndianLittle = true;
+    public bool EndianLittle = false;
 
     internal Opcode(string? name, int numargs)
     {
@@ -194,7 +194,7 @@ public class Opcode
         {
             if (EndianLittle)
             {
-                for (int j = _argSizes[a] - 1; j >= 0; j--)
+                for (int j = 0; j < _argSizes[a]; j++)
                 {
                     args[a] += (file[i] & 0xFF) << (8 * j);
                     i++;
@@ -202,7 +202,7 @@ public class Opcode
             }
             else
             {
-                for (int j = 0; j < _argSizes[a]; j++)
+                for (int j = _argSizes[a] - 1; j >= 0; j--)
                 {
                     args[a] += (file[i] & 0xFF) << (8 * j);
                     i++;
