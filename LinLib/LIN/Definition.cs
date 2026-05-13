@@ -72,7 +72,7 @@ public class Definition
     /// </summary>
     /// <param name="name">Name of the new definition</param>
     /// <param name="value">The value of the new definition</param>
-    public void ScriptDefineDefinition(string name, byte value)
+    public void ScriptDefineDefinition(string name, int value)
     {
         _scriptDefinedDefinitions[name] = value;
     }

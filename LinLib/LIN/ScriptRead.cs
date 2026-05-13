@@ -105,7 +105,7 @@ public static class ScriptRead
                         SkipWhitespace(file, ref c);
 
                         sb.Clear();
-                        byte defValue = byte.Parse(ReadString(file, sb, ref c).Trim());
+                        int defValue = int.Parse(ReadString(file, sb, ref c).Trim());
 
                         definitionClass.ScriptDefineDefinition(defName, defValue);
                         continue;
@@ -248,8 +248,9 @@ public static class ScriptRead
                     
                     ScriptEntry e = new ScriptEntry();
                     e.Opcode = s.File[i];
+                    i++;
                     e.Args = Opcode.GetOpcodeById(e.Opcode, game).ReadArgs(s.File, ref i);
-                    
+                    i--;
                     scriptData.Add(e);
                 }
                 else

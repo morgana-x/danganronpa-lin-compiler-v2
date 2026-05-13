@@ -22,7 +22,7 @@ public class Opcode
         {
             Game.DANGANRONPA1, new Dictionary<byte, Opcode>
             {
-                { 0x00, new Opcode("TextCount", [2]) },
+                { 0x00, new Opcode("TextCount", [2]) { EndianLittle = false}},
                 { 0x01, new Opcode("LoadSprite", 3) }, // Mostly Unknown 
                 { 0x02, new Opcode("Text", [2]) },
                 {
@@ -30,7 +30,7 @@ public class Opcode
                 }, // Textbox format, 0 = other char speaking, 4 = player character speaking / thoughts
                 { 0x04, new PostProcessingEffectOpcode("PostProcessingFilter", 4) }, // 0 No Filter, 1 Sepia Tone
                 { 0x05, new Opcode("Movie", [1, 1]) },
-                { 0x06, new Opcode("Animation", [2, 2, 2, 1, 1]) },
+                { 0x06, new Opcode("Animation", [2, 2, 2, 1, 1])  },
                 { 0x08, new VoiceOpcode("Voice", [1, 1, 2, 1]) },
                 { 0x09, new MusicOpcode("Music", 3) },
                 { 0x0A, new Opcode("SoundA", [2, 1]) },
@@ -41,7 +41,7 @@ public class Opcode
                 { 0x0F, new StudentEntryOpcode("StudentTitleEntry", [1, 2]) },
                 { 0x10, new StudentEntryOpcode("StudentReportInfo", [1, 2]) },
                 { 0x11, new SetRelationOpcode("ChangeRelation", [1, 1, 2]) }, // Relationship setting?
-                { 0x14, new TrialCameraOpcode("TrialCamera", [1, 1, 1]) }, //Character, Motionr bshr, Motion, Position
+                { 0x14, new TrialCameraOpcode("TrialCamera", [1, 2]) }, //Character, Motionr bshr, Motion, Position
                 { 0x15, new Opcode("LoadMap", 3) }, // Room, State, Padding, Time of Day
                 { 0x19, new Opcode("LoadScript", 3) },
                 { 0x1A, new Opcode("StopScript", 0) },
@@ -87,7 +87,7 @@ public class Opcode
             {
                 { 0x01, new Opcode(null, 4) },
                 { 0x0A, new Opcode("SoundA", [2, 1])},
-                { 0x14, new TrialCameraOpcodeDr2("TrialCamera", [1, 2, 2, 1]) },
+                { 0x14, new TrialCameraOpcodeDr2("TrialCamera", [1, 2, 1, 1, 1]) },
                 { 0x15, new Opcode(null, 4) },
                 { 0x1A, new Opcode("StopScript", 0)},
                 { 0x19, new Opcode("LoadScript", [1, 2, 2]) },
@@ -120,7 +120,7 @@ public class Opcode
     
     private int[] _argSizes;
 
-
+    public bool EndianLittle = true;
 
     internal Opcode(string? name, int numargs)
     {
@@ -143,7 +143,8 @@ public class Opcode
         _argSizes = argSizes.ToArray();
         
     }
-
+    
+    
     public virtual void WriteArgs(ref List<byte> file, int[] args)
     {
         for (int i = 0; i < args.Length; i++)
@@ -155,12 +156,20 @@ public class Opcode
                 file.Add((byte)(a));
                 continue;
             }
-            
-      
-            for (int j = _argSizes[i] - 1; j >= 0; j--)
-                file.Add((byte)((a >> (8 * j)) & 0xFF));
-            
-           
+
+
+            if (EndianLittle)
+            {
+                for (int j = 0; j < _argSizes[i]; j++)
+                    file.Add((byte)((a >> (8 * j)) & 0xFF));
+            }
+            else
+            {
+                for (int j = _argSizes[i] - 1; j >= 0; j--)
+                    file.Add((byte)((a >> (8 * j)) & 0xFF));
+            }
+
+
         }
     }
     
@@ -170,9 +179,9 @@ public class Opcode
         if (_numArguments == -1)
         {
             var vargs = new List<int>();
-            while (file[i + 1] != 0x70)
+            while (file[i] != 0x70)
             {
-                vargs.Add(file[i + 1]);
+                vargs.Add(file[i]);
                 i++;
             }
 
@@ -183,10 +192,21 @@ public class Opcode
         
         for (int a = 0; a < _numArguments; a++)
         {
-            for (int j = _argSizes[a] - 1; j >= 0; j--)
+            if (EndianLittle)
             {
-                args[a] += (file[i + 1] << (8 * j)) & 0xFF;
-                i++;
+                for (int j = _argSizes[a] - 1; j >= 0; j--)
+                {
+                    args[a] += (file[i] & 0xFF) << (8 * j);
+                    i++;
+                }
+            }
+            else
+            {
+                for (int j = 0; j < _argSizes[a]; j++)
+                {
+                    args[a] += (file[i] & 0xFF) << (8 * j);
+                    i++;
+                }
             }
         }
         
