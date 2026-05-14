@@ -120,6 +120,16 @@ public class Opcode
     
     private int[] _argSizes;
 
+    public int NumArgs
+    {
+        get { return _numArguments; }
+    }
+    
+    public string Name
+    {
+        get { return _name; }
+    }
+
     public bool EndianLittle = false;
 
     internal Opcode(string? name, int numargs)

@@ -5,6 +5,11 @@ namespace LinLib.LIN;
 /// </summary>
 public class Definition
 {
+    public Definition()
+    {
+        LoadDefinitions();    
+    }
+    
     private readonly Dictionary<Game, Dictionary<string, int>> _definitions = new()
     {
         [Game.DANGANRONPA1] = new Dictionary<string, int>(),
@@ -87,5 +92,14 @@ public class Definition
             if (_definitions[game].ContainsKey(names[i])) continue;
             _definitions[game].Add(names[i], values[i]);
         }
+    }
+
+    public void CopyTo(Definition destination)
+    {
+        foreach (var def in _scriptDefinedDefinitions)
+            if (!destination._scriptDefinedDefinitions.ContainsKey(def.Key))
+                destination._scriptDefinedDefinitions.Add(def.Key, def.Value);
+            else
+                destination._scriptDefinedDefinitions[def.Key] = def.Value;
     }
 }

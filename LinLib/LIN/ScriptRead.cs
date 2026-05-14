@@ -23,6 +23,54 @@ public static class ScriptRead
 
             return sb.ToString();
         }
+        
+        static string ReadPoundString(StreamReader file, StringBuilder sb, ref char c)
+        {
+            c = (char)file.Read();
+            while (c != '"' && c != '\n' && c != '\r' && file.Peek() != -1)
+            {
+                sb.Append(c);
+                c = (char)file.Read();
+            }
+
+            return sb.ToString();
+        }
+
+        static string[] ReadPoundArgs(StreamReader file, StringBuilder sb, ref char c)
+        {
+            List<string> args = new List<string>();
+            
+            while (c != '\n' && c != '\r' && file.Peek() != -1)
+            {
+                if (c == '"')
+                {
+                    sb.Clear();
+                    args.Add(ReadPoundString(file, sb, ref c));
+                    sb.Clear();
+                    c = (char)file.Read();
+                    continue;
+                }
+
+                if (c == ' ')
+                {
+                    var result = sb.ToString().Trim();
+                    if (result.Length > 0)
+                        args.Add(result);
+                    sb.Clear();
+                    c = (char)file.Read();
+                    continue;
+                }
+                
+                sb.Append(c);
+                c = (char)file.Read();
+            }
+            
+            var finalresult = sb.ToString().Trim();
+            if (finalresult.Length > 0)
+                args.Add(finalresult);
+            
+            return args.ToArray();
+        }
 
         /// <summary>
         /// Reads a decompiled script
@@ -33,13 +81,11 @@ public static class ScriptRead
         /// <returns>Whether the read was successful</returns>
         public static bool ReadSource(Script s, string filename, Game game = Game.BASE)
         {
-            var definitionClass = new Definition();
-            definitionClass.LoadDefinitions();
             // Default script type is textless
             s.Type = ScriptType.Textless;
             //Program.PrintLine("[read] reading source file...");
             var file = new StreamReader(filename, Encoding.UTF8);
-            List<ScriptEntry> scriptData = new List<ScriptEntry>();
+           
             StringBuilder sb = new StringBuilder();
             uint sourceLine = 0;
             try
@@ -94,20 +140,24 @@ public static class ScriptRead
                         c = (char)file.Read();
                     }
                     if (file.Peek() != -1) c = (char)file.Read();
-
-                    if (sb.ToString().Trim().ToLower() == "#define")
+                    
+                    var result = sb.ToString().Trim().ToLower();
+                    if (result.StartsWith("#"))
                     {
+                        if (result.Length < 2)
+                            throw new Exception("# missing Pound operater name! EG: #define!");
+                        
+                        var name = result.Substring(1);
+                        if (!Pound.TryGetPound(name, out var pound) || pound == null)
+                            throw new Exception($"Unknown preprocessing token \"{name}\"!!!");
+                        
                         SkipWhitespace(file, ref c);
-
+                        
                         sb.Clear();
-                        string defName = ReadString(file, sb, ref c).Trim();
-          
-                        SkipWhitespace(file, ref c);
-
+                        
+                        pound(s, game, ReadPoundArgs(file, sb, ref c));
+                        
                         sb.Clear();
-                        int defValue = int.Parse(ReadString(file, sb, ref c).Trim());
-
-                        definitionClass.ScriptDefineDefinition(defName, defValue);
                         continue;
                     }
 
@@ -176,17 +226,19 @@ public static class ScriptRead
                                 var trimmed = a.Trim();
                                 int value;
                                 if (!int.TryParse(trimmed, out value))
-                                    value = definitionClass.TryGetDefinitionValue(trimmed, game);
+                                    value = s.Definitions.TryGetDefinitionValue(trimmed, game);
                                 args.Add(value);
                             }
                         }
                         e.Args = args.ToArray();
+
+                        var op = Opcode.GetOpcodeById(e.Opcode);
+                        if (op != null && op.NumArgs != -1 && e.Args.Length > op.NumArgs)
+                            throw new ArgumentException($"Too many args provided for {op.Name}!");
                     }
 
-                    scriptData.Add(e);
+                    s.ScriptData.Add(e);
                 }
-                s.ScriptData = scriptData;
-
                 return true;
             }
             catch(Exception e) {
