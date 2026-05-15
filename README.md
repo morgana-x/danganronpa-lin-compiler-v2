@@ -1,3 +1,7 @@
+# THIS REPOSITORY HAS MOVED
+
+Please find the current repository at https://codeberg.org/morgana/LinLib
+
 ## `lin_compiler`
 ### LIN script compiler / decompiler.
 
