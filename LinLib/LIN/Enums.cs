@@ -72,10 +72,12 @@ public static class Enums
         CHR_KIYOTAKA_MONDO = 23,
         CHR_DAIYA = 24,
         CHR_NARRATOR = 26,
-        CHR_USAMI = 27,
+       // CHR_USAMI = 27,
         CHR_DEBATE = 28,
         CHR_UNKNOWN = 30,
-        CHR_SYSTEM = 31
+        CHR_SYSTEM = 31,
+        CHR_USAMI = 33,
+        CHR_MONOKUMA_ENTERTAINMENT_SYSTEM = 34,
     }
 
     public enum Dr1Item
