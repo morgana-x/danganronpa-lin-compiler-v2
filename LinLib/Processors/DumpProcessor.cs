@@ -27,15 +27,16 @@ public static class DumpProcessor
             Console.WriteLine("Processing " + filePath);
             outFileWriter.WriteLine("# [" + filePath + "]");
 
+            Script s  = new Script(filePath, true, game);
             try
             {
-                var s = new Script(filePath, true, game);
                 ScriptWrite.WriteSource(s, outFileWriter, game, true);
             }
             catch(Exception e)
             {
                 outFileWriter.WriteLine("CRITICAL ERROR OCCURED WHILE EXTRACTING THE FILE");
                 outFileWriter.WriteLine(e.ToString());
+                outFileWriter.WriteLine("Last opcode: 0x" + s.ScriptData.Last().Opcode.ToString("X"));
             }
 
             outFileWriter.WriteLine("\n\n\n\n");

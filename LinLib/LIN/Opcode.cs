@@ -22,7 +22,7 @@ public class Opcode
         {
             Game.DANGANRONPA1, new Dictionary<byte, Opcode>
             {
-                { 0x00, new Opcode("TextCount", [2]) { EndianLittle = true}},
+                { 0x00, new Opcode("TextCount", [2]) { _endianLittle = true}},
                 { 0x01, new Opcode("LoadSprite", 3) }, // Mostly Unknown 
                 { 0x02, new Opcode("Text", [2]) },
                 {
@@ -69,10 +69,10 @@ public class Opcode
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
                 { 0x33, new GameStateOpcode("SetGameState", [1, 1, 2]) },
                 { 0x34, new Opcode("GotoLabel", [2]) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
-                { 0x35, new CheckFlagAOpcode("CheckFlagA", -1) }, // each check is 4 args
-                { 0x36, new CheckFlagBOpcode("CheckFlagB", -1) }, // each check is 4 args
-                { 0x38, new CheckFlagDOpcode("CheckFlagC", -1) },
-                { 0x39, new CheckFlagDOpcode("CheckFlagD", -1) },
+                { 0x35, new CheckFlagAOpcode("CheckFlagA", [1, 1, 1, 1]) }, // each check is 4 args
+                { 0x36, new CheckFlagBOpcode("CheckFlagB", [1, 1, 1, 2]) }, // each check is 5 args
+                { 0x38, new CheckFlagDOpcode("CheckFlagC", [1, 1, 1, 2]) },
+                { 0x39, new CheckFlagDOpcode("CheckFlagD", [1, 1, 1, 2]) },
                 { 0x3A, new Opcode("WaitInput", 0) },
                 { 0x3B, new Opcode("WaitFrame", 0) },
                 { 0x3C, new Opcode("If_FlagCheck", 0) },
@@ -105,9 +105,9 @@ public class Opcode
                 { 0x3B, new Opcode("StartJump", [2]) },
                 { 0x3D, new ScreenEffectOpcode("ScreenEffect", [1, 1, 2, 1])},
                 { 0x3E, new Opcode("Hangman", 2)},
-                { 0x46, new CheckFlagAOpcode("CheckFlagG", -1)},
-                { 0x49, new CheckFlagDOpcode("CheckFlagF", -1)},
-                { 0x4A, new CheckFlagDOpcode("CheckFlagE", -1)},
+                { 0x46, new CheckFlagAOpcode("CheckFlagG", [1, 1, 1, 1])},
+                { 0x49, new CheckFlagDOpcode("CheckFlagF",  [1, 1, 1, 2])},
+                { 0x4A, new CheckFlagDOpcode("CheckFlagE",  [1, 1, 1, 1])},
                 { 0x4B, new Opcode("WaitInput", -1) },
                 { 0x4C, new Opcode("WaitFrame", 0) },
                 { 0x4D, new Opcode("If_FlagCheck", 0)}
@@ -118,27 +118,28 @@ public class Opcode
     private readonly string? _name;
     private readonly int _numArguments;
     
-    private int[] _argSizes;
+    private readonly int[] _argSizes;
+    private readonly int[] _argSizesWithJoinerArg;
 
-    public int NumArgs
-    {
-        get { return _numArguments; }
-    }
+    private readonly bool _hasJoiner;
+
+    public int NumArgs => _numArguments;
     
-    public string Name
-    {
-        get { return _name; }
-    }
+    public string? Name => _name;
 
-    public bool EndianLittle = false;
+    private bool _endianLittle = false;
 
     internal Opcode(string? name, int numargs)
     {
         _name = name;
         _numArguments = numargs;
-        
-        if (numargs < 0)
-            numargs = 0;
+        _hasJoiner = false;
+
+        if (numargs <= 0)
+        {
+            _argSizes = [];
+            return;
+        }
         
         _argSizes = new int[numargs];
         
@@ -146,14 +147,50 @@ public class Opcode
             _argSizes[i] = 1;
     }
 
-    internal Opcode(string? name, IEnumerable<int> argSizes)
+    internal Opcode(string? name, IEnumerable<int> argSizes, bool repeatable=false, bool hasJoinerArg=false)
     {
         _name = name;
-        _numArguments = argSizes.Count();
+        _numArguments = repeatable ? -1 : argSizes.Count();
+        
         _argSizes = argSizes.ToArray();
         
+        _hasJoiner = hasJoinerArg;
+        if (_hasJoiner)
+        {
+            var argsizesjoiner = _argSizes.ToList();
+            argsizesjoiner.Add(1);
+            _argSizesWithJoinerArg = argsizesjoiner.ToArray();
+        }
     }
-    
+
+    int getArgSize(int i)
+    {
+        if (_argSizes.Length <= 0)
+            return 1;
+        
+        if (_hasJoiner)
+            return _argSizesWithJoinerArg[i % _argSizesWithJoinerArg.Length];
+        
+        if (i < _argSizes.Length)
+            return _argSizes[i];
+        
+        return _argSizes[i % _argSizes.Length];
+    }
+
+    int getSegmentSize()
+    {
+        if (_argSizes.Length <= 0)
+            return _numArguments;
+        if (_hasJoiner)
+            return _argSizesWithJoinerArg.Length;
+
+        return _argSizes.Length;
+    }
+
+    internal int getSegementIndex(int i)
+    {
+        return i % getSegmentSize();
+    }
     
     public virtual void WriteArgs(ref List<byte> file, int[] args)
     {
@@ -161,21 +198,21 @@ public class Opcode
         {
             var a = args[i];
 
-            if (_argSizes.Length == 0 || _numArguments == -1 || i >= _argSizes.Length)
+            if (_argSizes.Length == 0)
             {
                 file.Add((byte)(a));
                 continue;
             }
 
 
-            if (EndianLittle)
+            if (_endianLittle)
             {
-                for (int j = 0; j < _argSizes[i]; j++)
+                for (int j = 0; j < getArgSize(i); j++)
                     file.Add((byte)((a >> (8 * j)) & 0xFF));
             }
             else
             {
-                for (int j = _argSizes[i] - 1; j >= 0; j--)
+                for (int j = getArgSize(i) - 1; j >= 0; j--)
                     file.Add((byte)((a >> (8 * j)) & 0xFF));
             }
 
@@ -185,26 +222,56 @@ public class Opcode
     
     public virtual int[] ReadArgs(byte[] file, ref int i)
     {
-       
-        if (_numArguments == -1)
+        var args = new List<int>();
+        if (_numArguments == -1 && _argSizes.Length == 0)
         {
-            var vargs = new List<int>();
             while (file[i] != 0x70)
             {
-                vargs.Add(file[i]);
+                args.Add(file[i]);
                 i++;
             }
 
-            return vargs.ToArray();
+            return args.ToArray();
+        }
+
+        int numargs = _numArguments;
+        if (numargs == -1)
+        {
+            int peekIndex = 0;
+            int argsizes = 0;
+            numargs = 0;
+            
+            for (int b = 0; b < _argSizes.Length; b++)
+                argsizes += _argSizes[b];
+            
+            while (i + peekIndex < file.Length && file[i + peekIndex] != 0x70)
+            {
+                int joiner = 0;
+                
+                int joinerIndex = i + peekIndex + (_hasJoiner  ? _argSizes.Length : 0 );
+                
+                if (_hasJoiner && numargs >= _argSizes.Length && joinerIndex < file.Length && file[joinerIndex] != 0x70 )
+                    joiner = 1;
+                
+                peekIndex += argsizes + joiner;
+                numargs += _argSizes.Length + joiner;
+            }
+            
         }
         
-        int[] args = new int[_numArguments];
-        
-        for (int a = 0; a < _numArguments; a++)
+        for (int a = 0; a < numargs; a++)
         {
-            if (EndianLittle)
+            if (getArgSize(a) == 1)
             {
-                for (int j = 0; j < _argSizes[a]; j++)
+                args.Add(file[i]);
+                i++;
+                continue;
+            }
+
+            args.Add(0);
+            if (_endianLittle)
+            {
+                for (int j = 0; j < getArgSize(a); j++)
                 {
                     args[a] += (file[i] & 0xFF) << (8 * j);
                     i++;
@@ -212,7 +279,7 @@ public class Opcode
             }
             else
             {
-                for (int j = _argSizes[a] - 1; j >= 0; j--)
+                for (int j = getArgSize(a) - 1; j >= 0; j--)
                 {
                     args[a] += (file[i] & 0xFF) << (8 * j);
                     i++;
@@ -221,7 +288,7 @@ public class Opcode
         }
         
         
-        return args;
+        return args.ToArray();
     }
     
 
@@ -283,15 +350,5 @@ public class Opcode
             return Opcodes[Game.BASE][op];
 
         return new Opcode("0x" + op.ToString("X2"), -1);
-    }
-
-    public static int GetOpcodeArgCount(byte op, Game game = Game.BASE)
-    {
-        if (game != Game.BASE)
-            if (Opcodes[game].ContainsKey(op))
-                return Opcodes[game][op]._numArguments;
-        if (Opcodes[Game.BASE].ContainsKey(op))
-            return Opcodes[Game.BASE][op]._numArguments;
-        return -1;
     }
 }
