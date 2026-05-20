@@ -69,10 +69,10 @@ public class Opcode
                 { 0x32, new Opcode(null, 1) }, // Truth bullet / Choice?
                 { 0x33, new GameStateOpcode("SetGameState", [1, 1, 2]) },
                 { 0x34, new Opcode("GotoLabel", [2]) }, // Argument 1 and 2 make up the label [ID]. See 0x2A.
-                { 0x35, new CheckFlagAOpcode("CheckFlagA", [1, 1, 1, 1]) }, // each check is 4 args
-                { 0x36, new CheckFlagBOpcode("CheckFlagB", [1, 1, 1, 2]) }, // each check is 5 args
-                { 0x38, new CheckFlagDOpcode("CheckFlagC", [1, 1, 1, 2]) },
-                { 0x39, new CheckFlagDOpcode("CheckFlagD", [1, 1, 1, 2]) },
+                { 0x35, new CheckFlagSubOpcode("CheckFlagA", [1, 1, 1, 1]) }, // each check is 4 args
+                { 0x36, new CheckFlagSubOpcode("CheckFlagB", [1, 1, 1, 2]) }, // each check is 5 args
+                { 0x38, new CheckFlagRelationOpcode("CheckRelationA", [2, 1, 2]) },
+                { 0x39, new CheckFlagRelationOpcode("CheckRelationB", [2, 1, 2]) },
                 { 0x3A, new Opcode("WaitInput", 0) },
                 { 0x3B, new Opcode("WaitFrame", 0) },
                 { 0x3C, new Opcode("If_FlagCheck", 0) },
@@ -105,9 +105,10 @@ public class Opcode
                 { 0x3B, new Opcode("StartJump", [2]) },
                 { 0x3D, new ScreenEffectOpcode("ScreenEffect", [1, 1, 2, 1])},
                 { 0x3E, new Opcode("Hangman", 2)},
-                { 0x46, new CheckFlagAOpcode("CheckFlagG", [1, 1, 1, 1])},
-                { 0x49, new CheckFlagDOpcode("CheckFlagF",  [1, 1, 1, 2])},
-                { 0x4A, new CheckFlagDOpcode("CheckFlagE",  [1, 1, 1, 1])},
+                { 0x46, new CheckFlagSubOpcode("CheckFlagE", [1, 1, 1, 1])},
+                { 0x47, new CheckFlagOpcode("CheckFlagF", [2, 1, 2])}, //new CheckFlagItemOpcode("CheckItem", [2, 1, 2]) },
+                { 0x49, new CheckFlagSubOpcode("CheckFlagG",  [1, 1, 1, 2])},
+                { 0x4A, new CheckFlagRelationOpcode("CheckRelationC",  [2, 1, 2])},
                 { 0x4B, new Opcode("WaitInput", -1) },
                 { 0x4C, new Opcode("WaitFrame", 0) },
                 { 0x4D, new Opcode("If_FlagCheck", 0)}
@@ -153,6 +154,9 @@ public class Opcode
         _numArguments = repeatable ? -1 : argSizes.Count();
         
         _argSizes = argSizes.ToArray();
+
+        if (_argSizes.Length == 0)
+            _numArguments = -1;
         
         _hasJoiner = hasJoinerArg;
         if (_hasJoiner)
