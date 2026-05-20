@@ -381,7 +381,8 @@ public static class Enums
         HANDBOOK_TRUTHBULLET_ENABLED = 6,
         HANDBOOK_SAVE_ENABLED = 7,
         HANDBOOK_TRUTHBULLET_KNOWN = 19,
-        ROOM_EXIT_ENABLED = 12
+        ROOM_EXIT_ENABLED = 12,
+		SCRIPT_SCENE = 20
     }
 
 
