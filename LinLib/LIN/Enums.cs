@@ -391,8 +391,9 @@ public static class Enums
         SPRITE_3D,
         SPRITE_SHOW,
         SPRITE_SHOW_DELAY,
-        SPRITE_HIDE2,
-        SPRITE_HIDE
+        SPRITE_HIDE,
+        SPRITE_HIDE_2,
+        SPRITE_HIDE_FADE_RIGHT
     }
 
 
