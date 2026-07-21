@@ -201,7 +201,7 @@ public static class ScriptWrite
     /// <param name="filename">Path to the final compiled script</param>
     /// <exception cref="Exception">The given file isn't a decompiled script file.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The script type isn't valid.</exception>
-    public static void WriteCompiled(Script s, string filename)
+    public static void WriteCompiled(Script s, string filename, Game game)
     {
         var file = new List<byte>();
 
@@ -241,7 +241,7 @@ public static class ScriptWrite
         {
             file.Add(0x70);
             file.Add(e.Opcode);
-            Opcode.GetOpcodeById(e.Opcode).WriteArgs(ref file, e.Args);
+            Opcode.GetOpcodeById(e.Opcode, game).WriteArgs(ref file, e.Args);
         }
 
         while (file.Count % 4 != 0) file.Add(0x00);
@@ -321,8 +321,8 @@ public static class ScriptWrite
     /// <param name="filename">Path to the final compiled script</param>
     /// <exception cref="Exception">The given file isn't a decompiled script file.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The script type isn't valid.</exception>
-    public static async Task WriteCompiledAsync(Script s, string filename)
+    public static async Task WriteCompiledAsync(Script s, string filename, Game game)
     {
-        await Task.Run( ()=> WriteCompiled(s, filename));
+        await Task.Run( ()=> WriteCompiled(s, filename, game));
     }
 }

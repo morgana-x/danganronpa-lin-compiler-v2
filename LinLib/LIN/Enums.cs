@@ -393,7 +393,8 @@ public static class Enums
         SPRITE_SHOW_DELAY,
         SPRITE_HIDE,
         SPRITE_HIDE_2,
-        SPRITE_HIDE_FADE_RIGHT
+        SPRITE_HIDE_FADE_RIGHT,
+        SPRITE_LEAVE = 7
     }
 
 

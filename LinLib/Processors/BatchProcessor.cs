@@ -75,7 +75,7 @@ public static class BatchProcessor
             if (decompile)
                 ScriptWrite.WriteSource(script, outPath, game);
             else
-                ScriptWrite.WriteCompiled(script, outPath);
+                ScriptWrite.WriteCompiled(script, outPath, game);
         }
         catch (Exception e)
         {

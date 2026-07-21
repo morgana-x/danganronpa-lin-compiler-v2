@@ -91,6 +91,6 @@ public static class LinApi
     {
         Opcode.GenerateOpcodeLookup();
         var script = new Script(input, false, game);
-        ScriptWrite.WriteCompiled(script, output);
+        ScriptWrite.WriteCompiled(script, output, game);
     }
 }

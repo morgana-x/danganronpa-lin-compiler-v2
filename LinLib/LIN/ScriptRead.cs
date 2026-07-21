@@ -232,7 +232,7 @@ public static class ScriptRead
                         }
                         e.Args = args.ToArray();
 
-                        var op = Opcode.GetOpcodeById(e.Opcode);
+                        var op = Opcode.GetOpcodeById(e.Opcode, game);
                         if (op != null && op.NumArgs != -1 && e.Args.Length > op.NumArgs)
                             throw new ArgumentException($"Too many args provided for {op.Name}!");
                     }

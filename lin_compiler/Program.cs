@@ -78,10 +78,6 @@ namespace lin_compiler
             {
                 Console.WriteLine("Dumping selected");
                 DumpProcessor.DumpDirectory(input, output, game);
-              //  Console.ForegroundColor = ConsoleColor.Yellow;
-               // Console.WriteLine("Press any key to close/continue.");
-              //  Console.ForegroundColor = ConsoleColor.Gray;
-               // Console.ReadKey();
                 return;
             }
 
@@ -92,10 +88,6 @@ namespace lin_compiler
                     // ReSharper disable once MethodHasAsyncOverload
                     BatchProcessor.BatchProcessDirectory(input, decompile, game,
                         plainArgs.Count == 2 ? plainArgs[1] : string.Empty);
-                    //  Console.ForegroundColor = ConsoleColor.Yellow;
-                    //   Console.WriteLine("Press any key to close/continue.");
-                    //   Console.ForegroundColor = ConsoleColor.Gray;
-                    // Console.ReadKey();
                     return;
                 }
                 
@@ -112,12 +104,8 @@ namespace lin_compiler
             }
             else
             {
-                ScriptWrite.WriteCompiled(s, output);
+                ScriptWrite.WriteCompiled(s, output, game);
             }
-         //   Console.ForegroundColor = ConsoleColor.Yellow;
-          //  Console.WriteLine("Press any key to close/continue.");
-         //   Console.ForegroundColor = ConsoleColor.Gray;
-          //  Console.ReadKey();
         }
     }
 }
