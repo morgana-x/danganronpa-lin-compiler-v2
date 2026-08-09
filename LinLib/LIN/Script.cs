@@ -25,10 +25,14 @@ public class Script
     public int TextEntries;
     public ScriptType Type;
 
+    public Game Game;
+
     public Definition Definitions;
 
     public Script(string filename, bool compiled = true, Game game = Game.BASE)
     {
+        Game = game;
+        
         Definitions = new Definition();
         
         if (compiled)

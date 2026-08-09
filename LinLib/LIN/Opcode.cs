@@ -9,7 +9,9 @@ public enum Game
 {
     BASE,
     DANGANRONPA1 = BASE,
-    DANGANRONPA2
+    DANGANRONPA2,
+    DANGNARONPAUDG,
+    DANGANRONPA1PSP
 }
 
 
@@ -113,7 +115,13 @@ public class Opcode
                 { 0x4C, new Opcode("WaitFrame", 0) },
                 { 0x4D, new Opcode("If_FlagCheck", 0)}
             }
-        }
+        },
+        {
+            Game.DANGANRONPA1PSP, new Dictionary<byte, Opcode>
+            {
+                { 0x3A, new Opcode("SetGameState", [1, 1, 1]) },
+            }
+        },
     };
 
     private readonly string? _name;

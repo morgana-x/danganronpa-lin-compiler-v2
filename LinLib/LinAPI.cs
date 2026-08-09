@@ -17,7 +17,8 @@ public static class LinApi
     public static void DumpDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        DumpProcessor.DumpDirectory(input, output, game);
+
+        var dumpProcessor = new DumpProcessor(input, output, game);
     }
 
     /// <summary>
@@ -29,7 +30,7 @@ public static class LinApi
     public static void BatchDecompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcessor.BatchProcessDirectory(input, true, game, output);
+        var batchProcessor = new BatchProcessor(input, output, game, true);
     }
 
     /// <summary>
@@ -41,7 +42,7 @@ public static class LinApi
     public static void BatchCompileDirectory(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        BatchProcessor.BatchProcessDirectory(input, false, game, output);
+        var batchProcessor = new BatchProcessor(input, output, game, false);
     }
 
     /// <summary>
@@ -53,7 +54,7 @@ public static class LinApi
     public static async Task BatchDecompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcessor.BatchProcessDirectoryAsync(input, true, game, output);
+        var batchProcessor = new BatchProcessor(input, output, game, true, true);
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public static class LinApi
     public static async Task BatchCompileDirectoryAsync(string input, string output, Game game)
     {
         Opcode.GenerateOpcodeLookup();
-        await BatchProcessor.BatchProcessDirectoryAsync(input, false, game, output);
+        var batchProcessor = new BatchProcessor(input, output, game, false, true);
     }
     
     /// <summary>

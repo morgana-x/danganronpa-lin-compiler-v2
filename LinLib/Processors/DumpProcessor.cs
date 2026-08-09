@@ -6,43 +6,42 @@ namespace LinLib.Processors;
 /// <summary>
 /// Handles dumping of a large set of files
 /// </summary>
-public static class DumpProcessor
-{
+public class DumpProcessor : BaseProcessor
+{ 
+    StreamWriter dumpWriter;
+    
     /// <summary>
     /// Dumps all .lin files in a directory into a single .txt file
     /// </summary>
     /// <param name="inPath">Path of the directory</param>
     /// <param name="outFile">Path of the resulting txt file</param>
     /// <param name="game">Danganronpa 1 or Danganronpa 2</param>
-    public static void DumpDirectory(string inPath, string outFile, Game game = Game.DANGANRONPA1)
+    public DumpProcessor(string inPath, string outPath, Game game = Game.DANGANRONPA1)
     {
-        Console.WriteLine("Dumping files from " + inPath + " to " + outFile);
-        var filePathsIn = Directory.GetFiles(inPath);
-        var outFileWriter = new StreamWriter(outFile, false, Encoding.Unicode);
-
-        foreach (var filePath in filePathsIn)
+        dumpWriter = new StreamWriter(outPath, false, Encoding.UTF8);
+        
+        processFolder(inPath, game, false);
+        
+        dumpWriter.Dispose();
+        dumpWriter.Close();
+    }
+    
+    public override void processScript(KeyValuePair<string, Script> s)
+    {
+        Console.WriteLine($"Processing {s.Key}");
+        
+        dumpWriter.WriteLine("# " + Path.GetFileNameWithoutExtension(s.Key) + ".lin");
+        try
         {
-            if (!filePath.EndsWith(".lin"))
-                continue;
-            Console.WriteLine("Processing " + filePath);
-            outFileWriter.WriteLine("# [" + filePath + "]");
-
-            Script s  = new Script(filePath, true, game);
-            try
-            {
-                ScriptWrite.WriteSource(s, outFileWriter, game, true);
-            }
-            catch(Exception e)
-            {
-                outFileWriter.WriteLine("CRITICAL ERROR OCCURED WHILE EXTRACTING THE FILE");
-                outFileWriter.WriteLine(e.ToString());
-                outFileWriter.WriteLine("Last opcode: 0x" + s.ScriptData.Last().Opcode.ToString("X"));
-            }
-
-            outFileWriter.WriteLine("\n\n\n\n");
+            ScriptWrite.WriteSource(s.Value, dumpWriter, s.Value.Game, true);
+        }
+        catch(Exception e)
+        {
+            dumpWriter.WriteLine("CRITICAL ERROR OCCURED WHILE WRITING THE FILE");
+            dumpWriter.WriteLine(e.ToString());
+            dumpWriter.WriteLine("Last opcode: 0x" + s.Value.ScriptData.Last().Opcode.ToString("X"));
         }
 
-        outFileWriter.Dispose();
-        outFileWriter.Close();
+        dumpWriter.WriteLine("\n\n\n\n");
     }
 }
