@@ -17,10 +17,10 @@ namespace lin_compiler
             }
             
             // Need duplicate dr2 / danganronpa2 options for work around with library + backwards compatibility with old args
-            [Option( "dr2", Required = false, HelpText = "Danganronpa 2 Mode")]
+            [Option('2', "dr2", Required = false, HelpText = "Danganronpa 2 Mode (short name workaround now requires -- too)")]
             public bool Danganronpa2 { get; set; }
             
-            [Option("danganronpa2", Required = false, HelpText = "Danganronpa 2 Mode (Longer name backwards compatibility)")]
+            [Option("danganronpa2", Required = false, HelpText = "Danganronpa 2 Mode")]
             public bool Danganronpa2Other { get; set; }
             
             [Option('s', "silent", Required = false, HelpText = "Silent mode")]
@@ -65,14 +65,11 @@ namespace lin_compiler
             string input, output;
            
             if (o.Props.Count() < 1)
-            {
-                throw new Exception("error: incorrect arguments.");
-            }
-            else
-            {
-                input = o.Props.ElementAt(0);
-                output =  o.Props.Count() >= 2 ? o.Props.ElementAt(1) : TrimExtension(input) + (o.Decompile ? ".txt" : ".lin");
-            }
+                throw new Exception("error: Missing input file/folder argument");
+        
+            input = o.Props.ElementAt(0);
+            output =  o.Props.Count() >= 2 ? o.Props.ElementAt(1) : TrimExtension(input) + (o.Decompile ? ".txt" : ".lin");
+        
 
             // Generate opcode name lookup
             Opcode.GenerateOpcodeLookup();
