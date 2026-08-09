@@ -15,7 +15,7 @@ public class TrialCameraOpcode : Opcode
 
         if (argIndex == 1)
         {
-            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
+            var name = Enum.GetName(Enums.GetCamEnum(game), argValue);
             if (name != null) return name;
         }
         return base.DecompileArg(game, args, argIndex, argValue);
@@ -45,7 +45,7 @@ public class TrialCameraOpcodeDr2 : Opcode
          // For DR2
         if (argIndex == 1)
         {
-            var name = Enum.GetName(typeof(Enums.DrCamMotion), argValue);
+            var name = Enum.GetName(Enums.GetCamEnum(game), argValue);
             if (name != null) return name;
         }
         

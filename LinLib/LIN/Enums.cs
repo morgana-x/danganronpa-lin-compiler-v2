@@ -441,10 +441,15 @@ public static class Enums
         UI_LOGICDIVE = 71,
         UI_SPLITSCREEN = 72
     }
+
+    public enum Dr1CamMotion
+    {
+	    
+    }
     
     // https://github.com/BitesizeBird/Danganronpa-Modding
     // https://docs.google.com/spreadsheets/d/1ewULVgmZAZ9urdq1nZHiRvUlW3bEwXk-6QgYqUSlKsM/edit?gid=0#gid=0
-    public enum DrCamMotion
+    public enum Dr2CamMotion
     {
        	TC_FIXED_00,
 		TC_FIXED_01,
@@ -1337,6 +1342,10 @@ public static class Enums
 	    EFFECT_CIRCLE_WIPE,
     }
 
+    public static Type GetCamEnum(Game game)
+    {
+	    return game == Game.DANGANRONPA2 ? typeof(Dr2CamMotion) : typeof(Dr1CamMotion);
+    }
 
     public static Type GetCharEnum(Game game)
     {

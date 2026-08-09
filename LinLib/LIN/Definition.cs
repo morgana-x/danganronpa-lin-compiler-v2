@@ -41,16 +41,18 @@ public class Definition
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagJoiner));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagCompare));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrArithmetic));
-        LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrCamMotion));
+
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrFlagD));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrGameState));
         LoadDefinitionsFromEnum(Game.BASE, typeof(Enums.DrScreenEffect));
 
+        LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1CamMotion));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Char));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Bgm));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Skill));
         LoadDefinitionsFromEnum(Game.DANGANRONPA1, typeof(Enums.Dr1Item));
-
+        
+        LoadDefinitionsFromEnum(Game.DANGANRONPA2, typeof(Enums.Dr2CamMotion));
         LoadDefinitionsFromEnum(Game.DANGANRONPA2, typeof(Enums.Dr2Char));
         LoadDefinitionsFromEnum(Game.DANGANRONPA2, typeof(Enums.Dr2Bgm));
         LoadDefinitionsFromEnum(Game.DANGANRONPA2, typeof(Enums.Dr2Skill));
