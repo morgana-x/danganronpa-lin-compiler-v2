@@ -13,7 +13,7 @@ argument.
 Example: `lin_compiler -d input.lin output.txt`
 
 If you are working with Danganronpa 2 script files, you should additionally
-pass the `-dr2` (or `--danganronpa2`) argument.
+pass the `-2`, or `--dr2`, or `--danganronpa2` argument.
 
 # LinLib
 ====================================
