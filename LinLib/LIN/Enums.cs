@@ -442,6 +442,14 @@ public static class Enums
         UI_SPLITSCREEN = 72
     }
 
+    public enum DrUiHudAction
+    {
+	    HUD_HIDE_ANIMATED = 0,
+	    HUD_SHOW_ANIMATED = 1,
+	    HUD_HIDE = 2,
+	    HUD_SHOW = 3
+    }
+
     public enum Dr1CamMotion
     {
 	    

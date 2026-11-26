@@ -54,7 +54,7 @@ public class Opcode
                 { 0x20, new Opcode("SpriteFlash", 5) },
                 { 0x21, new SpeakerOpcode("Speaker", 1) },
                 { 0x22, new ScreenFadeOpcode("ScreenFade", 3) },
-                { 0x23, new Opcode("ObjectState", 5) },
+                { 0x23, new Opcode("ObjectState", [1, 2, 2]) },
                 { 0x25, new ChangeUiOpcode("ChangeUi", 2) },
                 { 0x26, new SetFlagOpcode("SetFlag", 3) }, // Argument 1 is the group, argument 2 is the ID, and argument 3 is the state.
                 { 0x27, new Opcode("CheckCharacter", 1) },

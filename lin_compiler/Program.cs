@@ -68,7 +68,7 @@ namespace lin_compiler
                 throw new Exception("error: Missing input file/folder argument");
         
             input = o.Props.ElementAt(0);
-            output =  o.Props.Count() >= 2 ? o.Props.ElementAt(1) : TrimExtension(input) + (o.Decompile ? ".txt" : ".lin");
+            output =  o.Props.Count() >= 2 ? o.Props.ElementAt(1) : TrimExtension(input) + ( (o.Decompile || o.Dump) ? ".txt" : ".lin");
         
 
             // Generate opcode name lookup
