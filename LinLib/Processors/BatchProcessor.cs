@@ -14,7 +14,7 @@ public class BatchProcessor : BaseProcessor
     public BatchProcessor(string folder, string? outPath, Game game, bool decompile, bool async = false)
     {
         decompileScripts = decompile;
-        outFolder = outPath ?? folder + "_extract";
+        outFolder = outPath ?? folder + (decompile ? "_extract" : "_repack");
         
         prepareDirectory(folder, decompileScripts, ref outFolder);
         
