@@ -14,17 +14,15 @@ public class BatchProcessor : BaseProcessor
     public BatchProcessor(string folder, string? outPath, Game game, bool decompile, bool async = false)
     {
         decompileScripts = decompile;
-        outFolder = outPath;
+        outFolder = outPath ?? folder + "_extract";
         
         prepareDirectory(folder, decompileScripts, ref outFolder);
         
-        processFolder(outFolder, game, async);
+        processFolder(folder, game, async);
     }
 
     public override void processScript(KeyValuePair<string, Script> s)
     {
-        Console.WriteLine($"Processing {s.Key}");
-        
         string outPath = outFolder + "/" + Path.GetFileNameWithoutExtension(s.Key) + (decompileScripts ? ".txt" : ".lin");
 
         try

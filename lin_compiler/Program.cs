@@ -37,6 +37,12 @@ namespace lin_compiler
             
             [Option('r', "replace", Required = false, HelpText = "Strings to replace")]
             public IEnumerable<string> Replacements { get; set; }
+            
+            [Option('i', "input", Required = false, HelpText = "Input file/folder argument")]
+            public string? Input { get; set; }
+            
+            [Option('o', "output", Required = false, HelpText = "Output file/folder argument")]
+            public string? Output { get; set; }
         }
 
         static string TrimExtension(string path)
@@ -64,11 +70,11 @@ namespace lin_compiler
  
             string input, output;
            
-            if (o.Props.Count() < 1)
+            if (o.Props.Count() < 1 && (o.Input == null || o.Input.Length < 1))
                 throw new Exception("error: Missing input file/folder argument");
         
-            input = o.Props.ElementAt(0);
-            output =  o.Props.Count() >= 2 ? o.Props.ElementAt(1) : TrimExtension(input) + ( (o.Decompile || o.Dump) ? ".txt" : ".lin");
+            input = o.Input ?? o.Props.ElementAt(0);
+            output = o.Output ?? (o.Props.Count() >= 2 ? o.Props.ElementAt(1) : (File.Exists(input) ? (TrimExtension(input) + ( (o.Decompile || o.Dump) ? ".txt" : ".lin")) : string.Empty));
         
 
             // Generate opcode name lookup
@@ -92,11 +98,11 @@ namespace lin_compiler
             {
                 if (o.Replacements.Any())
                 {
-                    new ReplaceProcessor(input, o.Props.Count() >= 2 ? o.Props.ElementAt(1) : string.Empty, game, replacements,  o.Decompile, o.Async);
+                    new ReplaceProcessor(input, output, game, replacements,  o.Decompile, o.Async);
                     return;
                 }
 
-                new BatchProcessor(input, o.Props.Count() >= 2 ? o.Props.ElementAt(1) : string.Empty, game, o.Decompile, o.Async);
+                new BatchProcessor(input, output, game, o.Decompile, o.Async);
                 return;
 
             }

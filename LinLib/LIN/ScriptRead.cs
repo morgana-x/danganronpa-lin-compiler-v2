@@ -312,11 +312,8 @@ public static class ScriptRead
                     {
                         if (s.File[i] != 0x00)
                         {
-                            Console.WriteLine($"[read] error: expected 0x00, got 0x{s.File[i].ToString("X2")}.");
-                            Console.WriteLine("SCRIPT IS NOW BROKEN, please check the last opcode at the end of the file and report the error! (If you're feeling generous :)");
-                            Console.WriteLine("Last opcode was " + scriptData.Last().Opcode.ToString("X2"));
+                            throw new Exception($"[read] error: expected 0x00, got 0x{s.File[i].ToString("X2")}. Last opcode was {scriptData.Last().Opcode.ToString("X2")}");
                             break;
-                            //throw new Exception("[read] error: expected 0x00, got 0x" + s.File[i].ToString("X2") + ".");
                         }
                         i++;
                     }

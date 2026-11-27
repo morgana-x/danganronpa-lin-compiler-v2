@@ -29,18 +29,47 @@ public abstract class BaseProcessor
     {
         Dictionary<string, Script> scripts = new Dictionary<string, Script>();
 
+        void addScript(string f, Script? s)
+        {
+            if (s == null)
+            {
+                Console.Error.WriteLine("Script " + f + " is null");
+                return;
+            }
+            scripts.Add(f, s);
+        }
+        
         foreach (var f in Directory.GetFiles(folder))
         {
             try
             {
                 if (f.EndsWith(".lin"))
                 {
-                    scripts.Add(f, new Script(f, true, game));
+                    try
+                    {
+                        addScript(f, new Script(f, true, game));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Error.WriteLine("Error reading script " + f);
+                        Console.Error.WriteLine(e.ToString());
+                    }
+
                     continue;
                 }
 
                 if (f.EndsWith(".txt") || f.EndsWith(".d"))
-                    scripts.Add(f, new Script(f, false, game));
+                {
+                    try
+                    {
+                        addScript(f, new Script(f, false, game));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Error.WriteLine("Error reading source script " + f);
+                        Console.Error.WriteLine(e.ToString());
+                    }
+                }
             }
             catch (Exception e)
             {
